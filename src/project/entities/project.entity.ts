@@ -1,0 +1,86 @@
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Document } from "src/document/entities/document.entity";
+import { Collaborator } from "src/collaborator/entities/collaborator.entity";
+import { User } from "src/user/entities/user.entity";
+import { Category } from "src/category/entities/category.entity";
+import { IsAlpha, IsArray, IsDate, IsInt, IsNotEmpty, IsString, ValidateNested } from "class-validator";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+
+@Entity('Projects')
+export class Project {
+    
+    @ApiProperty({  type: () => Number, example:4, readOnly: true, description:'Autoincremental integer value.' })
+    /*@IsInt()*/
+    @PrimaryGeneratedColumn({ name: 'project_id' })
+    private projectId: number;
+
+    @ApiProperty({  type: () => String, required: true,  example:'El libro de Gisela', description:'Title of Project.'  })
+    /*@IsString()
+    @IsAlpha()
+    @IsNotEmpty()*/
+    @Column({ name:'title', type: 'varchar', length: 255, default: '', nullable: false })
+    private title: string;
+
+    @ApiProperty({  type: () => Date, example:'25-08-2023', description:'Date of registration in the system.' })
+    /*@IsDate()*/
+    @CreateDateColumn({ name:'creation_date', type: 'timestamp'})
+    private readonly creationDate: Date;
+
+    /* Relations */
+    
+    @ApiProperty({ type: () => User, required: true})
+    @ManyToOne(()=> User, (user) => user.projects,{ nullable: false })
+    @JoinColumn({name :'authors_id'}, )
+    author: User;
+
+    @ApiProperty({ type: () => Category, required: true})
+    @ManyToOne(()=> Category, (category) => category.projects,{ nullable: false },)
+    @JoinColumn({name :'categories_id'})
+    category: Category;       
+    
+    @ApiPropertyOptional({ type: () => Document, isArray: true })
+    /*@IsArray()
+    @ValidateNested({ each: true })*/
+    @OneToMany(()=> Document, (document) => document.project,{ nullable: true })
+    documents?: Document[];
+
+    @ApiPropertyOptional({  type: () => Collaborator, isArray: true })
+    /*@IsArray()
+    @ValidateNested({ each: true })*/
+    @OneToMany(()=> Collaborator, (collaborator) => collaborator.user)
+    collaborators?: Collaborator[];
+
+    /* functions getters and setters */
+    public getProjectId():number {
+        return this.projectId
+    }
+    public getTitle():string {
+        return this.title
+    }
+    public getCreationDate(): any {
+        this.creationDate
+    }
+    public getAuthor(): User {
+        return this.author
+    }
+    public getCategory(): Category {
+        return this.category
+    }
+     
+
+    public setTitle(newTitle: string): void {
+        this.title = newTitle
+    }
+    /*public setCategory(newCategory: Category): void {
+        this.category = newCategory
+    }*/
+    
+
+    constructor( title:string, author: User, category: Category/*,collaborators?: Collaborator[], documents?:Document[]*/){
+        this.title = title;
+        this.author = author;
+        this.category = category;
+        /*this.collaborators =  collaborators;
+        this.documents = documents;*/
+    }
+}
