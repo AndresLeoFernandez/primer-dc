@@ -10,19 +10,14 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 export class Project {
     
     @ApiProperty({  type: () => Number, example:4, readOnly: true, description:'Autoincremental integer value.' })
-    /*@IsInt()*/
     @PrimaryGeneratedColumn({ name: 'project_id' })
     private projectId: number;
 
     @ApiProperty({  type: () => String, required: true,  example:'El libro de Gisela', description:'Title of Project.'  })
-    /*@IsString()
-    @IsAlpha()
-    @IsNotEmpty()*/
     @Column({ name:'title', type: 'varchar', length: 255, default: '', nullable: false })
     private title: string;
 
     @ApiProperty({  type: () => Date, example:'25-08-2023', description:'Date of registration in the system.' })
-    /*@IsDate()*/
     @CreateDateColumn({ name:'creation_date', type: 'timestamp'})
     private readonly creationDate: Date;
 
@@ -39,18 +34,15 @@ export class Project {
     category: Category;       
     
     @ApiPropertyOptional({ type: () => Document, isArray: true })
-    /*@IsArray()
-    @ValidateNested({ each: true })*/
     @OneToMany(()=> Document, (document) => document.project,{ nullable: true })
     documents?: Document[];
 
     @ApiPropertyOptional({  type: () => Collaborator, isArray: true })
-    /*@IsArray()
-    @ValidateNested({ each: true })*/
     @OneToMany(()=> Collaborator, (collaborator) => collaborator.user)
     collaborators?: Collaborator[];
 
-    /* functions getters and setters */
+    /* Functions getters and setters */
+
     public getProjectId():number {
         return this.projectId
     }
@@ -67,7 +59,6 @@ export class Project {
         return this.category
     }
      
-
     public setTitle(newTitle: string): void {
         this.title = newTitle
     }
@@ -76,11 +67,11 @@ export class Project {
     }*/
     
 
-    constructor( title:string, author: User, category: Category/*,collaborators?: Collaborator[], documents?:Document[]*/){
+    constructor( title:string, author: User, category: Category,collaborators?: Collaborator[], documents?:Document[]){
         this.title = title;
         this.author = author;
         this.category = category;
-        /*this.collaborators =  collaborators;
-        this.documents = documents;*/
+        this.collaborators =  collaborators;
+        this.documents = documents;
     }
 }
