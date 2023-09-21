@@ -7,7 +7,8 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateUserDto {
 
   @ApiProperty({ required: false, example: 'Nombre',})
-  @IsAlpha()
+  @IsString()
+  @NotContains(" ", { message: "No spaces allowed in firstname."})
   @IsOptional()
   @IsNotEmpty()
   @Transform(({ value }) => sanitizeInput(value))
@@ -15,7 +16,8 @@ export class CreateUserDto {
   firstName?: string;
   
   @ApiProperty({ required: false, example: 'Apellido',})
-  @IsAlpha()
+  @IsString()
+  @NotContains(" ", { message: "No spaces allowed in lastname."})
   @IsOptional()
   @IsNotEmpty()
   @Transform(({ value }) => sanitizeInput(value))

@@ -16,22 +16,27 @@ export class Collaborator {
     @PrimaryGeneratedColumn({ name: 'collaborator_id' })
     collaboratorId: number;
 
+    @ApiProperty({ enum: ['COLLABORATOR', 'OWNER']})
+    @Column({ type: 'enum', enum: RolesCollaborators, default: RolesCollaborators.COLLABORATOR })
+    role: RolesCollaborators;    
+    
+    /* Relations */
+
     @ApiProperty({ type: () => Project, required: true, description: '', example: ''})
     @ManyToOne(() => Project, (project) => project.collaborators, {nullable: false} )
     @JoinColumn({ name:'projects_id' })
     project: Project
-    
+        
     @ApiProperty({  type: () => User,required: true,description: '',example: ''})
     @ManyToOne(() => User, (user) =>user.collaborators, {nullable: false})
     @JoinColumn({ name:'users_id' })
     user: User;
-    
-    @Column({ type: 'enum', enum: RolesCollaborators, default: RolesCollaborators.COLLABORATOR })
-    role: RolesCollaborators;
-    
+        
+    @ApiProperty({  type: () => Document,required: true,description: '',example: ''})
     @OneToMany(()=> Document, (document) => document.author)
     documents: Document[] 
 
+    @ApiProperty({  type: () => History,required: true,description: '',example: ''})
     @OneToMany(()=> History, (history) => history.author)
     histories: History[] 
 

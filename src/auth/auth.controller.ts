@@ -1,5 +1,5 @@
 import { Controller, Post, Get, Body, UseGuards, Headers, Request } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User as UserEntity } from 'src/user/entities/user.entity';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/Login.dto';
@@ -22,43 +22,46 @@ export class AuthController {
   @ApiOperation({summary: 'Sign In the app', description:'',})
   @ApiBody({ type: LoginDto })
   @ApiResponse({ status: 201, description: 'The acces has been successfully.'})  
-  @ApiResponse({ status: 404, description: 'Forbidden.' })
+  @ApiResponse({ status: 404, description: 'User not found.' })
   async signIn(@Body() loginDto: LoginDto) {
-      
-    /*console.log(userEntity);*/
-    return await this.authService.login(loginDto);
-    /*const data = await this.authService.login(loginDto.email,loginDto.password);
+    const data = await this.authService.login(loginDto);
     return {
       message: 'Login exitoso',
       data,
-    };*/
+    };
   }
   
   @Post('signup')
-  @ApiOperation({summary: 'Register in the app', description:'',})
-  @ApiBody({ type: CreateUserDto })
-  @ApiResponse({ status: 201, description: 'The record has been successfully created.'})  
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiOperation({summary: 'Register in the app', description:'Add a new user to the system.',})
+  @ApiBody({ type: CreateUserDto,description:'<p>The request body its an object with CreateUserDto structure.Its mandatory username, email and password. Email must be unique in the system.The username and password must have at least 5 characters.</p>' })
+  @ApiResponse({ status: 201, description: 'The User has been successfully created.'})  
+  @ApiResponse({ status: 400, description: 'Any requirement is not met in the input data.Show error message.' })
+  @ApiResponse({ status: 409, description: 'The user email is already in use in the system.' })
   async signUp(@Body() createUserDto: CreateUserDto) {
-    return await this.userService.createUser(createUserDto)
+    const usuario = await this.userService.createUser(createUserDto);    
+    /*delete usuario.password;*/
+    return usuario;
   }
 
   
-  /*@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Get('signout')
   async signOut(@Headers('authorization') bearer: string) {
     return this.authService.signOut(bearer)
-  }*/
+  }
 
-
-
+ 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
+  @ApiOperation({summary: 'Show profile user logon', description:'',})
+  @ApiOkResponse({ status: 201, description: 'This is the user profile.'})  
+  @ApiResponse({ status: 401, description: 'User Unauthorized'})  
   @Get('profile')
-  profile(@User() user) {
+  async profile(@User() user) {
+    const datos = await this.userService.buscarPorEmail(user.email);
     return {
       message: 'Petición correcta',
-      user,
+      datos,
     };
   }
 

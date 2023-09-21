@@ -1,17 +1,12 @@
-import {  Injectable,
-          NotFoundException,
-          BadRequestException } from '@nestjs/common';
+import {  Injectable, NotFoundException, BadRequestException, ConflictException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, FindOneOptions,Repository } from 'typeorm';
+import { FindOneOptions,Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ChangePasswordDto } from 'src/auth/dto/ChangePassword.dto';
 
-export interface UserFindOne {
-  id?: number;
-  username?:string;
-  email?: string;
-}
+
 
 @Injectable()
 export class UserService {
@@ -27,22 +22,26 @@ export class UserService {
       return (user != null);
   }
   
-  async getUsers(): Promise<User[]| null> {
-    return await this.userRepository.find()
+  async getUsers(): Promise<User[]> {
+    try {
+      return await this.userRepository.find()
+    }catch (error){
+      throw new NotFoundException(`Users does not exist.`);
+    }
   }
 
   async getOne(id: number, userEntity?: User): Promise<User> {    
       const criteria : FindOneOptions = { where: { userId: id } }
       let user = await this.userRepository.findOne(criteria);
-      if (!user)
-        throw new NotFoundException(`User does not exists. Check if the id: ${id} is correct.`);
-      return user;    
+      if (!user) throw new NotFoundException(`User does not exists. Check if the id: ${id} is correct.`);
+      return user  
   }  
+
   /*  find user by id or email   */
-  async findOneBy(data: UserFindOne): Promise<User| null> {
+  async findOneBy( options: Partial<{ username: string;userId:number; email: string }>): Promise<User| null> {
     return await this.userRepository
       .createQueryBuilder('user')
-      .where(data)
+      .where(options)
       .addSelect('user.password')
       .getOne();
   }
@@ -51,27 +50,32 @@ export class UserService {
     const criteria : FindOneOptions = { where:{ email: dto.email }}
     const userExist = await this.userRepository.findOne(criteria);
     if (userExist)
-      throw new BadRequestException('User already registered with email');
+      throw new ConflictException('User already registered with this email');
     const newUser = new User(dto.firstName,dto.lastName,dto.email,dto.username,dto.password);
     const user = await this.userRepository.save(newUser);
     return user;
   }
 
   /*  Edit field User but not is posible to change email!!! */
-  async editUser (id: number, dto: UpdateUserDto, userEntity?: User): Promise<User| null> {
-    const user = await this.getOne(id,userEntity);   
-    if (user) {
-      const editedUser = Object.assign(user, dto);
-      return await this.userRepository.save(editedUser);
-    }
-    throw new BadRequestException('User not find');
+  async editUser (dto: UpdateUserDto, userEntity: any): Promise<User> {
+    const currentUser = await this.buscarPorEmail(userEntity.email);
+    const editedUser = Object.assign(currentUser, dto);
+    return await this.userRepository.save(editedUser);    
   }
+
+
+  async changePassword (dto: ChangePasswordDto, userEntity:any): Promise<User> {
+    const currentUser = await this.buscarPorEmail(userEntity.email);    
+    const editedUser = Object.assign(currentUser, dto);
+    return await this.userRepository.save(editedUser);     
+  }
+
   /*  Delete user in the system  */
-  async deleteUser (id: number, userEntity?: User): Promise<User| null> {
-    const user = await this.getOne(id,userEntity);
-    if (user) 
-      return await this.userRepository.remove(user);
-    throw new BadRequestException('User not find');
+  async deleteUser (userId:number): Promise<User> {
+    const currentUser = await this.findOneBy({userId});
+    if (currentUser) 
+      return await this.userRepository.remove(currentUser);
+    throw new BadRequestException('User not found');
   }
 
   async buscarPorEmail(email: string): Promise<User | null> {
