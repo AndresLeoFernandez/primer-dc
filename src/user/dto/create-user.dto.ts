@@ -7,42 +7,44 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateUserDto {
 
   @ApiProperty({ required: false, example: 'Nombre',})
-  @IsAlpha()
+  @IsString()
+  @NotContains(" ", { message: "No spaces allowed in firstname."})
   @IsOptional()
   @IsNotEmpty()
   @Transform(({ value }) => sanitizeInput(value))
-  @Matches(/^(?!\s*$).+/, { message: 'Name can not be empty or whitespace' })
+  @Matches(/^(?!\s*$).+/, { message: 'Name can not be empty or have whitespace.' })
   firstName?: string;
   
   @ApiProperty({ required: false, example: 'Apellido',})
-  @IsAlpha()
+  @IsString()
+  @NotContains(" ", { message: "No spaces allowed in lastname."})
   @IsOptional()
   @IsNotEmpty()
   @Transform(({ value }) => sanitizeInput(value))
-  @Matches(/^(?!\s*$).+/, { message: 'Name can not be empty or whitespace' })
+  @Matches(/^(?!\s*$).+/, { message: 'LastName can not be empty or have whitespace.' })
   lastName?: string;
 
   @ApiProperty({ required: true, example: 'Manue23',})
   @IsString()
   @IsNotEmpty()
-  @NotContains(" ", { message: "No spaces allowed"})
+  @NotContains(" ", { message: "No spaces allowed."})
   @Transform(({ value }) => sanitizeInput(value))
-  @MinLength(5, { message: 'Username should contain more than 5 letters' })
+  @MinLength(5, { message: 'Username should contain more than 5 letters.' })
   username: string;
 
   @ApiProperty({ required: true, minLength: 5 , example: 'AqHtdd25',})
   @IsString()
   @IsNotEmpty()
-  @NotContains(" ", { message: "No spaces allowed"})
-  @MinLength(5, { message: 'Password should contain more than 5 letters' })
+  @NotContains(" ", { message: 'No spaces allowed.'})
+  @MinLength(5, { message: 'Password should contain more than 5 letters.' })
   password: string;
 
   @ApiProperty({ required: true, example: 'account@demo.com',})
   @IsEmail()
   @Transform(({ value }) => lowercaseString(value?.trim()))
   @IsNotEmpty()
-  @NotContains(" ", { message: "No spaces allowed."})
-  @Matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, {message: 'Email must be a type of email'})
+  @NotContains(" ", { message: 'No spaces allowed.'})
+  @Matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, {message: 'Email must be a type of email.'})
   email: string;
 
 }

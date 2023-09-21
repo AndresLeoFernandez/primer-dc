@@ -14,31 +14,25 @@ import { User } from "src/user/entities/user.entity";
 export class Document {
     
     @ApiProperty({  type: () => Number, example:4,readOnly: true, description:'Autoincremental integer value.' })
-    @IsInt()
     @PrimaryGeneratedColumn({ name: 'document_id' })
     documentId: number;
   
     @ApiProperty({  type: () => String, required: true, example:'Text', description:'Type Document.' })
-    @IsString()
-    @IsAlpha()
-    @IsNotEmpty()
-    @Transform(({ value }) => sanitizeInput(value))
     @Column({ name:'type' })
     type: string;
     
     @ApiProperty({  type: () => Date, example:'25-08-2023', description:'Date of registration in the system.'})
-    @IsDate()
     @CreateDateColumn({ name:'creation_date', type: 'timestamp' })
     private creationDate: Date;
 
-    
+    /* Relations */
 
     @ApiProperty({  type: () => Project, required: true})
     @ManyToOne(() => Project, (project) => project.documents,{ nullable: false })
     @JoinColumn({name :'projects_id' })
     project: Project;
 
-    @ApiProperty({  type: () => Collaborator, required: true})
+    @ApiProperty({ type: () => Collaborator, required: true})
     @ManyToOne(() => Collaborator, (collaborator) => collaborator.documents,{ nullable: false })
     @JoinColumn({name :'author_collaborator_id'})
     author: Collaborator;
@@ -53,13 +47,12 @@ export class Document {
     @OneToMany( () => History,(history) => history.document)
     histories?: History[];
 
-    /* functions getters and setters */
+    /* Functions getters and setters */
+
     public getDocumentId():number {
         return this.documentId
     }
-    /*public getTitle():string {
-        return this.title
-    }*/
+    
     public getCreationDate(): any {
         this.creationDate
     }
@@ -67,10 +60,7 @@ export class Document {
     public getType(): string {
         return this.type
     }
-     
-    /*public setTitle(newTitle: string): void {
-        this.title = newTitle
-    }*/
+        
     constructor(type: string, project: Project,author: Collaborator,comments?: Comment[],histories?: History[]){
         this.type = type;
         this.project = project;

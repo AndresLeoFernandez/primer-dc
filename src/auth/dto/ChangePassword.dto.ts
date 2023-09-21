@@ -1,10 +1,5 @@
-import { Transform } from "class-transformer";
-import { IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
+import { OmitType, PartialType } from "@nestjs/swagger";
+import { CreateUserDto } from "src/user/dto/create-user.dto";
 
-export class ChangePasswordDto {
-    @IsString()
-    @Transform(({ value }) => value?.trim())
-    @IsNotEmpty()
-    @MinLength(5)
-    newPassword: string;
-  }
+
+export class ChangePasswordDto extends PartialType(OmitType(CreateUserDto,['firstName','lastName','username','email'] as const),) {} 
