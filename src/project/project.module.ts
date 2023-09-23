@@ -7,7 +7,9 @@ import { Document } from "src/document/entities/document.entity";
 import { Collaborator } from "src/collaborator/entities/collaborator.entity";
 import { User } from "src/user/entities/user.entity";
 import { Category } from "src/category/entities/category.entity";
-import { UserModule } from 'src/user/user.module';
+import { CategoryService } from 'src/category/category.service';
+/*import { AllowedCategoryValidator } from './dto/create-project.dto';*/
+/*import { UserModule } from 'src/user/user.module';*/
 
 @Module({
   imports:[

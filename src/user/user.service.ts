@@ -46,14 +46,18 @@ export class UserService {
       .getOne();
   }
   /*  create user if email is not in use before in the system  */
-  async createUser(dto: CreateUserDto):Promise<User> {
+  async createUser(dto: CreateUserDto):Promise<any> {
     const criteria : FindOneOptions = { where:{ email: dto.email }}
     const userExist = await this.userRepository.findOne(criteria);
     if (userExist)
       throw new ConflictException('User already registered with this email');
     const newUser = new User(dto.firstName,dto.lastName,dto.email,dto.username,dto.password);
     const user = await this.userRepository.save(newUser);
-    return user;
+    return {
+      mensage:"Create succesfull",
+      email:user.getEmail(),
+      username:user.getUsername()
+   };
   }
 
   /*  Edit field User but not is posible to change email!!! */

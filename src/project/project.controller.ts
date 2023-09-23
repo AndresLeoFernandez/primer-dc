@@ -11,6 +11,7 @@ import { AuthGuard } from 'src/auth/auth.guard';/*add */
 import { AuthService } from 'src/auth/auth.service';
 import { RolesCollaborators } from 'src/constants/roles-collaborators';
 import { UserDto } from 'src/user/dto/user.dto';
+import { ProjectOwnerGuard } from 'src/auth/projectOwner.guard';
 
 @ApiTags('Project')
 @Controller('project')
@@ -23,18 +24,24 @@ export class ProjectController {
   @Post('/add')
   @ApiOperation({summary: 'Create New Project', description:'',})
   @ApiBody({ type: CreateProjectDto })
-  @ApiResponse({ status: 201, description: 'The record has been successfully created.'})  
+  @ApiResponse({ status: 201, description: 'The Project has been successfully created.'})  
+  @ApiResponse({ status: 401, description: 'Unauthorized.' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 404, description: 'Category not Found.' })
+  @ApiResponse({ status: 406, description: 'Project exist.' })
   async create( @Body() createProjectDto: CreateProjectDto, @User('userId') currentUserId:number) {
     return await this.projectService.createProject(createProjectDto,currentUserId);
   }
 
   @ApiBearerAuth()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard,ProjectOwnerGuard)
   @Post('/:id/add/collaborator')
   @ApiOperation({summary: 'Add Collaborator to Project', description:'',})
-  @ApiResponse({ status: 201, description: 'The collaborator has been asign.'})  
+  @ApiResponse({ status: 201, description: 'The collaborator has been asign.'})
+  @ApiResponse({ status: 401, description: 'Unauthorized not Project owner.' })  
   @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 404, description: 'No found collaborator' })
+  @ApiResponse({ status: 406, description: 'The collaborator already exists in the project.' })
   async addCollaborator(
     @Param('id',ParseIntPipe) id: number,
     @Body() collaboratorDto: UserDto, 
@@ -81,7 +88,7 @@ export class ProjectController {
   }*/
 
   @ApiBearerAuth()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard,ProjectOwnerGuard)
   @ApiOperation({summary: 'Delete Project', description:'',})
   @ApiResponse({ status: 201, description: 'The project has been delete.'})  
   @ApiResponse({ status: 403, description: 'Forbidden.' })
