@@ -3,7 +3,6 @@ import { Document } from "src/document/entities/document.entity";
 import { Collaborator } from "src/collaborator/entities/collaborator.entity";
 import { User } from "src/user/entities/user.entity";
 import { Category } from "src/category/entities/category.entity";
-import { IsAlpha, IsArray, IsDate, IsInt, IsNotEmpty, IsString, ValidateNested } from "class-validator";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 @Entity('Projects')

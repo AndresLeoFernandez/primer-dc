@@ -23,6 +23,16 @@ export class AuthService {
     }
     return user!;
   }
+
+  async refresh(user:any):Promise<any>{
+    const currentUser = await this.userService.findOneBy({ email:user.email });
+    if (currentUser){
+      const payload = {userId:currentUser.getUserId(), email: currentUser.getEmail() };
+      return { access_token: await this.jwtService.signAsync(payload),}
+    }   
+  }
+  
+
     
   async login(loginDto: LoginDto):Promise<any> {
     const user = await this.userService.findOneBy({ email:loginDto.email });
@@ -34,7 +44,7 @@ export class AuthService {
     return { access_token: await this.jwtService.signAsync(payload),}
   }
 
-  async signOut(bearer:string){
+  /*async signOut(bearer:string){
     return 'chau'
-  }
+  }*/
 }

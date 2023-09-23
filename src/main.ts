@@ -2,9 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { initSwagger } from './app.swagger';
+/*import { useContainer } from 'class-validator';*/
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule,{ abortOnError: false });
+  /**/
+  /*useContainer(app.select(AppModule), { fallback: true });*/
+  /**/
   initSwagger(app);
   /*app.setGlobalPrefix('/api');*/ // Setting base path
   app.useGlobalPipes(

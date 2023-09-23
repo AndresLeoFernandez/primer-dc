@@ -8,7 +8,6 @@ import { User } from 'src/common/decorators/user.decorator';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { UserService } from 'src/user/user.service';
 
-
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -19,12 +18,13 @@ export class AuthController {
 
   
   @Post('login')
-  @ApiOperation({summary: 'Sign In the app', description:'',})
+  @ApiOperation({summary: 'Logs user into the system', description:'',})
   @ApiBody({ type: LoginDto })
   @ApiResponse({ status: 201, description: 'The acces has been successfully.'})  
   @ApiResponse({ status: 404, description: 'User not found.' })
   async signIn(@Body() loginDto: LoginDto) {
     const data = await this.authService.login(loginDto);
+    
     return {
       message: 'Login exitoso',
       data,
@@ -32,23 +32,21 @@ export class AuthController {
   }
   
   @Post('signup')
-  @ApiOperation({summary: 'Register in the app', description:'Add a new user to the system.',})
+  @ApiOperation({summary: 'Register user in the app', description:'Add a new user to the system.',})
   @ApiBody({ type: CreateUserDto,description:'<p>The request body its an object with CreateUserDto structure.Its mandatory username, email and password. Email must be unique in the system.The username and password must have at least 5 characters.</p>' })
   @ApiResponse({ status: 201, description: 'The User has been successfully created.'})  
   @ApiResponse({ status: 400, description: 'Any requirement is not met in the input data.Show error message.' })
   @ApiResponse({ status: 409, description: 'The user email is already in use in the system.' })
   async signUp(@Body() createUserDto: CreateUserDto) {
-    const usuario = await this.userService.createUser(createUserDto);    
-    /*delete usuario.password;*/
-    return usuario;
+    const result = await this.userService.createUser(createUserDto);    
+    return result;
   }
-
   
-  @UseGuards(AuthGuard)
+  /*@UseGuards(AuthGuard)
   @Get('signout')
   async signOut(@Headers('authorization') bearer: string) {
     return this.authService.signOut(bearer)
-  }
+  }*/
 
  
   @ApiBearerAuth()
@@ -65,13 +63,14 @@ export class AuthController {
     };
   }
 
-  /*@Auth() falta crear este decorador
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get('refresh')
-  refreshToken(@User() user: UserEntity) {
-    const data = this.authService.login(user.getEmail(),user.getPassword());
+  refreshToken(@User() user) {
+    const data = this.authService.refresh(user);
     return {
       message: 'Refresh exitoso',
       data,
     };
-  }*/
+  }
 }
