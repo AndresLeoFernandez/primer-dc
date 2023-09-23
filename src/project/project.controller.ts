@@ -90,14 +90,12 @@ export class ProjectController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard,ProjectOwnerGuard)
   @ApiOperation({summary: 'Delete Project', description:'',})
-  @ApiResponse({ status: 201, description: 'The project has been delete.'})  
+  @ApiResponse({ status: 200, description: 'The project has been delete.'})  
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Delete('/:id/delete')
   remove( @Param('id',ParseIntPipe ) id: number,
           @User('email') currentUserEmail) {
     return this.projectService.remove(id,currentUserEmail);
-    /*Elimino todos los colaboradores del projecto*/
-    /*Elimino todos los documentos del projecto*/
   }
 }
 

@@ -23,7 +23,7 @@ export class Collaborator {
     /* Relations */
 
     @ApiProperty({ type: () => Project, required: true, description: '', example: ''})
-    @ManyToOne(() => Project, (project) => project.collaborators, {nullable: false} )
+    @ManyToOne(() => Project, (project) => project.collaborators, {nullable: false, onDelete: 'CASCADE',orphanedRowAction: 'delete'} )
     @JoinColumn({ name:'projects_id' })
     project: Project
         

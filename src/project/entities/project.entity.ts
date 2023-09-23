@@ -37,7 +37,7 @@ export class Project {
     documents?: Document[];
 
     @ApiPropertyOptional({  type: () => Collaborator, isArray: true })
-    @OneToMany(()=> Collaborator, (collaborator) => collaborator.user)
+    @OneToMany(()=> Collaborator, (collaborator) => collaborator.user,{ cascade: ["remove"] })
     collaborators?: Collaborator[];
 
     /* Functions getters and setters */

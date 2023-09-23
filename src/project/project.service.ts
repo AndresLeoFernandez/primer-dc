@@ -94,8 +94,15 @@ export class ProjectService {
     let project = await this.projectRepository.findOne(criteria);
     if (!project)
     throw new NotFoundException('Project does not exist.');
-    const criteriaCurrentUser : FindOneOptions = { where:{ email:currentEmail}};
+    const criteriaCurrentUser : FindOneOptions = { relations:['collaborators'], where:{ email:currentEmail}};
     const currentUser = await this.userRepository.findOne(criteriaCurrentUser);    
+    
+
+    /*const criteriaOwnerCollaborator : FindManyOptions = { where:{ projectId: id}};
+    const collaborators = await this.collaboratorRepository.find(criteriaOwnerCollaborator);
+    if (!collaborators)
+    */
+    
     return await this.projectRepository.remove(project);   
       
     /*Elimino todos los colaboradores del projecto*/
