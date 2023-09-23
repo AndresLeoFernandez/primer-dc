@@ -23,7 +23,7 @@ export class Comment {
     /* Relations */
 
     @ApiProperty({ type: () => Document, required: true})
-    @ManyToOne(() => Document, (document) => document.comments, {nullable: false })
+    @ManyToOne(() => Document, (document) => document.comments, {nullable: false, onDelete: 'CASCADE',orphanedRowAction: 'delete'})
     @JoinColumn({name :'documents_id'})
     document: Document;   
     

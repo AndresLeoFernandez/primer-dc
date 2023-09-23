@@ -12,6 +12,8 @@ import { AuthService } from 'src/auth/auth.service';
 import { RolesCollaborators } from 'src/constants/roles-collaborators';
 import { UserDto } from 'src/user/dto/user.dto';
 import { ProjectOwnerGuard } from 'src/auth/projectOwner.guard';
+import { ProjectCollaboratorGuard } from 'src/auth/projectCollaborator.guard';
+import { CreateDocumentDto } from 'src/document/dto/create-document.dto';
 
 @ApiTags('Project')
 @Controller('project')
@@ -50,19 +52,19 @@ export class ProjectController {
     return await this.projectService.addCollaborator(id,RolesCollaborators.COLLABORATOR,collaboratorDto.email,currentUserEmail); 
   }
   
-  /*@ApiBearerAuth()
-  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard,ProjectCollaboratorGuard)
   @Post(':id/add/document')
   @ApiOperation({summary: 'Add Document to Project', description:'',})
   @ApiResponse({ status: 201, description: 'The document has been add to the proyect.'})  
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async addDocument(
     @Param('id',ParseIntPipe) id: number,
-    @Body() documentDto: DocumentDto,
-    @User() author:any
+    @Body() documentDto: CreateDocumentDto,
+    @User() currentUser
   ){
-    return await this.projectService.addDocument(id,documentDto,author.email);
-  }*/
+    return await this.projectService.addDocument(id,documentDto,currentUser);
+  }
   
    
   @Get('view/all')
@@ -90,14 +92,12 @@ export class ProjectController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard,ProjectOwnerGuard)
   @ApiOperation({summary: 'Delete Project', description:'',})
-  @ApiResponse({ status: 201, description: 'The project has been delete.'})  
+  @ApiResponse({ status: 200, description: 'The project has been delete.'})  
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Delete('/:id/delete')
   remove( @Param('id',ParseIntPipe ) id: number,
           @User('email') currentUserEmail) {
     return this.projectService.remove(id,currentUserEmail);
-    /*Elimino todos los colaboradores del projecto*/
-    /*Elimino todos los documentos del projecto*/
   }
 }
 

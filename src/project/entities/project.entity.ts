@@ -33,11 +33,11 @@ export class Project {
     category: Category;       
     
     @ApiPropertyOptional({ type: () => Document, isArray: true })
-    @OneToMany(()=> Document, (document) => document.project,{ nullable: true })
+    @OneToMany(()=> Document, (document) => document.project,{ nullable: true, cascade: ["remove"]  })
     documents?: Document[];
 
     @ApiPropertyOptional({  type: () => Collaborator, isArray: true })
-    @OneToMany(()=> Collaborator, (collaborator) => collaborator.user)
+    @OneToMany(()=> Collaborator, (collaborator) => collaborator.user,{cascade: ["remove"] })
     collaborators?: Collaborator[];
 
     /* Functions getters and setters */

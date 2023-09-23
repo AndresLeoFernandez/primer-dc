@@ -10,6 +10,8 @@ import { Collaborator } from 'src/collaborator/entities/collaborator.entity';
 import { RolesCollaborators } from 'src/constants/roles-collaborators';
 import { CategoryService } from 'src/category/category.service';
 import { Category } from 'src/category/entities/category.entity';
+import { DocumentService } from 'src/document/document.service';
+import { CreateDocumentDto } from 'src/document/dto/create-document.dto';
 
 
 @Injectable()
@@ -18,8 +20,9 @@ export class ProjectService {
     @InjectRepository(Project) private readonly projectRepository: Repository<Project>,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @InjectRepository(Collaborator) private readonly collaboratorRepository: Repository<Collaborator>,
-    @InjectRepository(Document) private readonly documentRepository: Repository<Document>,
+    /*@InjectRepository(Document) private readonly documentRepository: Repository<Document>,*/
     @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
+    private readonly documentService: DocumentService,
     
   ) {}
   
@@ -34,14 +37,11 @@ export class ProjectService {
       throw new NotAcceptableException('Project already exist.');
     /*Check si existe la categoria*/
     const criteriaCategory : FindOneOptions = { where:{ name: dto.category.toLowerCase()}};
-    console.log(dto);
-    console.log(dto.category);
     const currentCategory = await this.categoryRepository.findOne(criteriaCategory);
-    console.log(currentCategory);
     if (!currentCategory)
       throw new NotFoundException('Category not exist.');
     const newProject = new Project(dto.title,currentUser,currentCategory);
-    const project = await this.projectRepository.save(newProject);
+    let project = await this.projectRepository.save(newProject);
     const newCollaborator = new Collaborator(project,currentUser,RolesCollaborators.OWNER);
     const collaborator = await this.collaboratorRepository.save(newCollaborator); 
     return project;
@@ -76,6 +76,61 @@ export class ProjectService {
     } catch (error){
       throw new NotAcceptableException('The collaborator already exists in the project.');    }
   }
+
+  async addDocument(numberProjectId: number, dto: CreateDocumentDto ,currentUser:any):Promise<any>{
+    /*verifico que exista el pojecto respecto del project id ingresado*/
+    const criteriaProject : FindOneOptions = { where: { projectId:numberProjectId } }
+    let project = await this.projectRepository.findOne(criteriaProject);
+    /**/
+    const criteriaCollaborator : FindOneOptions = { 
+      relations:['project','user'],
+      where:{
+          project: {
+              projectId:numberProjectId,
+          },
+          user:{
+              userId:currentUser.userId,
+          }    
+      }
+  };
+  const userAutor = await this.collaboratorRepository.findOne(criteriaCollaborator);
+    /**/
+    /*const criteriaCollaborator : FindOneOptions = { where:{ userId:currentUser.userId}};
+    const userAutor = await this.collaboratorRepository.findOne(criteriaCollaborator);*/
+    try{
+      const newDocument = await this.documentService.createDocument(dto,project,userAutor);  
+      return {
+        message: `Document add successfull!!`,
+        newDocument
+      }
+    }catch (error){
+      throw new NotAcceptableException('Hubo un error en la creacion del documento')
+    }
+    
+    
+    /*verifico que usuario logueado sea el dueño del proyecto*/
+    /*const criteriaOwnerCollaborator : FindOneOptions = { relations:['user'], where:{ role: RolesCollaborators.OWNER, user:userOwner.getUserId()}};
+    const ownerCollaborator = await this.collaboratorRepository.findOne(criteriaOwnerCollaborator);
+    if (!ownerCollaborator)
+      throw new NotFoundException(`Current User with email: ${currentEmail} not is the Owner. Don not have permissions to do this operation.`);
+    const newCollaborator = new Collaborator(project,userCollaborator,rol);*/
+    /*try {
+    const collaborator = await this.collaboratorRepository.save(newCollaborator);
+    return {message: `Collaborator ${email} added succesfull in project ${project.getTitle()}.` }
+    } catch (error){
+      throw new NotAcceptableException('The collaborator already exists in the project.');    }*/
+  }
+  
+
+  /*async getListCollaboratorsAndOwner(id:number):Promise<any>{
+    const project = this.getOne(id);
+    if (project){
+      const criteriaOwnerCollaborator : FindManyOptions = { relations:['project'], where:{ user:userOwner.getUserId()}};
+    const ownerCollaborator = await this.collaboratorRepository.findOne(criteriaOwnerCollaborator);
+    }
+
+
+  } */
   
   async getProjects():Promise<Project[] | null> {    
     return await this.projectRepository.find()   
@@ -88,18 +143,14 @@ export class ProjectService {
       throw new NotFoundException('Proyect does not exist.');
     return proyect;
   }  
-
+  
   async remove(id: number,currentEmail: string):Promise<Project | null> {
     const criteria : FindOneOptions = { where: { projectId: id } }
     let project = await this.projectRepository.findOne(criteria);
     if (!project)
     throw new NotFoundException('Project does not exist.');
-    const criteriaCurrentUser : FindOneOptions = { where:{ email:currentEmail}};
+    const criteriaCurrentUser : FindOneOptions = { relations:['collaborators'], where:{ email:currentEmail}};
     const currentUser = await this.userRepository.findOne(criteriaCurrentUser);    
     return await this.projectRepository.remove(project);   
-      
-    /*Elimino todos los colaboradores del projecto*/
-    /*Elimino todos los documentos del projecto*/
-    
   }  
 }

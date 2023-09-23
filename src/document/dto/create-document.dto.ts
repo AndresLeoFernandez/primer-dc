@@ -7,22 +7,25 @@ import { Project } from "src/project/entities/project.entity";
 import { History } from "src/history/entities/history.entity";
 import { Column, CreateDateColumn, OneToMany, ManyToOne, JoinColumn } from "typeorm";
 
-export class CreateDocumentDto {
 
+export class CreateDocumentDto {
+    
+    @ApiProperty({  type: () => String, required: true, example:'titulo', description:'title Document.' })
     @IsString({ message: 'El titulo debe contener solo caracteres alfanumericos.' })
     @IsNotEmpty({ message: 'El titulo no puede ser vacio.' })
     /*@Transform(({ value }) => lowercaseString(value?.trim()))*/
     @MinLength(1, { message: 'El titulo  debe contener al menos 1 letra.' })
     @MaxLength(255, { message: 'Se ha alcanzado la longitud máxima de letras para el titulo.' })
     /*@Matches(/^[a-zA-Z0-9-]*$/, {message: 'El titulo puede contener numeros, letras y guion medio unicamente.' })*/
-    readonly title: string;
+    title: string;
   
+    @ApiProperty({  type: () => String, required: true, example:'Body document', description:'Body of the Document.' })
     @IsString()
-    @IsOptional()
     @Transform(({ value }) => sanitizeInput(value))
     @IsNotEmpty()
     content: string;
       
+    @ApiPropertyOptional({  type: () => String, example:'This revisision change text', description:'Declare diferences in the document.' })
     @IsString()
     @IsOptional()
     @Transform(({ value }) => sanitizeInput(value))
@@ -37,19 +40,4 @@ export class CreateDocumentDto {
     @Column({ name:'type' })
     type: string;
     
-    @ApiProperty({  type: () => Project, required: true})
-    @ValidateNested()
-    project: Project;
-
-    @ApiProperty({  type: () => Collaborator, required: true})
-    @ValidateNested()
-    author: Collaborator;
-
-    @ApiPropertyOptional({  type: () => Project,})
-    @ValidateNested({ each: true })
-    comments?: Comment[];
-
-    @ApiPropertyOptional({ type: () => History,})
-    @ValidateNested({ each: true })
-    histories?: History[];
 }
