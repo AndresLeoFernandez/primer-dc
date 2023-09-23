@@ -7,6 +7,7 @@ import { Document } from './entities/document.entity';
 import { History } from 'src/history/entities/history.entity';
 import { Collaborator } from 'src/collaborator/entities/collaborator.entity';
 import { User } from 'src/user/entities/user.entity';
+import { Project } from 'src/project/entities/project.entity';
 @Injectable()
 export class DocumentService {
 
@@ -16,23 +17,19 @@ export class DocumentService {
     @InjectRepository(History) private readonly historyRepository: Repository<History>
     ) {}
 
-  async createDocument(dto: CreateDocumentDto, currentUserId: number):Promise<Document> {
-    const criteriaAuthor : FindOneOptions = { relations:['user'],where:{ collaboratorId:dto.author.collaboratorId}};
-    const collaborator = await this.collaboratorRepository.findOne(criteriaAuthor);
-    if (!collaborator)
-      throw new NotFoundException('Collaborator does not exists');
-    /*console.log(collaborator);*/
-    if (collaborator.user.getUserId()===currentUserId){
-      const newDocument = new Document(dto.type,dto.project,dto.author);
-      const document = await this.documentRepository.save(newDocument);
-      const newHistory = new History(dto.title,document,dto.author,dto.content,dto.messaggesLog);
-      const history = await this.historyRepository.save(newHistory);
-      return document;
-    }
-    throw new NotFoundException('El author del documento difiere del usuario actual');
+  async createDocument(dto: CreateDocumentDto,project:Project, author:Collaborator):Promise<Document> {
+    const newDocument = new Document(dto.type,project,author);
+    const document = await this.documentRepository.save(newDocument);
+    console.log('Se guado documento');
+    const newHistory = new History(dto.title,document,author,dto.content,dto.messaggesLog);
+    const history = await this.historyRepository.save(newHistory);
+    console.log('Se guado history');
+    return document;
   }
+  /*  throw new NotFoundException('El author del documento difiere del usuario actual');
+  }*/
 
-  async updateDocument(id: number, dto: UpdateDocumentDto):Promise<Document> {
+  /*async updateDocument(id: number, dto: UpdateDocumentDto):Promise<Document> {
     const criteriaDocument : FindOneOptions = { where:{ documentId:id}};
     const document = await this.documentRepository.findOne(criteriaDocument);
     if (document) {
@@ -41,7 +38,7 @@ export class DocumentService {
       return document;  
     }
     return null
-  }
+  }*/
 
   async findAll(): Promise<Document[]> {
     return await this.documentRepository.find();

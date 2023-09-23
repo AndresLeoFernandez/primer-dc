@@ -13,6 +13,7 @@ import { History } from "src/history/entities/history.entity";
   imports:[
     TypeOrmModule.forFeature([Document,Collaborator,Comment,Project,History])],
   controllers: [DocumentController],
-  providers: [DocumentService]
+  providers: [DocumentService],
+  exports:[DocumentService]
 })
 export class DocumentModule {}

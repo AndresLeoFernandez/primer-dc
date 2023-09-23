@@ -12,7 +12,7 @@ import { Document } from './entities/document.entity';
 export class DocumentController {
   constructor(private readonly documentService: DocumentService) 
   {}
-  @ApiBearerAuth()
+  /*@ApiBearerAuth()
   @UseGuards(AuthGuard) 
   @Post('/add')
   @ApiOperation({summary: 'Create New Document and first history', description:'',})
@@ -23,8 +23,8 @@ export class DocumentController {
   ) {
       return this.documentService.createDocument(createDocumentDto,currentUserId);
   }
-
-  @ApiBearerAuth()
+*/
+ /* @ApiBearerAuth()
   @UseGuards(AuthGuard) 
   @Post('/:id/edit')
   @ApiOperation({summary: 'Update Document, create new history', description:'',})
@@ -35,7 +35,7 @@ export class DocumentController {
     @User('userId') currentUserId:number
   ):Promise <Document> {
       return this.documentService.updateDocument(documentId,updateDocumentDto);
-  }
+  }*/
 
   @Get()
   findAll() {
