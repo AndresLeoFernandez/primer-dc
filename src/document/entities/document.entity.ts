@@ -28,7 +28,7 @@ export class Document {
     /* Relations */
 
     @ApiProperty({  type: () => Project, required: true})
-    @ManyToOne(() => Project, (project) => project.documents,{ nullable: false })
+    @ManyToOne(() => Project, (project) => project.documents,{ nullable: false, onDelete: 'CASCADE',orphanedRowAction: 'delete'})
     @JoinColumn({name :'projects_id' })
     project: Project;
 
@@ -38,13 +38,11 @@ export class Document {
     author: Collaborator;
 
     @ApiPropertyOptional({  type: () => Project,isArray: true })
-    @IsArray()
-    @ValidateNested({ each: true })
-    @OneToMany(() => Comment, (comment) => comment.document,{ nullable: false })
+    @OneToMany(() => Comment, (comment) => comment.document,{ nullable: false,cascade: ["remove"]})
     comments?: Comment[];
 
     @ApiPropertyOptional({  type: () => History, isArray: true })
-    @OneToMany( () => History,(history) => history.document)
+    @OneToMany( () => History,(history) => history.document,{cascade: ["remove"] })
     histories?: History[];
 
     /* Functions getters and setters */

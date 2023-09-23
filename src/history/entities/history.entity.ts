@@ -42,7 +42,7 @@ export class History {
   /* Relations */
   
   @ApiProperty({  type: () => Document, description:"History of document"})
-  @ManyToOne(() => Document, (document) => document.histories, { nullable: false })
+  @ManyToOne(() => Document, (document) => document.histories, { nullable: false, onDelete: 'CASCADE',orphanedRowAction: 'delete'})
   @JoinColumn({name :'documents_id'})
   document: Document;
   

@@ -23,7 +23,7 @@ export class Collaborator {
     /* Relations */
 
     @ApiProperty({ type: () => Project, required: true, description: '', example: ''})
-    @ManyToOne(() => Project, (project) => project.collaborators, {nullable: false, onDelete: 'CASCADE',orphanedRowAction: 'delete'} )
+    @ManyToOne(() => Project, (project) => project.collaborators, {nullable: false, onDelete: 'CASCADE',orphanedRowAction: 'delete'})
     @JoinColumn({ name:'projects_id' })
     project: Project
         
@@ -33,11 +33,11 @@ export class Collaborator {
     user: User;
         
     @ApiProperty({  type: () => Document,required: true,description: '',example: ''})
-    @OneToMany(()=> Document, (document) => document.author)
+    @OneToMany(()=> Document, (document) => document.author,{onDelete: 'CASCADE',orphanedRowAction: 'delete'})
     documents: Document[] 
 
     @ApiProperty({  type: () => History,required: true,description: '',example: ''})
-    @OneToMany(()=> History, (history) => history.author)
+    @OneToMany(()=> History, (history) => history.author,{onDelete: 'CASCADE',orphanedRowAction: 'delete'})
     histories: History[] 
 
     constructor(project: Project, user: User, role: RolesCollaborators, documents?: Document[],histories?: History[]){
