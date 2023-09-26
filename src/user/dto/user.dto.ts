@@ -3,7 +3,6 @@ import { Transform } from 'class-transformer';
 import { lowercaseString, sanitizeInput } from 'src/helpers/utils.helpers';
 import { ApiProperty } from '@nestjs/swagger';
 
-
 export class UserDto {
 
   @ApiProperty({ required: false, example: 'Nombre',})

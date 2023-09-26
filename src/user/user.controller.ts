@@ -1,13 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, ParseIntPipe, UseGuards, Delete } from '@nestjs/common';
-import {User as userEntity } from './entities/user.entity';
+import {User } from './entities/user.entity';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ChangePasswordDto } from 'src/auth/dto/ChangePassword.dto';
 import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { User } from 'src/common/decorators/user.decorator';
-/*import { CurrentUser } from 'src/common/decorators/currentUser.decorator';*/
+/*import { User } from 'src/common/decorators/user.decorator';*/
+import { CurrentUser } from 'src/common/decorators/currentUser.decorator';
+
 
 
 @ApiTags('User')
@@ -16,6 +16,8 @@ export class UserController {
   constructor(private readonly userService: UserService) 
   {}
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get('view/all')
   @ApiOperation({summary: 'Obtain all Users', description:'',})
   @ApiOkResponse({ status: 200, description: 'Give all the Users.'}) 
@@ -29,27 +31,32 @@ export class UserController {
       return this.userService.findOneBy(username)
   } */
 
-  
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get('/:id/view')
   @ApiOperation({summary: 'Obtain User by id', description:' la descripcion',})
-  @ApiParam({ name: 'id', description: 'userId' })
+  @ApiParam({ name: 'id', description: 'User id' })
   @ApiOkResponse({ status: 200, description: 'The found record', type: User })
   @ApiResponse({  status: 403, description: 'Forbidden.'})
-  async getOne(@Param('id',ParseIntPipe) userId: number): Promise<userEntity> {
+  async getOne(
+    @Param('id',ParseIntPipe) userId: number
+  ): Promise<User> {
     const data = await this.userService.getOne(userId);
     return data
   }
-  @ApiBearerAuth()
+  /*@ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Patch('/edit')
   @ApiOperation({summary: 'Update Current User', description:' la descripcion',})
   @ApiBody({ type: UpdateUserDto })
   @ApiResponse({  status: 201, description: 'The record has been successfully modifier.'})  
   @ApiResponse({  status: 401,description: 'Not Authorized. Need log for this operation.'})  
-  async update( @Body() updateUserDto: UpdateUserDto,@User() user:any) {
+  async update( 
+    @Body() updateUserDto: UpdateUserDto,
+    @CurrentUserUser() user:User) {
     const data = await this.userService.editUser(updateUserDto,user);
     return { message: 'Modificación correcta',data    }
-  }
+  }*/
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
@@ -58,7 +65,9 @@ export class UserController {
   @ApiResponse({ status: 401,description: 'Not Authorized. Need log for this operation.'})  
   @ApiBody({ type: ChangePasswordDto, description:'Change the password'})
   @Patch('/change-password')
-  async changeUserPassword( @Body() changePasswordDto: ChangePasswordDto,@User() user:any) {
+  async changeUserPassword(
+    @Body() changePasswordDto: ChangePasswordDto,
+    @CurrentUser() user:User) {
     const data = await this.userService.changePassword(changePasswordDto,user);
     return { message: 'Modificación de Password correcta',data }
   }
@@ -69,8 +78,8 @@ export class UserController {
   @ApiOperation({summary: 'Delete Current User', description:' la descripcion',})
   @ApiOkResponse({  status: 201, description: 'The record has been successfully deleted.'})  
   @ApiResponse({  status: 404,description: 'The entered ID does not exist.'})  
-  async remove(@User() user:any) {
-    return await this.userService.deleteUser(user.userId);
+  async remove(@CurrentUser() currentUser:User) {
+    return await this.userService.deleteUser(currentUser);
   } 
 
 }

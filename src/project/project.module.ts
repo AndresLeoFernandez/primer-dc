@@ -7,18 +7,18 @@ import { Document } from "src/document/entities/document.entity";
 import { Collaborator } from "src/collaborator/entities/collaborator.entity";
 import { User } from "src/user/entities/user.entity";
 import { Category } from "src/category/entities/category.entity";
-import { CategoryService } from 'src/category/category.service';
-/*import { UserModule } from 'src/user/user.module';*/
 import { DocumentModule } from 'src/document/document.module';
+import { UserModule } from 'src/user/user.module';
+/*import { IsEmailUserAlreadyExistConstraint } from 'src/common/validators/isEmailUserAlreadyExist';*/
 
-/*import { AllowedCategoryValidator } from './dto/create-project.dto';*/
-/*import { UserModule } from 'src/user/user.module';*/
+
 
 @Module({
   imports:[
+    UserModule,
     DocumentModule,
     TypeOrmModule.forFeature([Project,Document,Collaborator,User,Category]),],
-  providers: [ProjectService],
+  providers: [ProjectService,/*IsEmailUserAlreadyExistConstraint*/],
   controllers: [ProjectController],  
 })
 export class ProjectModule {}

@@ -15,7 +15,7 @@ crea en request currentProject
 */
 
 @Injectable()
-export class ProjectOwnerGuard implements CanActivate {
+export class ProjectExistGuard implements CanActivate {
     
     constructor( 
         @InjectRepository(Project) private readonly projectRepository: Repository<Project>,)
@@ -28,11 +28,8 @@ export class ProjectOwnerGuard implements CanActivate {
         const criteriaProject : FindOneOptions = { relations:['author',],where:{ projectId: projectId}};
         const project = await this.projectRepository.findOne(criteriaProject);
         if (!project)
-            throw new NotFoundException('Proyect does not exist.');
-        if (!(currentUser.userId === project.getAuthor().getUserId())){
-           throw new UnauthorizedException('Current user not owner.');
-        }
-        request['owner'] = project.getAuthor();
+        throw new NotFoundException('Proyect does not exist.');
+        request['currentproject'] = project;
         /*console.log(`Este es CURRENT PROYECT`);
         console.log(request['currentproject']);*/
         return true;

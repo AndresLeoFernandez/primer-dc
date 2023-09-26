@@ -12,6 +12,7 @@ import { CategoryService } from 'src/category/category.service';
 import { Category } from 'src/category/entities/category.entity';
 import { DocumentService } from 'src/document/document.service';
 import { CreateDocumentDto } from 'src/document/dto/create-document.dto';
+import { UpdateDocumentDto } from 'src/document/dto/update-document.dto';
 
 
 @Injectable()
@@ -23,134 +24,84 @@ export class ProjectService {
     /*@InjectRepository(Document) private readonly documentRepository: Repository<Document>,*/
     @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
     private readonly documentService: DocumentService,
-    
-  ) {}
-  
-  async createProject(dto: CreateProjectDto, authorid:number):Promise<Project> {
-    /* Recupero current User*/
-    const criteriaUser : FindOneOptions = { where:{ userId: authorid}};
-    const currentUser = await this.userRepository.findOne(criteriaUser);
-    /*Verificamos que no exista ya creado un proyecto por current user con igual titulo*/
-    const criteria : FindOneOptions = { relations:['author','category'],where:{ title: dto.title.toLowerCase(), author: currentUser.getUserId()}};
+
+  ) { }
+
+  async createProject(dto: CreateProjectDto, currentUser: User): Promise<Project> {
+   /*Verificamos que no exista ya creado un proyecto por current user con igual titulo*/
+    const criteria: FindOneOptions = { relations: ['author', 'category'], where: { title: dto.title.toLowerCase(), author: currentUser.getUserId() } };
     const projectExist = await this.projectRepository.findOne(criteria);
     if (projectExist && projectExist.getAuthor().getUserId() === currentUser.getUserId())
       throw new NotAcceptableException('Project already exist.');
     /*Check si existe la categoria*/
-    const criteriaCategory : FindOneOptions = { where:{ name: dto.category.toLowerCase()}};
+    const criteriaCategory: FindOneOptions = { where: { name: dto.category.toLowerCase() } };
     const currentCategory = await this.categoryRepository.findOne(criteriaCategory);
     if (!currentCategory)
       throw new NotFoundException('Category not exist.');
-    const newProject = new Project(dto.title,currentUser,currentCategory);
+    const newProject = new Project(dto.title, currentUser, currentCategory);
     let project = await this.projectRepository.save(newProject);
-    const newCollaborator = new Collaborator(project,currentUser,RolesCollaborators.OWNER);
-    const collaborator = await this.collaboratorRepository.save(newCollaborator); 
+    const newCollaborator = new Collaborator(project, currentUser, RolesCollaborators.OWNER);
+    const collaborator = await this.collaboratorRepository.save(newCollaborator);
     return project;
   }
-  
 
-  async addCollaborator(projectId: number, rol:RolesCollaborators, email:string, currentEmail:string):Promise<any>{
-    /*verifico que exista el pojecto respecto del project id ingresado*/
-    const criteriaProject : FindOneOptions = { relations:['author'],where: { projectId } }
-    let project = await this.projectRepository.findOne(criteriaProject);
-    if (!project)
-      throw new NotFoundException('Proyect does not exist.');
+  /*async addCollaborator(projectId: number, email:string, currentEmail:string):Promise<any>*/
+  async addCollaborator( email: string, project: Project): Promise<any> {
     /*verifico que el usuario que se debe asignar como colaborador exista conforme al email*/
-    const criteriaCollaborator : FindOneOptions = { where:{ email:email}};
-    const userCollaborator = await this.userRepository.findOne(criteriaCollaborator);
-    if (!userCollaborator)
-    throw new NotFoundException('User colaborator does not exist.');
-    /*verifico que el usuario logueado exista (se podria evitar) */
-    const criteriaCurrentUser : FindOneOptions = { where:{ email:currentEmail}};
-    const userOwner = await this.userRepository.findOne(criteriaCurrentUser);
-    if (!userOwner)
-    throw new NotFoundException('User Owner does not exists.');
-    /*verifico que usuario logueado sea el dueño del proyecto*/
-    const criteriaOwnerCollaborator : FindOneOptions = { relations:['user'], where:{ role: RolesCollaborators.OWNER, user:userOwner.getUserId()}};
-    const ownerCollaborator = await this.collaboratorRepository.findOne(criteriaOwnerCollaborator);
-    if (!ownerCollaborator)
-      throw new NotFoundException(`Current User with email: ${currentEmail} not is the Owner. Don not have permissions to do this operation.`);
-    const newCollaborator = new Collaborator(project,userCollaborator,rol);
+    const criteriaUser: FindOneOptions = { where: { email: email } };
+    const user = await this.userRepository.findOne(criteriaUser);
+    console.log(user);
+    if (!user)
+      throw new NotFoundException('The email does not correspond to any user of the system.');
     try {
-    const collaborator = await this.collaboratorRepository.save(newCollaborator);
-    return {message: `Collaborator ${email} added succesfull in project ${project.getTitle()}.` }
-    } catch (error){
-      throw new NotAcceptableException('The collaborator already exists in the project.');    }
-  }
-
-  async addDocument(numberProjectId: number, dto: CreateDocumentDto ,currentUser:any):Promise<any>{
-    /*verifico que exista el pojecto respecto del project id ingresado*/
-    const criteriaProject : FindOneOptions = { where: { projectId:numberProjectId } }
-    let project = await this.projectRepository.findOne(criteriaProject);
-    /**/
-    const criteriaCollaborator : FindOneOptions = { 
-      relations:['project','user'],
-      where:{
-          project: {
-              projectId:numberProjectId,
-          },
-          user:{
-              userId:currentUser.userId,
-          }    
-      }
-  };
-  const userAutor = await this.collaboratorRepository.findOne(criteriaCollaborator);
-    /**/
-    /*const criteriaCollaborator : FindOneOptions = { where:{ userId:currentUser.userId}};
-    const userAutor = await this.collaboratorRepository.findOne(criteriaCollaborator);*/
-    try{
-      const newDocument = await this.documentService.createDocument(dto,project,userAutor);  
-      return {
-        message: `Document add successfull!!`,
-        newDocument
-      }
-    }catch (error){
-      throw new NotAcceptableException('Hubo un error en la creacion del documento')
+      const newCollaborator = new Collaborator(project, user, RolesCollaborators.COLLABORATOR);
+      const collaborator = await this.collaboratorRepository.save(newCollaborator);
+      return { message: `Collaborator ${email} added succesfull in project ${project.getTitle()}.` }
+    } catch (error) {
+      throw new NotAcceptableException('The collaborator already exists in the project.');
     }
-    
-    
-    /*verifico que usuario logueado sea el dueño del proyecto*/
-    /*const criteriaOwnerCollaborator : FindOneOptions = { relations:['user'], where:{ role: RolesCollaborators.OWNER, user:userOwner.getUserId()}};
-    const ownerCollaborator = await this.collaboratorRepository.findOne(criteriaOwnerCollaborator);
-    if (!ownerCollaborator)
-      throw new NotFoundException(`Current User with email: ${currentEmail} not is the Owner. Don not have permissions to do this operation.`);
-    const newCollaborator = new Collaborator(project,userCollaborator,rol);*/
-    /*try {
-    const collaborator = await this.collaboratorRepository.save(newCollaborator);
-    return {message: `Collaborator ${email} added succesfull in project ${project.getTitle()}.` }
-    } catch (error){
-      throw new NotAcceptableException('The collaborator already exists in the project.');    }*/
   }
-  
 
-  /*async getListCollaboratorsAndOwner(id:number):Promise<any>{
-    const project = this.getOne(id);
+  async addDocument(project: Project, dto: CreateDocumentDto, userAutor: Collaborator): Promise<any> {
+    try {
+      const newDocument = await this.documentService.createDocument(dto, project, userAutor);
+      return { message: `Document add successfull!!`, newDocument}
+    } catch (error) {
+      throw new NotAcceptableException('Hubo un error en la creacion del documento.');
+    }
+  }
+
+  async editDocument(document: Document, dto: UpdateDocumentDto, userAutor: Collaborator): Promise<any> {
+    try {
+      let newDocument = await this.documentService.updateDocument(document, dto, userAutor);
+      return { message: `Document updated successfull!!`, newDocument};
+    } catch (error) {
+      throw new NotAcceptableException('Hubo un error en la actualizacion del documento.');
+    }
+  }
+
+  async getListCollaboratorsAndOwner(id:number):Promise<any>{
+    /*const project = this.getOne(id);
     if (project){
       const criteriaOwnerCollaborator : FindManyOptions = { relations:['project'], where:{ user:userOwner.getUserId()}};
     const ownerCollaborator = await this.collaboratorRepository.findOne(criteriaOwnerCollaborator);
-    }
+    }*/
+    return `Lista de colaboradores de ${id}`;
+  }
 
-
-  } */
-  
-  async getProjects():Promise<Project[] | null> {    
-    return await this.projectRepository.find()   
-  }  
+  async getProjects(): Promise<Project[] | null> {
+    return await this.projectRepository.find()
+  }
 
   async getOne(id: number, userEntity?: User): Promise<Project | null> {
-    const criteria : FindOneOptions = { where: { projectId: id } }
+    const criteria: FindOneOptions = { where: { projectId: id } }
     let proyect = await this.projectRepository.findOne(criteria);
     if (!proyect)
       throw new NotFoundException('Proyect does not exist.');
     return proyect;
-  }  
-  
-  async remove(id: number,currentEmail: string):Promise<Project | null> {
-    const criteria : FindOneOptions = { where: { projectId: id } }
-    let project = await this.projectRepository.findOne(criteria);
-    if (!project)
-    throw new NotFoundException('Project does not exist.');
-    const criteriaCurrentUser : FindOneOptions = { relations:['collaborators'], where:{ email:currentEmail}};
-    const currentUser = await this.userRepository.findOne(criteriaCurrentUser);    
-    return await this.projectRepository.remove(project);   
-  }  
+  }
+
+  async remove(project: Project): Promise<Project | null> {
+    return await this.projectRepository.remove(project);
+  }
 }
