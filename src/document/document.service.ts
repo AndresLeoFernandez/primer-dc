@@ -29,16 +29,22 @@ export class DocumentService {
   /*  throw new NotFoundException('El author del documento difiere del usuario actual');
   }*/
 
-  /*async updateDocument(id: number, dto: UpdateDocumentDto):Promise<Document> {
-    const criteriaDocument : FindOneOptions = { where:{ documentId:id}};
+  async updateDocument(document:Document, dto: UpdateDocumentDto, author:Collaborator):Promise<Document> {
+    /*const criteriaDocument : FindOneOptions = { where:{ documentId:id}};
     const document = await this.documentRepository.findOne(criteriaDocument);
-    if (document) {
-      const newHistory = new History(dto.title,document,dto.author,dto.content,dto.messaggesLog);
+    if (document) {*/
+    console.log('=======+++=======');
+    console.log(document);
+    console.log(dto);
+    console.log(author);
+    console.log('=======+++=======');
+    
+      const newHistory = new History(dto.title,document,author,dto.content,dto.messaggesLog);
       const history = await this.historyRepository.save(newHistory);
       return document;  
-    }
-    return null
-  }*/
+  }
+   
+  
 
   async findAll(): Promise<Document[]> {
     return await this.documentRepository.find();

@@ -46,11 +46,13 @@ export class CategoryService {
   }
 
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: number, updateCategoryDto: UpdateCategoryDto): Promise<Category> {
+    const category = await this.findOne(id);    
+    const newCategory = Object.assign(category, updateCategoryDto);
+    return await this.categoryRepository.save(newCategory);       
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(categoryId: number): Promise<any> {
+    return await this.categoryRepository.delete(categoryId);
   }
 }

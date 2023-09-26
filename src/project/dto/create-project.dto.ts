@@ -46,15 +46,4 @@ export class CreateProjectDto {
     @IsNotEmpty()
     @Transform(({ value }) => lowercaseString(value))
     category: string;
-
-    /*@ApiProperty({ type: () => Category, required: true, example:'programing', description: 'Category of the project.' })
-    @ValidateNested()
-    category: Category;  */ 
-
-    /*@Validate(AllowedCategoryValidator)
-    @IsString()
-    @IsNotEmpty()
-    @MaxLength(50, { message: 'Maximum length has been reached.' })
-    categoryName: string;*/
-  
 }

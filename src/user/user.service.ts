@@ -61,25 +61,23 @@ export class UserService {
   }
 
   /*  Edit field User but not is posible to change email!!! */
-  async editUser (dto: UpdateUserDto, userEntity: any): Promise<User> {
-    const currentUser = await this.buscarPorEmail(userEntity.email);
+  async editUser (dto: UpdateUserDto, currentUser: User): Promise<User> {
+    /*const currentUser = await this.buscarPorEmail(userEntity.email);*/
     const editedUser = Object.assign(currentUser, dto);
     return await this.userRepository.save(editedUser);    
   }
 
 
-  async changePassword (dto: ChangePasswordDto, userEntity:any): Promise<User> {
-    const currentUser = await this.buscarPorEmail(userEntity.email);    
+  async changePassword (dto: ChangePasswordDto, currentUser:User): Promise<User> {
+    /*const currentUser = await this.buscarPorEmail(userEntity.email);    */
     const editedUser = Object.assign(currentUser, dto);
     return await this.userRepository.save(editedUser);     
   }
 
   /*  Delete user in the system  */
-  async deleteUser (userId:number): Promise<User> {
-    const currentUser = await this.findOneBy({userId});
-    if (currentUser) 
-      return await this.userRepository.remove(currentUser);
-    throw new BadRequestException('User not found');
+  async deleteUser (user:User): Promise<User> {
+    return this.userRepository.remove(user);
+    
   }
 
   async buscarPorEmail(email: string): Promise<User | null> {

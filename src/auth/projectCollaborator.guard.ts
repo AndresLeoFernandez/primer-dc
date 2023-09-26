@@ -1,14 +1,20 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { FindManyOptions, FindOneOptions, Repository, createQueryBuilder } from "typeorm";
+import { FindOneOptions, Repository } from "typeorm";
 import { Collaborator } from "src/collaborator/entities/collaborator.entity";
-import { Project } from "src/project/entities/project.entity";
+
+
+/*
+Este guard verifica que:
+dado el proyecto el usuario actual sea dueño o colaborador
+crea en request ownerOrCol que es el colaborador actual ejecutando la accion.
+*/
+
 
 @Injectable()
 export class ProjectCollaboratorGuard implements CanActivate {
     
     constructor( 
-        @InjectRepository(Project) private readonly projectRepository: Repository<Project>,
         @InjectRepository(Collaborator) private readonly collaboratorRepository:Repository<Collaborator>,
         )
     {}       
@@ -17,7 +23,7 @@ export class ProjectCollaboratorGuard implements CanActivate {
         const request = context.switchToHttp().getRequest();        
         const currentUser= request.user;
         const numberProjectId = request.params.id;
-        const criteriaCollaborator : FindManyOptions = { 
+        const criteriaCollaborator : FindOneOptions = { 
             relations:['project','user'],
             where:{
                 project: {
@@ -28,10 +34,14 @@ export class ProjectCollaboratorGuard implements CanActivate {
                 }    
             }
         };
-        const colaboradores = await this.collaboratorRepository.find(criteriaCollaborator);
-        if (!colaboradores){
+        const collaborator = await this.collaboratorRepository.findOne(criteriaCollaborator);
+        if (!collaborator){
            throw new UnauthorizedException('Current user not a user or collaborator of the project');
         }
+        request['collaborator'] = collaborator;
+        /*console.log(`Este es COLLABORADOR QUE INTENTA EJECUTAR LA ACCION`);
+        console.log(request['ownerOrCol']);*/
+        
         return true;
     }
 }

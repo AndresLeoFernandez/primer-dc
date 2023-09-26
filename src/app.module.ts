@@ -25,14 +25,15 @@ import { AuthModule } from './auth/auth.module';
       ],
       synchronize: /*true*/ false
     }),
+    AuthModule,
     UserModule,
-    ProjectModule,
+    CategoryModule,
     CommentModule,
     CollaboratorModule,
-    CategoryModule,
     DocumentModule,
     HistoryModule,
-    AuthModule],
+    ProjectModule,
+    ],
   controllers: [AppController],
   providers: [AppService],
 })
