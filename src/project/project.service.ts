@@ -50,7 +50,7 @@ export class ProjectService {
     /*verifico que el usuario que se debe asignar como colaborador exista conforme al email*/
     const criteriaUser: FindOneOptions = { where: { email: email } };
     const user = await this.userRepository.findOne(criteriaUser);
-    console.log(user);
+    /*console.log(user);*/
     if (!user)
       throw new NotFoundException('The email does not correspond to any user of the system.');
     try {
@@ -80,14 +80,42 @@ export class ProjectService {
     }
   }
 
-  async getListCollaboratorsAndOwner(id:number):Promise<any>{
-    /*const project = this.getOne(id);
-    if (project){
-      const criteriaOwnerCollaborator : FindManyOptions = { relations:['project'], where:{ user:userOwner.getUserId()}};
-    const ownerCollaborator = await this.collaboratorRepository.findOne(criteriaOwnerCollaborator);
-    }*/
-    return `Lista de colaboradores de ${id}`;
+  async getProjectsOwner(currentUser:User):Promise<any> {
+    const criteriaOwner : FindManyOptions = {/*relations:['author'],*/ where:{author:{userId:currentUser.getUserId(),}}};
+    const allProyects = await this.projectRepository.find(criteriaOwner);
+    return allProyects;
   }
+
+  async getProjectsCollaborator(currentUser:User):Promise<any>{
+    const criteriaCollaborator : FindManyOptions = { 
+      select: { project: { projectId:true, title:true,},},relations: ['project'],where: { user:currentUser.getUserId(),
+        role:RolesCollaborators.COLLABORATOR },};
+    const projectCollaborator = await this.collaboratorRepository.find(criteriaCollaborator);
+    if (!projectCollaborator){
+      return { message:'Not have projects.'}
+    }else {
+      /*console.log(projectCollaborator);*/
+      const result : Project[] = [];
+      /*console.log(result);
+      console.log(typeof result );*/
+      for (const pro of projectCollaborator ) {
+        const criteriaCol: FindOneOptions = { where: { projectId: pro.project.getProjectId()}};
+        const current = await this.projectRepository.findOne(criteriaCol);
+        result.push(current);
+      };
+      /*console.log(result);*/
+      return result;
+    }
+  }
+
+
+    /*return projectCollaborator;*/
+  
+    /*return allProyects;*/
+    /*const criteriaOwner : FindManyOptions = {relations:['collaborator'], where:{collaborator:{userId:currentUser.getUserId(),role:RolesCollaborators.COLLABORATOR}}};
+    const allProyects = await this.projectRepository.find(criteriaOwner);
+    return allProyects;
+  }*/
 
   async getProjects(): Promise<Project[] | null> {
     return await this.projectRepository.find()

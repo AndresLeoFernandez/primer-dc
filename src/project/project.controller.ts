@@ -100,13 +100,31 @@ export class ProjectController {
     @CurrentCollaborator() creator:Collaborator,
     @CurrentDocument() currentDocument:Document   
   ){
-    /*console.log(id);
-    console.log(idDoc);
-    console.log('antes de entrar');*/
     return await this.projectService.editDocument(currentDocument,documentDto,creator);
   }
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Get('/my-projects')
+  @ApiOperation({summary: 'Get all projects where the current user is the owner', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide a list of all your projects.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  async findProjectsOwner(
+    @CurrentUser() currentUser:User
+  ): Promise<Project[]> {
+    return await this.projectService.getProjectsOwner(currentUser);
+  }
 
-
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Get('/my-collaboration-projects')
+  @ApiOperation({summary: 'Get all projects where the current user is collaborator', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide a list of all projects where current user collaborator.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  async findProjectsCollaborators(
+    @CurrentUser() currentUser:User
+  ): Promise<Project[]> {
+    return await this.projectService.getProjectsCollaborator(currentUser);
+  }
 
   @Get('view/all')
   @ApiOperation({summary: 'Obtain all Projects', description:'',})
