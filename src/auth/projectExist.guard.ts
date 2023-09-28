@@ -30,8 +30,6 @@ export class ProjectExistGuard implements CanActivate {
         if (!project)
         throw new NotFoundException('Proyect does not exist.');
         request['currentproject'] = project;
-        /*console.log(`Este es CURRENT PROYECT`);
-        console.log(request['currentproject']);*/
         return true;
     }
 }

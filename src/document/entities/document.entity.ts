@@ -15,15 +15,23 @@ export class Document {
     
     @ApiProperty({  type: () => Number, example:4,readOnly: true, description:'Autoincremental integer value.' })
     @PrimaryGeneratedColumn({ name: 'document_id' })
-    documentId: number;
+    private documentId: number;
   
     @ApiProperty({  type: () => String, required: true, example:'Text', description:'Type Document.' })
     @Column({ name:'type' })
-    type: string;
+    private type: string;
     
     @ApiProperty({  type: () => Date, example:'25-08-2023', description:'Date of registration in the system.'})
     @CreateDateColumn({ name:'creation_date', type: 'timestamp' })
     private creationDate: Date;
+
+    @ApiProperty({  type: () => Number, example:4,readOnly: true, default:1, description:'Value of the las history.' })
+    @Column({ name: 'last_history_id' })
+    private lastHistoryId: number;
+
+    @ApiProperty({  type: () => Number, example:4,readOnly: true, default:0, description:'visits.' })
+    @Column({ name: 'visits' })
+    private visits: number;
 
     /* Relations */
 
@@ -33,7 +41,7 @@ export class Document {
     project: Project;
 
     @ApiProperty({ type: () => Collaborator, required: true})
-    @ManyToOne(() => Collaborator, (collaborator) => collaborator.documents,{ nullable: false })
+    @ManyToOne(() => Collaborator, (collaborator) => collaborator.documents,{ nullable: false,onDelete: 'CASCADE',orphanedRowAction: 'delete'})
     @JoinColumn({name :'author_collaborator_id'})
     author: Collaborator;
 
@@ -58,6 +66,13 @@ export class Document {
     public getType(): string {
         return this.type
     }
+
+    public setLastHistoryId(newHistoryId:number){
+        this.lastHistoryId = newHistoryId;
+    }
+    public getLastHistoryId():number {
+        return this.lastHistoryId;
+    }
         
     constructor(type: string, project: Project,author: Collaborator,comments?: Comment[],histories?: History[]){
         this.type = type;
@@ -65,5 +80,7 @@ export class Document {
         this.author = author;
         this.comments = comments;
         this.histories = histories;
+        this.visits = 0;    
+        this.lastHistoryId = 1;    
     }
 }

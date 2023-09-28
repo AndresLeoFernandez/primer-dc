@@ -1,15 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { CollaboratorService } from './collaborator.service';
 import { CreateCollaboratorDto } from './dto/create-collaborator.dto';
 import { Collaborator } from './entities/collaborator.entity';
-import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'src/auth/auth.guard';
 
+@ApiBearerAuth()
 @ApiTags('Collaborator')
 @Controller('collaborator')
+
+
 export class CollaboratorController {
   constructor(private readonly collaboratorService: CollaboratorService)
   {}
-
+  
+  /*@UseGuards(AuthGuard,ProjectExistGuard,ProjectCollaboratorGuard,DocumentExistGuard)
   @Post('/add')
   @ApiOperation({summary: 'Create new Collaborator', description:'',})
   @ApiBody({ type: CreateCollaboratorDto })
@@ -18,13 +23,14 @@ export class CollaboratorController {
   async create( @Body() createCollaboratorDto: CreateCollaboratorDto) {
     return this.collaboratorService.create(createCollaboratorDto);
   }
-
+  */
+  @UseGuards(AuthGuard)
   @Get('view/all')
   @ApiOperation({ summary: 'Find all Collaborators', description:' Otorga todos los Colaboradores del sistema.',})
   async findAll(): Promise<Collaborator[]> {
     return this.collaboratorService.findAll();
   }
-
+  @UseGuards(AuthGuard)
   @Get(':id/view')
   @ApiOperation({summary: 'Obtain Users by id', description:' la descripcion',})
   @ApiParam({ name: 'id', description: 'collaboratorId' })
@@ -33,9 +39,10 @@ export class CollaboratorController {
   async findOne( @Param('id', ParseIntPipe) id: number):Promise<Collaborator> {
     return this.collaboratorService.findOne(id);
   }
-
-
-  /*@Get(':id')
+ 
+  /*
+  @UseGuards(AuthGuard)
+  @Get(':id')
   @ApiOperation({summary: 'Obtain Users by id', description:' la descripcion',})
   @ApiParam({ name: 'id', description: 'collaboratorId' })
   @ApiResponse({  status: 200, description: 'The found record', type: Collaborator })

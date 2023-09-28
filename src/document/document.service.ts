@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
-import { FindOneOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Document } from './entities/document.entity';
 import { History } from 'src/history/entities/history.entity';
@@ -20,31 +20,33 @@ export class DocumentService {
   async createDocument(dto: CreateDocumentDto,project:Project, author:Collaborator):Promise<Document> {
     const newDocument = new Document(dto.type,project,author);
     const document = await this.documentRepository.save(newDocument);
-    console.log('Se guado documento');
     const newHistory = new History(dto.title,document,author,dto.content,dto.messaggesLog);
     const history = await this.historyRepository.save(newHistory);
-    console.log('Se guado history');
-    return document;
+    document.setLastHistoryId(history.getHistoryId());
+    const documentSaved = await this.documentRepository.save(document);
+    return documentSaved;
   }
-  /*  throw new NotFoundException('El author del documento difiere del usuario actual');
-  }*/
-
-  async updateDocument(document:Document, dto: UpdateDocumentDto, author:Collaborator):Promise<Document> {
-    /*const criteriaDocument : FindOneOptions = { where:{ documentId:id}};
-    const document = await this.documentRepository.findOne(criteriaDocument);
-    if (document) {*/
-    console.log('=======+++=======');
-    console.log(document);
-    console.log(dto);
-    console.log(author);
-    console.log('=======+++=======');
-    
-      const newHistory = new History(dto.title,document,author,dto.content,dto.messaggesLog);
-      const history = await this.historyRepository.save(newHistory);
-      return document;  
-  }
-   
   
+  async updateDocument(document:Document, dto: UpdateDocumentDto, author:Collaborator):Promise<Document> {
+    const newHistory = new History(dto.title,document,author,dto.content,dto.messaggesLog);
+    const history = await this.historyRepository.save(newHistory);
+    document.setLastHistoryId(history.getHistoryId());
+    const documentSaved = await this.documentRepository.save(document);
+    return documentSaved;  
+  }
+  async getLastDocumentVersion(document:Document):Promise<any> {
+    const criteria : FindOneOptions = { where: { historyId : document.getLastHistoryId()} }
+    const lastVersion = this.historyRepository.findOneOrFail(criteria);
+    return lastVersion;
+  }
+
+  async getHistoryDocument(document:Document):Promise<any> {
+    const criteria : FindManyOptions = {
+    relations:['document'], select: { document:{document:false}, historyId:true, messaggesLog:true, creationDate:true,}, where: { document: { documentId: document.getDocumentId(),},},};
+    const currentHistories = this.historyRepository.find(criteria);
+    return currentHistories;
+  }
+
 
   async findAll(): Promise<Document[]> {
     return await this.documentRepository.find();

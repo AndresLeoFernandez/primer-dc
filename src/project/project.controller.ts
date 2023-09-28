@@ -64,7 +64,27 @@ export class ProjectController {
   ){
       return await this.projectService.addCollaborator(emailUserDto.email,currentProject);
   }
-  
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard,ProjectExistGuard,ProjectOwnerGuard,ProjectCollaboratorGuard)
+  @Delete('/:id/delete/collaborator')
+  @ApiOperation({summary: 'Delete Collaborator to Project', description:'',})
+  @ApiParam({name:'id',type:Number, description:'Id project to delete Collaborator'})
+  @ApiBody({type: EmailUserDto, description:'Email user to delete.'})
+  @ApiOkResponse({ status: 201, description: 'The collaborator has been delete.'})
+  @ApiResponse({ status: 401, description: 'Unauthorized not Project owner.' })  
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 404, description: 'The email does not correspond to any user of the system.' })
+  @ApiResponse({ status: 406, description: 'The collaborator not exists in the project.' })
+  async deleteCollaborator(
+    @Param('id',ParseIntPipe) id: number,
+    @Body() emailUserDto: EmailUserDto,
+    @CurrentProject() currentProject:Project,
+    @CurrentUser() currentUser:User
+    )
+    {
+      return await this.projectService.deleteCollaborator(currentUser,emailUserDto.email,currentProject);
+    }
+
   @ApiBearerAuth()
   @UseGuards(AuthGuard,ProjectExistGuard,ProjectCollaboratorGuard)
   @Post(':id/add/document')
@@ -156,9 +176,9 @@ export class ProjectController {
   @Delete('/:id/delete')
   remove( 
     @Param('id',ParseIntPipe ) id: number,
-    @Request() req
+    @CurrentProject() currentProject:Project
   ){
-    return this.projectService.remove(req.currentproject);
+    return this.projectService.remove(currentProject);
   }
 }
 

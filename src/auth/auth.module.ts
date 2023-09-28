@@ -8,8 +8,7 @@ import { ProjectModule } from 'src/project/project.module';
 
 @Module({
   imports:[
-    UserModule,/*
-    ProjectModule,*/
+    UserModule,
     JwtModule.register({
       global:true,
       secret:jwtConstants.secret,

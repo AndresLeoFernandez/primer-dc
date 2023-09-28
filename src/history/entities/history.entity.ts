@@ -42,12 +42,12 @@ export class History {
   /* Relations */
   
   @ApiProperty({  type: () => Document, description:"History of document"})
-  @ManyToOne(() => Document, (document) => document.histories, { nullable: false, onDelete: 'CASCADE',orphanedRowAction: 'delete'})
+  @ManyToOne(() => Document, (document) => document.histories, { nullable: false,onDelete: 'CASCADE',orphanedRowAction: 'delete'})
   @JoinColumn({name :'documents_id'})
   document: Document;
   
   @ApiProperty({ type: () => Collaborator })
-  @ManyToOne(()=> Collaborator, (collaborator) => collaborator.user, { nullable: false })
+  @ManyToOne(()=> Collaborator, (collaborator) => collaborator.user, { nullable: false,onDelete: 'CASCADE',orphanedRowAction: 'delete' })
   @JoinColumn({name :"author_collaborator_id"})
   author: Collaborator;
 

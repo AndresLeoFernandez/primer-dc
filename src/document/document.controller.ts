@@ -2,10 +2,12 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGua
 import { DocumentService } from './document.service';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { User } from 'src/common/decorators/user.decorator';
+
 import { Document } from './entities/document.entity';
+import { DocumentExistGuard } from 'src/auth/documentExist.guard';
+import { CurrentDocument } from 'src/common/decorators/currentDocument.decorator';
 
 @ApiTags('Document')
 @Controller('document')
@@ -36,6 +38,34 @@ export class DocumentController {
   ):Promise <Document> {
       return this.documentService.updateDocument(documentId,updateDocumentDto);
   }*/
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard,DocumentExistGuard)
+  @Get(':idDoc/last-version')
+  @ApiOperation({summary: 'Get the las version of the document', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide a list of all your projects.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  @ApiParam({ name: 'idDoc', description: 'Gets the document id',})
+  async findLastDocumentVersion (
+    @Param('idDoc') idDoc: number,
+    @CurrentDocument() document: Document
+  ): Promise<any> {
+    return await this.documentService.getLastDocumentVersion(document);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard,DocumentExistGuard)
+  @Get(':idDoc/histories')
+  @ApiOperation({summary: 'Get histories of the document', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide a list of all the document history.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  @ApiParam({ name: 'idDoc', description: 'Gets the document id',})
+  async findHistoryDocument(
+    @Param('idDoc') idDoc: number,
+    @CurrentDocument() document: Document
+  ): Promise<any> {
+    return await this.documentService.getHistoryDocument(document);
+  }
+
 
   @Get()
   findAll() {
