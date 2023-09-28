@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { CreateProjectDto } from './dto/create-project.dto';
-import { UpdateProjectDto } from './dto/update-project.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { Project } from './entities/project.entity';
@@ -8,7 +7,6 @@ import { User } from '../user/entities/user.entity';
 import { Document } from '../document/entities/document.entity';
 import { Collaborator } from 'src/collaborator/entities/collaborator.entity';
 import { RolesCollaborators } from 'src/constants/roles-collaborators';
-import { CategoryService } from 'src/category/category.service';
 import { Category } from 'src/category/entities/category.entity';
 import { DocumentService } from 'src/document/document.service';
 import { CreateDocumentDto } from 'src/document/dto/create-document.dto';
@@ -21,7 +19,6 @@ export class ProjectService {
     @InjectRepository(Project) private readonly projectRepository: Repository<Project>,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @InjectRepository(Collaborator) private readonly collaboratorRepository: Repository<Collaborator>,
-    /*@InjectRepository(Document) private readonly documentRepository: Repository<Document>,*/
     @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
     private readonly documentService: DocumentService,
 
@@ -45,12 +42,11 @@ export class ProjectService {
     return project;
   }
 
-  /*async addCollaborator(projectId: number, email:string, currentEmail:string):Promise<any>*/
+
   async addCollaborator( email: string, project: Project): Promise<any> {
     /*verifico que el usuario que se debe asignar como colaborador exista conforme al email*/
     const criteriaUser: FindOneOptions = { where: { email: email } };
     const user = await this.userRepository.findOne(criteriaUser);
-    console.log(user);
     if (!user)
       throw new NotFoundException('The email does not correspond to any user of the system.');
     try {
@@ -60,6 +56,17 @@ export class ProjectService {
     } catch (error) {
       throw new NotAcceptableException('The collaborator already exists in the project.');
     }
+  }
+  
+  async deleteCollaborator(currentUser:User, email: string ,project: Project): Promise<any> {
+    if (currentUser.getEmail()===email)
+    throw new NotAcceptableException('You are the owner, not valid operation.');
+    const criteriaCollaborator : FindOneOptions = { relations: ['user','project'], where: { user: { email:email,},project: { projectId:project.getProjectId(), author: currentUser.getUserId(),}, role:RolesCollaborators.COLLABORATOR },};        
+   const resultCollaborator = await this.collaboratorRepository.findOne(criteriaCollaborator);
+   if (!resultCollaborator)
+   new NotFoundException('The email does not exist in the project collaborators.');
+   const deletedCollaborator = await this.collaboratorRepository.remove(resultCollaborator);
+   return { message: `The ${email} has been deleted for the project ${project.getTitle()}.`}
   }
 
   async addDocument(project: Project, dto: CreateDocumentDto, userAutor: Collaborator): Promise<any> {
@@ -79,15 +86,45 @@ export class ProjectService {
       throw new NotAcceptableException('Hubo un error en la actualizacion del documento.');
     }
   }
-
-  async getListCollaboratorsAndOwner(id:number):Promise<any>{
-    /*const project = this.getOne(id);
-    if (project){
-      const criteriaOwnerCollaborator : FindManyOptions = { relations:['project'], where:{ user:userOwner.getUserId()}};
-    const ownerCollaborator = await this.collaboratorRepository.findOne(criteriaOwnerCollaborator);
-    }*/
-    return `Lista de colaboradores de ${id}`;
+/* Devuelve los proyectos donde el usuario es Collaborator*/
+  async getProjectsOwner(currentUser:User):Promise<any> {
+    const criteriaOwner : FindManyOptions = {/*relations:['author'],*/ where:{author:{userId:currentUser.getUserId(),}}};
+    const allProyects = await this.projectRepository.find(criteriaOwner);
+    return allProyects;
   }
+  /* Devuelve los proyectos donde el usuario es Collaborator*/
+  async getProjectsCollaborator(currentUser:User):Promise<any>{
+    const criteriaCollaborator : FindManyOptions = { 
+     select: { 
+      project: {
+        projectId:true,
+        title:true,
+      },
+    },
+    relations: ['user','project'],
+    where: { 
+      user: {
+        userId:currentUser.getUserId(),
+      },
+      role:RolesCollaborators.COLLABORATOR 
+    },
+  };        
+  const projectCollaborator = await this.collaboratorRepository.find(criteriaCollaborator);
+  
+  if (projectCollaborator.length===0){
+    return { message:'Does not have projects as a collaborator.'}
+  }else {
+    console.log(projectCollaborator);
+    const result : Project[] = [];
+    for (const pro of projectCollaborator ) {
+      const criteriaCol: FindOneOptions = { where: { projectId: pro.project.getProjectId()}};
+      const current = await this.projectRepository.findOne(criteriaCol);
+      result.push(current);
+    };
+    console.log(result);
+    return result;
+  }
+}
 
   async getProjects(): Promise<Project[] | null> {
     return await this.projectRepository.find()

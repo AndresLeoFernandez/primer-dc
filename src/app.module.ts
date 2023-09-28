@@ -23,7 +23,7 @@ import { AuthModule } from './auth/auth.module';
       entities: [
         "dist/**/**.entity{.ts,.js}"
       ],
-      synchronize: /*true*/ false
+      synchronize: /*true */ false
     }),
     AuthModule,
     UserModule,
