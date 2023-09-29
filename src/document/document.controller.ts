@@ -6,7 +6,7 @@ import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiParam, ApiRespo
 import { AuthGuard } from 'src/auth/auth.guard';
 
 import { Document } from './entities/document.entity';
-import { DocumentExistGuard } from 'src/auth/documentExist.guard';
+import { DocumentExistGuard } from 'src/guards/documentExist.guard';
 import { CurrentDocument } from 'src/common/decorators/currentDocument.decorator';
 
 @ApiTags('Document')

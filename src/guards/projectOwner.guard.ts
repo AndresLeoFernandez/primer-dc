@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { jwtConstants } from "./constants";
-import { Request } from "express";
-import { ProjectService } from "src/project/project.service";
+/*import { JwtService } from "@nestjs/jwt";*/
+/*import { jwtConstants } from "./constants";*/
+/*import { Request } from "express";*/
+/*import { ProjectService } from "src/project/project.service";*/
 import { InjectRepository } from "@nestjs/typeorm";
 import { Project } from "src/project/entities/project.entity";
 import { FindOneOptions, Repository } from "typeorm";
@@ -15,7 +15,7 @@ crea en request currentProject
 */
 
 @Injectable()
-export class ProjectExistGuard implements CanActivate {
+export class ProjectOwnerGuard implements CanActivate {
     
     constructor( 
         @InjectRepository(Project) private readonly projectRepository: Repository<Project>,)
@@ -28,8 +28,13 @@ export class ProjectExistGuard implements CanActivate {
         const criteriaProject : FindOneOptions = { relations:['author',],where:{ projectId: projectId}};
         const project = await this.projectRepository.findOne(criteriaProject);
         if (!project)
-        throw new NotFoundException('Proyect does not exist.');
-        request['currentproject'] = project;
+            throw new NotFoundException('Proyect does not exist.');
+        if (!(currentUser.userId === project.getAuthor().getUserId())){
+           throw new UnauthorizedException('Current user not owner.');
+        }
+        request['owner'] = project.getAuthor();
+        /*console.log(`Este es CURRENT PROYECT`);
+        console.log(request['currentproject']);*/
         return true;
     }
 }

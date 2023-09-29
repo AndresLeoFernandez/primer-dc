@@ -18,10 +18,10 @@ import { CurrentProject } from 'src/common/decorators/currentProject.decorator';
 import { CurrentCollaborator } from 'src/common/decorators/currentCollaborator.decorator';
 
 import { AuthGuard } from 'src/auth/auth.guard';
-import { ProjectOwnerGuard } from 'src/auth/projectOwner.guard';
-import { ProjectCollaboratorGuard } from 'src/auth/projectCollaborator.guard';
-import { ProjectExistGuard } from 'src/auth/projectExist.guard';
-import { DocumentExistGuard } from 'src/auth/documentExist.guard';
+import { ProjectOwnerGuard } from 'src/guards/projectOwner.guard';
+import { ProjectCollaboratorGuard } from 'src/guards/projectCollaborator.guard';
+import { ProjectExistGuard } from 'src/guards/projectExist.guard';
+import { DocumentExistGuard } from 'src/guards/documentExist.guard';
 import { CurrentDocument } from 'src/common/decorators/currentDocument.decorator';
 
 @ApiTags('Project')

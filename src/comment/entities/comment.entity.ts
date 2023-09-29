@@ -13,6 +13,9 @@ export class Comment {
     @Column({ name:'author' })
     private author: string;
     
+    @ApiProperty({  type: () => String, required: true,  example:'cuenta@demo.com', description:'Email author.'  })
+    @Column({ name:'email_comment_author' })
+    private email: string;
     
     @Column({ name:'content', type:'text' })
     private content: string;
@@ -23,7 +26,7 @@ export class Comment {
     /* Relations */
 
     @ApiProperty({ type: () => Document, required: true})
-    @ManyToOne(() => Document, (document) => document.comments, {nullable: false, onDelete: 'CASCADE',orphanedRowAction: 'delete'})
+    @ManyToOne(() => Document, (document) => document.comments, {nullable: false, onDelete: 'CASCADE',/*orphanedRowAction: 'delete'*/})
     @JoinColumn({name :'documents_id'})
     document: Document;   
     
@@ -38,13 +41,19 @@ export class Comment {
     public getCreationDate(): any {
         this.creationDate
     }
-    
+    public getEmailComentAuthor():string {
+        return this.email
+    }
+        
     public getContent(): String {
         return this.content
     }
 
-    constructor(author: string,content: string){
+    constructor(author: string,email:string,content: string,document:Document ){
         this.author = author;
+        this.email = email
         this.content = content;
+        this.document = document;
     }
+
 }

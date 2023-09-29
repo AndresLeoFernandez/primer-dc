@@ -23,21 +23,21 @@ export class Project {
     /* Relations */
     
     @ApiProperty({ type: () => User, required: true})
-    @ManyToOne(()=> User, (user) => user.projects,{ nullable: false })
+    @ManyToOne(()=> User, (user) => user.projects,{ nullable: false, })
     @JoinColumn({name :'authors_id'}, )
     author: User;
 
     @ApiProperty({ type: () => Category, required: true})
-    @ManyToOne(()=> Category, (category) => category.projects,{ nullable: false },)
+    @ManyToOne(()=> Category, (category) => category.projects,{ nullable: false,cascade:true },)
     @JoinColumn({name :'categories_id'})
     category: Category;       
     
     @ApiPropertyOptional({ type: () => Document, isArray: true })
-    @OneToMany(()=> Document, (document) => document.project,{ nullable: true, cascade: ["remove"]  })
+    @OneToMany(()=> Document, (document) => document.project,{ nullable: true, cascade:true/*cascade: ["remove"] */ })
     documents?: Document[];
 
     @ApiPropertyOptional({  type: () => Collaborator, isArray: true })
-    @OneToMany(()=> Collaborator, (collaborator) => collaborator.user,{cascade: ["remove"] })
+    @OneToMany(()=> Collaborator, (collaborator) => collaborator.user,{cascade:true/*cascade: ["remove"]*/ })
     collaborators?: Collaborator[];
 
     /* Functions getters and setters */
