@@ -61,10 +61,14 @@ export class ProjectService {
   async deleteCollaborator(currentUser:User, email: string ,project: Project): Promise<any> {
     if (currentUser.getEmail()===email)
     throw new NotAcceptableException('You are the owner, not valid operation.');
-    const criteriaCollaborator : FindOneOptions = { relations: ['user','project'], where: { user: { email:email,},project: { projectId:project.getProjectId(), author: currentUser.getUserId(),}, role:RolesCollaborators.COLLABORATOR },};        
+    const criteriaCollaborator : FindOneOptions = { 
+      relations: ['user','project'], 
+      where: { 
+        user: { email:email,},
+        project: { projectId:project.getProjectId(), author: currentUser.getUserId(),}, role:RolesCollaborators.COLLABORATOR },};        
    const resultCollaborator = await this.collaboratorRepository.findOne(criteriaCollaborator);
    if (!resultCollaborator)
-   new NotFoundException('The email does not exist in the project collaborators.');
+   throw new NotFoundException('The email does not exist in the project collaborators.');
    const deletedCollaborator = await this.collaboratorRepository.remove(resultCollaborator);
    return { message: `The ${email} has been deleted for the project ${project.getTitle()}.`}
   }
