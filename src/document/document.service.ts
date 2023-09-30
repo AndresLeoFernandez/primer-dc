@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
-import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, IsNull, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Document } from './entities/document.entity';
 import { History } from 'src/history/entities/history.entity';
@@ -34,16 +34,31 @@ export class DocumentService {
     const documentSaved = await this.documentRepository.save(document);
     return documentSaved;  
   }
+  /**
+   * Elimina documento y todas las histories relacionadas
+   * 
+   *  */
+  async deleteDocument(document:Document) {
+    const criteriaHistories : FindManyOptions = {where:{document: document.getDocumentId()}}
+    const histories = await this.historyRepository.find(criteriaHistories)
+    for (const history of histories) {
+      void await this.historyRepository.delete(history.getHistoryId());
+    }
+    console.log(`Se eliminaron las histories de ${document.getDocumentId()}`)
+    void await this.documentRepository.remove(document);    
+
+  }
+
   async getLastDocumentVersion(document:Document):Promise<any> {
     const criteria : FindOneOptions = { where: { historyId : document.getLastHistoryId()} }
     const lastVersion = this.historyRepository.findOneOrFail(criteria);
     return lastVersion;
   }
 
-  async getHistoryDocument(document:Document):Promise<any> {
+  async getHistoriesDocument(document:Document):Promise<History[]> {
     const criteria : FindManyOptions = {
     relations:['document'], select: { document:{document:false}, historyId:true, messaggesLog:true, creationDate:true,}, where: { document: { documentId: document.getDocumentId(),},},};
-    const currentHistories = this.historyRepository.find(criteria);
+    const currentHistories = await this.historyRepository.find(criteria);
     return currentHistories;
   }
 
@@ -58,7 +73,17 @@ export class DocumentService {
     if (!document)
       throw new NotFoundException('Document does not exists');
     return document;
-  }  
+  }
+  /*
+  * Dado un id de proyecto retorna los documentos que posee
+  */  
+  async getDocumentsByProjectId(idproject:number):Promise<Document[]| null> {
+    console.log('--------------Project id------------------');
+    console.log(idproject);
+    console.log('--------------------------------');
+    const criteria : FindManyOptions = {relations:['project'], where: { project:{ projectId: idproject },} }
+    return this.documentRepository.find(criteria);     
+  }
   
   async findOne(id: number):Promise<Document | null> {
     const criteria : FindOneOptions = { where: { documentId: id } }
@@ -73,5 +98,11 @@ export class DocumentService {
     if (!document) 
       throw new BadRequestException('Document not find');
     return await this.documentRepository.remove(document);
+  }
+  
+  async projectHasDocument(idProject: number):Promise<Boolean>{
+    const criteriaDocument : FindOneOptions = {relations:['project'], where: { project:{ projectId:idProject,}},};
+    const document = await this.documentRepository.findOne(criteriaDocument);
+    return !(document===null);
   }
 }

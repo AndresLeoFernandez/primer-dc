@@ -20,6 +20,7 @@ export class ProjectService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @InjectRepository(Collaborator) private readonly collaboratorRepository: Repository<Collaborator>,
     @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
+    
     private readonly documentService: DocumentService,
 
   ) { }
@@ -42,7 +43,6 @@ export class ProjectService {
     return project;
   }
 
-
   async addCollaborator( email: string, project: Project): Promise<any> {
     /*verifico que el usuario que se debe asignar como colaborador exista conforme al email*/
     const criteriaUser: FindOneOptions = { where: { email: email } };
@@ -57,7 +57,18 @@ export class ProjectService {
       throw new NotAcceptableException('The collaborator already exists in the project.');
     }
   }
-  
+
+
+  /* Dado el proyecto devuelve los colaboradores */
+  async getCollaboratorsByProjectId(project:Project){
+    const criteriaCollaborator : FindManyOptions = { 
+      relations: ['user','project'], 
+      where: { 
+        /*user: { email:email,},*/
+        project: { projectId:project.getProjectId(),}, role:RolesCollaborators.COLLABORATOR },};        
+    return  this.collaboratorRepository.find(criteriaCollaborator);
+  }
+
   async deleteCollaborator(currentUser:User, email: string ,project: Project): Promise<any> {
     if (currentUser.getEmail()===email)
     throw new NotAcceptableException('You are the owner, not valid operation.');
@@ -90,6 +101,8 @@ export class ProjectService {
       throw new NotAcceptableException('Hubo un error en la actualizacion del documento.');
     }
   }
+
+
 /* Devuelve los proyectos donde el usuario es Collaborator*/
   async getProjectsOwner(currentUser:User):Promise<any> {
     const criteriaOwner : FindManyOptions = {/*relations:['author'],*/ where:{author:{userId:currentUser.getUserId(),}}};
@@ -141,8 +154,31 @@ export class ProjectService {
       throw new NotFoundException('Proyect does not exist.');
     return proyect;
   }
-
-  async remove(project: Project): Promise<Project | null> {
+  
+  /* El remove solo autorizado para el dueño del proyecto.  
+  * Elimina projecto y sus colaboradores siempre que no posea documentos vigentes*/
+  async deleteProject(project: Project, currentUser:User): Promise<Project | null> {
+    if (await this.hasDocument(project))
+    throw new NotAcceptableException('First You must delete existing documents in the project.'); 
+    const collaborators = await this.getCollaboratorsByProjectId(project);
+    this.collaboratorRepository.remove(collaborators);
+    console.log('The collaborators are deleted.');
     return await this.projectRepository.remove(project);
   }
+  
+  async hasDocument(project:Project):Promise<Boolean>{
+    const existe = await this.documentService.projectHasDocument(project.getProjectId());
+    return existe? existe: false;
+    
+  }
+
+  async removeDocuments(currentProject:Project){
+    const documents = await this.documentService.getDocumentsByProjectId(currentProject.getProjectId());
+    for (const doc of documents) {
+      console.log(`Start delete ${doc.getDocumentId()}`);
+      const current = await this.documentService.deleteDocument(doc);
+      console.log(`Operation finished. Document ${doc.getDocumentId()} is deleted Ok.`);
+    } 
+  }
+
 }

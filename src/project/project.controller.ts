@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, ParseIntPipe, UseGuards, Request, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, ParseIntPipe, UseGuards, Put, ParseArrayPipe } from '@nestjs/common';
 import { ApiOperation, ApiBody, ApiResponse, ApiTags, ApiBearerAuth, ApiParam, ApiOkResponse } from '@nestjs/swagger';
 
 import { ProjectService } from './project.service';
@@ -13,21 +13,24 @@ import { CreateDocumentDto } from 'src/document/dto/create-document.dto';
 import { EmailUserDto } from 'src/user/dto/email-User.dto';
 import { UpdateDocumentDto } from 'src/document/dto/update-document.dto';
 
-import { CurrentUser } from 'src/common/decorators/currentUser.decorator';
-import { CurrentProject } from 'src/common/decorators/currentProject.decorator';
-import { CurrentCollaborator } from 'src/common/decorators/currentCollaborator.decorator';
+import { CurrentUser } from 'src/decorators/currentUser.decorator';
+import { CurrentProject } from 'src/decorators/currentProject.decorator';
+import { CurrentCollaborator } from 'src/decorators/currentCollaborator.decorator';
 
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/guards/auth.guard';
 import { ProjectOwnerGuard } from 'src/guards/projectOwner.guard';
 import { ProjectCollaboratorGuard } from 'src/guards/projectCollaborator.guard';
 import { ProjectExistGuard } from 'src/guards/projectExist.guard';
 import { DocumentExistGuard } from 'src/guards/documentExist.guard';
-import { CurrentDocument } from 'src/common/decorators/currentDocument.decorator';
+import { CurrentDocument } from 'src/decorators/currentDocument.decorator';
+import { DocumentService } from 'src/document/document.service';
 
 @ApiTags('Project')
 @Controller('project')
 export class ProjectController {
-  constructor(private readonly projectService: ProjectService,
+  constructor(
+    private readonly projectService: ProjectService,
+    private readonly documentService: DocumentService,
 ) {}
 
   @ApiBearerAuth()
@@ -40,7 +43,7 @@ export class ProjectController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiResponse({ status: 404, description: 'Category not Found.' })
   @ApiResponse({ status: 406, description: 'Proyect does not exist.'})
-  async create( 
+  async createProject( 
     @Body() createProjectDto: CreateProjectDto,
     @CurrentUser() currentUser:User) {
     return await this.projectService.createProject(createProjectDto,currentUser);
@@ -64,6 +67,24 @@ export class ProjectController {
   ){
       return await this.projectService.addCollaborator(emailUserDto.email,currentProject);
   }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard,ProjectExistGuard,ProjectOwnerGuard,ProjectCollaboratorGuard)
+  @ApiOperation({summary: 'Get Collaborators of the project', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide a list of all the Collaborators in the project id.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  @ApiParam({ name: 'id', description: 'Get the project id',})
+  @Get(':id/collaborators')
+  async getCollaboratorsByProjectId(
+    @Param('id',ParseIntPipe) id: number,
+    @CurrentProject() project: Project,
+    /*@CurrentUser() currentUser: User*/
+    ):Promise<Collaborator[]>
+    {
+      return this.projectService.getCollaboratorsByProjectId(project,/*currentUser*/);
+    }
+
+
   @ApiBearerAuth()
   @UseGuards(AuthGuard,ProjectExistGuard,ProjectOwnerGuard,ProjectCollaboratorGuard)
   @Delete('/:id/delete/collaborator')
@@ -102,6 +123,22 @@ export class ProjectController {
   ){
     return await this.projectService.addDocument(currentProject,documentDto,creator);
   }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard,ProjectExistGuard,ProjectCollaboratorGuard)
+  @ApiOperation({summary: 'Get documents of the project', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide a list of all the document in the project id.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  @ApiParam({ name: 'id', description: 'Get the project id',})
+  @Get(':id/documents')
+  async getDocumentsByProjectId(
+    @Param('id',ParseIntPipe) id: number,
+    @CurrentProject() project: Project
+    ):Promise<Document[]>
+    {
+      return await this.documentService.getDocumentsByProjectId(project.getProjectId())
+    }
+
    
   @ApiBearerAuth()
   @UseGuards(AuthGuard,ProjectExistGuard,ProjectCollaboratorGuard,DocumentExistGuard)
@@ -128,7 +165,7 @@ export class ProjectController {
   @ApiOperation({summary: 'Get all projects where the current user is the owner', description:'',})
   @ApiOkResponse({ status: 200, description: 'Provide a list of all your projects.'}) 
   @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
-  async findProjectsOwner(
+  async getProjectsOwner(
     @CurrentUser() currentUser:User
   ): Promise<Project[]> {
     return await this.projectService.getProjectsOwner(currentUser);
@@ -140,7 +177,7 @@ export class ProjectController {
   @ApiOperation({summary: 'Get all projects where the current user is collaborator', description:'',})
   @ApiOkResponse({ status: 200, description: 'Provide a list of all projects where current user collaborator.'}) 
   @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
-  async findProjectsCollaborators(
+  async getProjectsCollaborators(
     @CurrentUser() currentUser:User
   ): Promise<Project[]> {
     return await this.projectService.getProjectsCollaborator(currentUser);
@@ -150,7 +187,7 @@ export class ProjectController {
   @ApiOperation({summary: 'Obtain all Projects', description:'',})
   @ApiOkResponse({ status: 200, description: 'Give all the Projects.'}) 
   @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
-  async findAll(): Promise<Project[]> {
+  async getProyects(): Promise<Project[]> {
     return await this.projectService.getProjects();
   }
 
@@ -158,7 +195,7 @@ export class ProjectController {
   @ApiOperation({summary: 'Obtain Project by id', description:'',})
   @ApiOkResponse({  status: 200, description: 'The found record', type: Project })
   @ApiResponse({  status: 403, description: 'Forbidden.'})  
-  async findOne(@Param('id',ParseIntPipe) id: number):Promise<Project> {
+  async getOne(@Param('id',ParseIntPipe) id: number):Promise<Project> {
     const data = this.projectService.getOne(id);
     return data
   }
@@ -173,13 +210,32 @@ export class ProjectController {
   @ApiOperation({summary: 'Delete Project', description:'',})
   @ApiOkResponse({ status: 200, description: 'The project has been delete.'})  
   @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 406, description: 'Project not deleted. Require not have documents for execute operation.' })
   @Delete('/:id/delete')
-  remove( 
+  deleteProject( 
+    @Param('id',ParseIntPipe ) id: number,
+    @CurrentProject() currentProject:Project,
+    @CurrentUser() currentUser:User
+  ){
+    return this.projectService.deleteProject(currentProject,currentUser);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard,ProjectExistGuard,ProjectOwnerGuard)
+  @ApiOperation({summary: 'Delete Project', description:'',})
+  @ApiOkResponse({ status: 200, description: 'The project has been delete.'})  
+  @ApiResponse({ status: 401, description: 'Unauthorized log in the app'})
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 406, description: 'Project not deleted. Require not have documents for execute operation.' })
+  @Delete('/:id/delete/documents')
+  removeDocument( 
     @Param('id',ParseIntPipe ) id: number,
     @CurrentProject() currentProject:Project
   ){
-    return this.projectService.remove(currentProject);
+    return this.projectService.removeDocuments(currentProject);
   }
+
+  
 }
 
 
