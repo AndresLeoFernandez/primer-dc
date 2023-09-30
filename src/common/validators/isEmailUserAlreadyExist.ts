@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface, registerDecorator } from "class-validator";
 import { UserService } from "src/user/user.service";
-
+/* no funciona */
 @ValidatorConstraint({ name: 'isEmailUserAlreadyExist', async: true })
 @Injectable()
 export class IsEmailUserAlreadyExistConstraint implements ValidatorConstraintInterface
