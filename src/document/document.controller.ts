@@ -3,11 +3,14 @@ import { DocumentService } from './document.service';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 import { Document } from './entities/document.entity';
 import { DocumentExistGuard } from 'src/guards/documentExist.guard';
-import { CurrentDocument } from 'src/common/decorators/currentDocument.decorator';
+import { CurrentDocument } from 'src/decorators/currentDocument.decorator';
+import { ProjectExistGuard } from 'src/guards/projectExist.guard';
+import { ProjectCollaboratorGuard } from 'src/guards/projectCollaborator.guard';
+import { ProjectOwnerGuard } from 'src/guards/projectOwner.guard';
 
 @ApiTags('Document')
 @Controller('document')
@@ -59,20 +62,20 @@ export class DocumentController {
   @ApiOkResponse({ status: 200, description: 'Provide a list of all the document history.'}) 
   @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
   @ApiParam({ name: 'idDoc', description: 'Gets the document id',})
-  async findHistoryDocument(
+  async findHistoriesDocument(
     @Param('idDoc') idDoc: number,
     @CurrentDocument() document: Document
   ): Promise<any> {
-    return await this.documentService.getHistoryDocument(document);
+    return await this.documentService.getHistoriesDocument(document);
   }
 
-
-  @Get()
+    
+  @Get('/view/all')
   findAll() {
     return this.documentService.findAll();
   }
 
-  @Get(':id')
+  @Get(':id/view')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.documentService.getOne(id);
   }

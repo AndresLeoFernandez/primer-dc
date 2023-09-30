@@ -5,7 +5,6 @@ import { UserService } from '../user/user.service';
 import { User } from 'src/user/entities/user.entity';
 import { validateHash } from 'src/common/utils';
 import { LoginDto } from './dto/Login.dto';
-import { UserNotFoundException } from 'src/exceptions/user-not-found.exception';
 
 @Injectable()
 export class AuthService {
@@ -14,26 +13,35 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) {}
     
-  
+ /**
+ * validate user with hash
+ * @param {LoginDto} loginDto
+ * @returns {Promise<User>}
+ */
   async validateUser(loginDto: LoginDto): Promise<User> {
     const user = await this.userService.findOneBy({ email: loginDto.email, });
     const isPasswordValid = await validateHash(loginDto.password, user?.getPassword(),);
     if (!isPasswordValid) {
-      throw new UserNotFoundException();
+      throw new NotFoundException();
     }
     return user!;
   }
 
-  async refresh(user:any):Promise<any>{
-    const currentUser = await this.userService.findOneBy({ email:user.email });
-    if (currentUser){
-      const payload = {userId:currentUser.getUserId(), email: currentUser.getEmail() };
-      return { access_token: await this.jwtService.signAsync(payload),}
-    }   
+  /**
+ * Refresh user access 
+ * @param {User} currentUser
+ * @returns {Promise<any>}
+ */
+  async refresh(currentUser:User):Promise<any>{
+    const payload = {userId:currentUser.getUserId(), email: currentUser.getEmail() };
+    return { access_token: await this.jwtService.signAsync(payload),}
   }
   
-
-    
+  /**
+ * Login user in the App 
+ * @param {LoginDto} loginDto
+ * @returns {Promise<any>}
+ */  
   async login(loginDto: LoginDto):Promise<any> {
     const user = await this.userService.findOneBy({ email:loginDto.email });
     if (!user) 
@@ -43,8 +51,4 @@ export class AuthService {
     const payload = {userId:user.getUserId(), email: user.getEmail() };
     return { access_token: await this.jwtService.signAsync(payload),}
   }
-
-  /*async signOut(bearer:string){
-    return 'chau'
-  }*/
 }
