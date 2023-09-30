@@ -31,7 +31,7 @@ import { AuthModule } from './auth/auth.module';
     CommentModule,
     CollaboratorModule,
     DocumentModule,
-    HistoryModule,
+    /*HistoryModule,*/
     ProjectModule,
     ],
   controllers: [AppController],

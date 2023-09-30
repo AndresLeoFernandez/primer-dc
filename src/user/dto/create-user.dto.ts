@@ -10,15 +10,14 @@ export class CreateUserDto {
   @Transform(({ value }) => lowercaseString(value?.trim()))
   @IsNotEmpty()
   @NotContains(" ", { message: 'No spaces allowed.'})
-  /*@Matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, {message: 'Email must be a type of email.'})*/
-  email: string;
+  readonly email: string;
 
   @ApiProperty({ type: () => String, required: true, minLength: 5 , example: 'tomate',})
   @IsString()
   @IsNotEmpty()
   @NotContains(" ", { message: 'No spaces allowed.'})
   @MinLength(5, { message: 'Password should contain more than 5 letters.' })
-  password: string;
+  readonly password: string;
 
   @ApiPropertyOptional({ required: false, example: 'Nombre',})
   @IsString()
@@ -27,7 +26,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   @Transform(({ value }) => sanitizeInput(value))
   @Matches(/^(?!\s*$).+/, { message: 'Name can not be empty or have whitespace.' })
-  firstName?: string;
+  readonly firstName?: string;
   
   @ApiPropertyOptional({ type: () => String, required: false, example: 'Apellido',})
   @IsString()
@@ -36,7 +35,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   @Transform(({ value }) => sanitizeInput(value))
   @Matches(/^(?!\s*$).+/, { message: 'LastName can not be empty or have whitespace.' })
-  lastName?: string;
+  readonly lastName?: string;
 
   @ApiProperty({ type: () => String, required: true, example: 'Manue23',})
   @IsString()
@@ -44,6 +43,6 @@ export class CreateUserDto {
   @NotContains(" ", { message: "No spaces allowed."})
   @Transform(({ value }) => sanitizeInput(value))
   @MinLength(5, { message: 'Username should contain more than 5 letters.' })
-  username: string;
+  readonly username: string;
   
 }

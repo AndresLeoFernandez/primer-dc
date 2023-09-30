@@ -4,9 +4,9 @@ import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ChangePasswordDto } from 'src/auth/dto/ChangePassword.dto';
 import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/guards/auth.guard';
 /*import { User } from 'src/common/decorators/user.decorator';*/
-import { CurrentUser } from 'src/common/decorators/currentUser.decorator';
+import { CurrentUser } from 'src/decorators/currentUser.decorator';
 
 
 
