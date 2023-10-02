@@ -2,7 +2,7 @@
 <p align="center"> <img src="images/logo.png" alt="logo" width="200" height="165">
 </p>
 
-***
+</hr>
 
 ## Idea Original
 <p align="justify">Generar una aplicación web que albergue de forma online proyectos,con distintos escritos(documentos), que puedan ser consultados por cualquier persona que navegue el sitio. Los proyectos estarán categorizados y los documentos podrán ser editados por distintos usuarios registrados que estén asignados para tal fin.</p>
