@@ -1,6 +1,7 @@
  <h1 align="center">Proyectos Colaborativos</h1>
 <p align="center"> <img src="images/logo.png" alt="logo" width="200" height="165">
 </p>
+
 ***
 
 ## Idea Original
