@@ -1,7 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
-import { IsEmail, IsNotEmpty, Matches, NotContains } from "class-validator";
-import { IsEmailUserAlreadyExist } from "src/common/validators/isEmailUserAlreadyExist";
+import { IsEmail, IsNotEmpty, NotContains } from "class-validator";
 import { lowercaseString, sanitizeInput } from "src/helpers/utils.helpers";
 
 export class EmailUserDto{
@@ -11,7 +10,6 @@ export class EmailUserDto{
     @Transform(({ value }) => lowercaseString(value?.trim()))
     @IsNotEmpty()
     @NotContains(" ", { message: "No spaces allowed."})
-    /*@IsEmailUserAlreadyExist({message:"Email not register in the app."})*/
     email: string;
   }
   

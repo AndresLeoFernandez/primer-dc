@@ -73,6 +73,14 @@ export class Document {
     public getLastHistoryId():number {
         return this.lastHistoryId;
     }
+    public getVisits():number{
+        return this.visits;
+      }
+      public setAddVisit():number {
+        this.visits++;
+        return this.visits;
+      }
+    
         
     constructor(type: string, project: Project,author: Collaborator,comments?: Comment[],histories?: History[]){
         this.type = type;

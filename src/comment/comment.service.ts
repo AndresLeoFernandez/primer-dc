@@ -34,11 +34,11 @@ export class CommentService {
     return foundComments;
   }
 
-  async findAll() {
+  async findAll():Promise<Comment[]> {
     return await this.commentRepository.find();
   }
 
-  async findOne(id: number): Promise<any> {
+  async findOne(id: number): Promise<Comment> {
     const criteria : FindOneOptions = { where:{ commentId:id }}
     const foundComment = await this.commentRepository.findOne(criteria);
     if (!foundComment) {

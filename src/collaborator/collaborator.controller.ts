@@ -13,57 +13,23 @@ import { AuthGuard } from 'src/guards/auth.guard';
 export class CollaboratorController {
   constructor(private readonly collaboratorService: CollaboratorService)
   {}
-  
-  /*@UseGuards(AuthGuard,ProjectExistGuard,ProjectCollaboratorGuard,DocumentExistGuard)
-  @Post('/add')
-  @ApiOperation({summary: 'Create new Collaborator', description:'',})
-  @ApiBody({ type: CreateCollaboratorDto })
-  @ApiResponse({  status: 201, description: 'The record has been successfully created.'})  
-  @ApiResponse({  status: 404, description: 'Forbidden change.'})
-  async create( @Body() createCollaboratorDto: CreateCollaboratorDto) {
-    return this.collaboratorService.create(createCollaboratorDto);
-  }
-  */
+    
   @UseGuards(AuthGuard)
   @Get('view/all')
-  @ApiOperation({ summary: 'Find all Collaborators', description:' Otorga todos los Colaboradores del sistema.',})
+  @ApiOperation({ summary: 'Get all raw collaborators', description:' Otorga listado en crudo de todos los colaboradores existentes en la aplicación.',})
   async findAll(): Promise<Collaborator[]> {
     return this.collaboratorService.findAll();
   }
   @UseGuards(AuthGuard)
   @Get(':id/view')
-  @ApiOperation({summary: 'Obtain Users by id', description:' la descripcion',})
+  @ApiOperation({summary: 'Get collaborator by id', description:' la descripcion',})
   @ApiParam({ name: 'id', description: 'collaboratorId' })
   @ApiResponse({  status: 200, description: 'The found record', type: Collaborator })
   @ApiResponse({  status: 403, description: 'Forbidden.'})  
   async findOne( @Param('id', ParseIntPipe) id: number):Promise<Collaborator> {
     return this.collaboratorService.findOne(id);
   }
- 
-  /*
-  @UseGuards(AuthGuard)
-  @Get(':id')
-  @ApiOperation({summary: 'Obtain Users by id', description:' la descripcion',})
-  @ApiParam({ name: 'id', description: 'collaboratorId' })
-  @ApiResponse({  status: 200, description: 'The found record', type: Collaborator })
-  @ApiResponse({  status: 403, description: 'Forbidden.'})  
-  async getAllCollaboratorByProject( @Param('id', ParseIntPipe) id: number):Promise<Collaborator> {
-    return this.collaboratorService.findOne(id);
-  }*/
-
-  /*
-  @Patch(':id')
-  @ApiOperation({summary: 'Change Collaborator by id', description:' la descripcion',})
-  @ApiParam({ name: 'id', description: 'collaboratorId' })
-  @ApiBody({ type: UpdateCollaboratorDto })
-  @ApiResponse({  status: 201, description: 'The record has been successfully modifier.'})  
-  @ApiResponse({  status: 404, description: 'Forbidden change.'})
-  update( @Param('id',ParseIntPipe) id: number, 
-          @Body() updateCollaboratorDto: UpdateCollaboratorDto) {
-    return this.collaboratorService.update(+id, updateCollaboratorDto);
-  }
-  */
- 
+  
   @Delete(':id')
   @ApiOperation({summary: 'Delete Collaborator by id', description:' la descripcion',})
   @ApiParam({ name: 'id', description: 'collaboratorId' })

@@ -32,7 +32,7 @@ import { AuthModule } from './auth/auth.module';
     CollaboratorModule,
     DocumentModule,
     /*HistoryModule,*/
-    ProjectModule,
+    ProjectModule,    
     ],
   controllers: [AppController],
   providers: [AppService],

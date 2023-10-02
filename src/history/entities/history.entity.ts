@@ -11,20 +11,11 @@ import { sanitizeInput } from "src/helpers/utils.helpers";
 export class History {
 
   @ApiProperty({  type: () => Number,example:4,description:'Autoincremental integer value.' })
-  @IsInt()
   @PrimaryGeneratedColumn({ name:'history_id' })
   private historyId: number;
-  
-  
+    
   @ApiProperty({  type: () => String, required: true, example:'Titulo del contenido a desarrollar', description:'Content title.' })
-  /*@IsString()
-  @IsNotEmpty()
-  @Transform(({ value }) => sanitizeInput(value))
-  @MinLength(1, { message: 'Title should contain more than 1 letters' })*/
-  @Column({ name:'title',
-            type:'varchar',
-            length:255, 
-          })
+  @Column({ name:'title',type:'varchar', length:255,})
   private title: string;
 
   @ApiPropertyOptional({  type: () => String, required: true, example:'Aqui desarrolla el cuerpo del contenido', description:'Content body.' })
@@ -39,6 +30,10 @@ export class History {
   @Column({ name:'messagge_log', type:'varchar', length:255, default:'' })
   private messaggesLog?: string;  
   
+  @ApiProperty({  type: () => Number, example:4,readOnly: true, default:0, description:'visits.' })
+  @Column({ name: 'visits' })
+  private visits: number;
+
   /* Relations */
   
   @ApiProperty({  type: () => Document, description:"History of document"})
@@ -71,6 +66,13 @@ export class History {
   public getMessageLog(): string {
     return this.messaggesLog
   }
+  public getVisits():number{
+    return this.visits;
+  }
+  public setAddVisit():number {
+    this.visits++;
+    return this.visits;
+  }
 
   constructor(title: string,document: Document,author: Collaborator,content?: string,messaggesLog?: string){
     this.title = title;
@@ -78,5 +80,6 @@ export class History {
     this.author = author;
     this.content = content;
     this.messaggesLog = messaggesLog;
+    this.visits = 0;    
   }  
 }
