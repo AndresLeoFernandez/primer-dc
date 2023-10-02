@@ -1,7 +1,5 @@
  <h1 align="center">Proyectos Colaborativos</h1>
-<p align="center"> <img src="images/logo.png" alt="logo" width="200" height="165">
-</p>
-
+<p align="center"> <img src="images/logo.png" alt="logo" width="200" height="16
 </hr>
 
 ## Idea Original
@@ -23,57 +21,50 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 </p>
 
 ### Descripción de Entidad USUARIO
-El usuario contara con los siguientes atributos:
-
-email: Representara el correo electronico del usuario. 
-Descripcion: Como tal debe ser un formato valido.
-Restriccion: Debe ser unico en la Aplicacion, no pudiendo ser utilizado por otro usario. 
+#### ATRIBUTOS
+##### email
+Descripción: Representa el correo electronico del usuario.Como tal debe ser un formato valido de correo electronico.
+Restricción: Debe ser unico en la Aplicación, no pudiendo ser utilizado por otro usuario. 
 Obligatorio: Si.
-
-password: Representara la contraseña del usuario.
-Descripcion: 
-Restriccion: Debe contar con mas de 5 caracteres. No puede contener el caracter " ". 
+##### password
+Descripción:Representa la contraseña del usuario. 
+Restricción: Debe contar con mas de 5 caracteres. No puede contener el caracter " ". 
 Obligatorio: Si.
-
-firstName: Representa el nombre de pila del usuario;
-Descripcion: 
-Restriccion: Debe ser unico en la Aplicacion, no pudiendo ser utilizado por otro usario. 
-Obligatorio: No.
-
-Descripcion: 
-Restriccion: Debe ser unico en la Aplicacion, no pudiendo ser utilizado por otro usario. 
+##### firstName 
+Descripción: Representa el nombre de pila del usuario.
+Restricción: No puede contener el caracter " ".De estar no puede ser vacio. 
+Obligatoriedad: Opcional.
+##### lastname
+Descripción: Representa el apellido del usuario.
+Restricción: No puede contener el caracter " ".De estar no puede ser vacio. 
+Obligatoriedad: Opcional.
+##### username
+Descripción: Representa el nombre de usuario en la aplicacion.
+Restricción: Debe contar con mas de 5 caracteres.No puede contener el caracter " ".
 Obligatorio: Si.
-
-Descripcion: 
-Restriccion: Debe ser unico en la Aplicacion, no pudiendo ser utilizado por otro usario. 
+##### dateRegistration
+Descripción: Representa la fecha de alta del usuario en la aplicación.
+Restricción: No posee. Se asigna automaticamente cuando se crea el usuario.
 Obligatorio: Si.
+##### isActive
+Descripción: Representa si el usuario esta activo en la aplicación.
+Restricción: No posee. Se asigna automaticamente cuando se crea el usuario.    
 
-  
-  @ApiPropertyOptional({ required: false, example: 'Nombre',})
-  @IsString()
-  @NotContains(" ", { message: "No spaces allowed in firstname."})
-  @IsOptional()
-  @IsNotEmpty()
-  @Transform(({ value }) => sanitizeInput(value))
-  @Matches(/^(?!\s*$).+/, { message: 'Name can not be empty or have whitespace.' })
-  readonly firstName?: string;
-  
-  @ApiPropertyOptional({ type: () => String, required: false, example: 'Apellido',})
-  @IsString()
-  @NotContains(" ", { message: "No spaces allowed in lastname."})
-  @IsOptional()
-  @IsNotEmpty()
-  @Transform(({ value }) => sanitizeInput(value))
-  @Matches(/^(?!\s*$).+/, { message: 'LastName can not be empty or have whitespace.' })
-  readonly lastName?: string;
+### Funciones
+- getUserId():number
+- getFirstName():string 
+- getLastName():string 
+- getEmail(): string 
+- getUsername(): String
+- getPassword(): string 
+- getCollaborators(): Collaborator[]
+- getDateRegistration(): any
+- IsActive(): Boolean 
+- setFirstName( newFirstName: string ): string
+- setLastName( newLastName: string ): string 
+- setPassword(newPassword: string): string 
+- deactivate()
 
-  @ApiProperty({ type: () => String, required: true, example: 'Manue23',})
-  @IsString()
-  @IsNotEmpty()
-  @NotContains(" ", { message: "No spaces allowed."})
-  @Transform(({ value }) => sanitizeInput(value))
-  @MinLength(5, { message: 'Username should contain more than 5 letters.' })
-  readonly username: string;
 ### Descripción de Entidad PROYECTO
 
 ### Descripción de Entidad CATEGORIA
