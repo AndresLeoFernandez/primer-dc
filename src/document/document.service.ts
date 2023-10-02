@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
-import { FindManyOptions, FindOneOptions, IsNull, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Document } from './entities/document.entity';
 import { History } from 'src/history/entities/history.entity';
@@ -51,18 +51,40 @@ export class DocumentService {
 
   async getLastDocumentVersion(document:Document):Promise<any> {
     const criteria : FindOneOptions = { where: { historyId : document.getLastHistoryId()} }
-    const lastVersion = this.historyRepository.findOneOrFail(criteria);
-    return lastVersion;
+    const lastVersion = await this.historyRepository.findOneOrFail(criteria);
+    lastVersion.setAddVisit();
+    const lastVersionSaved = await this.historyRepository.save(lastVersion);
+    document.setAddVisit();
+    void await this.documentRepository.save(document);
+    return lastVersionSaved;
   }
 
   async getHistoriesDocument(document:Document):Promise<History[]> {
     const criteria : FindManyOptions = {
-    relations:['document'], select: { document:{document:false}, historyId:true, messaggesLog:true, creationDate:true,}, where: { document: { documentId: document.getDocumentId(),},},};
+    relations:['document'], select: { document:{document:false}, historyId:true, messaggesLog:true, creationDate:true,visits:true}, where: { document: { documentId: document.getDocumentId(),},},};
     const currentHistories = await this.historyRepository.find(criteria);
     return currentHistories;
   }
 
+  async getVisitsDocument(document:Document):Promise<number> {
+    const totalHistories = await this.getHistoriesDocument(document);
+    let count: number = 0;
+    for (const history of totalHistories) {
+      count = count + history.getVisits();
+    }
+    return count
+  }
+  async mostViewed():Promise<Document[]>{
+    let criteria : FindManyOptions = { order: { visits:'DESC',},}
+    const documents = await this.documentRepository.find(criteria); 
+    return  documents;
+  }
 
+  async mostRecent():Promise<Document[]>{
+    let criteria : FindManyOptions = { order: { creationDate:'DESC',},}
+    const documents = await this.documentRepository.find(criteria); 
+    return  documents;
+  }
   async findAll(): Promise<Document[]> {
     return await this.documentRepository.find();
   }
@@ -78,9 +100,6 @@ export class DocumentService {
   * Dado un id de proyecto retorna los documentos que posee
   */  
   async getDocumentsByProjectId(idproject:number):Promise<Document[]| null> {
-    console.log('--------------Project id------------------');
-    console.log(idproject);
-    console.log('--------------------------------');
     const criteria : FindManyOptions = {relations:['project'], where: { project:{ projectId: idproject },} }
     return this.documentRepository.find(criteria);     
   }

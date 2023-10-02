@@ -1,5 +1,6 @@
 /*import bcrypt from 'bcryptjs';*/
 import * as bcrypt from 'bcrypt';
+
 /**
  * generate hash from password or string
  * @param {string} password
@@ -22,6 +23,5 @@ export function validateHash(
   if (!password || !hash) {
     return Promise.resolve(false);
   }
-
   return bcrypt.compare(password, hash);
 }

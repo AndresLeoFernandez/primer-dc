@@ -14,7 +14,7 @@ export class CategoryController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Post('add')
-  @ApiOperation({summary: 'Create New Category', description:'',})
+  @ApiOperation({summary: 'Create new category', description:'',})
   @ApiBody({ type: CreateCategoryDto })
   @ApiOkResponse({ status: 201, description: 'The Category has been successfully created.'})  
   @ApiResponse({ status: 400, description: 'Category already exist.' })
@@ -24,7 +24,7 @@ export class CategoryController {
   }
 
   @Get('view/all')
-  @ApiOperation({summary: 'Obtain all Categories', description:'',})
+  @ApiOperation({summary: 'Get all raw categories', description:'',})
   @ApiResponse({ status: 201, description: 'Give all the Categories.'}) 
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async findAll(): Promise<Category[]> {
@@ -32,7 +32,7 @@ export class CategoryController {
   }
 
   @Get('/:name')
-  @ApiOperation({summary: 'Obtain Category id by Name', description:'',})
+  @ApiOperation({summary: 'Get category by name', description:'',})
   @ApiParam({ name: 'name', description: 'Enter the name of the category' })
   @ApiOkResponse({ status: 200,  description: 'The found record', type: Category })
   @ApiResponse({ status: 403,  description: 'Forbidden.' })
@@ -42,39 +42,12 @@ export class CategoryController {
   }
 
   @Get('/:id/view')
-  @ApiOperation({summary: 'Obtain Category by id', description:' la descripcion',})
+  @ApiOperation({summary: 'Get category by id', description:' la descripcion',})
   @ApiParam({ name: 'id', description: 'categoryId' })
   @ApiResponse({  status: 200, description: 'The found record', type: Category})
   @ApiResponse({  status: 403, description: 'Forbidden.' })
   async findOne(@Param('id', ParseIntPipe) id: number):Promise<Category> {
     return this.categoryService.findOne(id);
   }
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
-  @Patch('/:id/edit')
-  @ApiOperation({summary: 'Change Category by id', description:' la descripcion',})
-  @ApiParam({ name: 'id', description: 'categoryId'})
-  @ApiBody({ type: UpdateCategoryDto })
-  @ApiResponse({  status: 200, description: 'The record has been successfully modifier.' })  
-  @ApiResponse({  status: 404, description: 'Forbidden change.' })
-  update( @Param('id',ParseIntPipe) id: number, 
-          @Body() updateCategoryDto: UpdateCategoryDto
-        ) {
-    return this.categoryService.update(id, updateCategoryDto);
-  }
 
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
-  @Delete('delete/:id')
-  @ApiOperation({summary: 'Delete Category by id', description:' la descripcion',})
-  @ApiParam({ name: 'id', description: 'userId' })
-  @ApiResponse({  status: 201,
-                  description: 'The record has been successfully deleted.'
-              })  
-  @ApiResponse({  status: 403,
-                  description: 'Forbidden.' 
-              }) 
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.categoryService.remove(id);
-  }
 }

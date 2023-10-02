@@ -4,7 +4,5 @@ export const CurrentDocument = createParamDecorator(
   (data: string, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
     return request.currentdocument
-    /*const currentProject = request.currentproject;
-    return currentProject;*/
   },
 );

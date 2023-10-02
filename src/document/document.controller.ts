@@ -1,50 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
-import { DocumentService } from './document.service';
-import { CreateDocumentDto } from './dto/create-document.dto';
-import { UpdateDocumentDto } from './dto/update-document.dto';
-import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { Body, Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+import { DocumentService } from './document.service';
+import { AuthGuard } from 'src/guards/auth.guard';
 import { Document } from './entities/document.entity';
 import { DocumentExistGuard } from 'src/guards/documentExist.guard';
 import { CurrentDocument } from 'src/decorators/currentDocument.decorator';
-import { ProjectExistGuard } from 'src/guards/projectExist.guard';
-import { ProjectCollaboratorGuard } from 'src/guards/projectCollaborator.guard';
-import { ProjectOwnerGuard } from 'src/guards/projectOwner.guard';
 
 @ApiTags('Document')
 @Controller('document')
 export class DocumentController {
   constructor(private readonly documentService: DocumentService) 
   {}
-  /*@ApiBearerAuth()
-  @UseGuards(AuthGuard) 
-  @Post('/add')
-  @ApiOperation({summary: 'Create New Document and first history', description:'',})
-  @ApiBody({type:CreateDocumentDto})
-  createNewDocument(
-    @Body() createDocumentDto: CreateDocumentDto,
-    @User('userId') currentUserId:number
-  ) {
-      return this.documentService.createDocument(createDocumentDto,currentUserId);
-  }
-*/
- /* @ApiBearerAuth()
-  @UseGuards(AuthGuard) 
-  @Post('/:id/edit')
-  @ApiOperation({summary: 'Update Document, create new history', description:'',})
-  @ApiBody({type:CreateDocumentDto})
-  async updateDocument(
-    @Param('documentId') documentId: number,
-    @Body() updateDocumentDto: UpdateDocumentDto,
-    @User('userId') currentUserId:number
-  ):Promise <Document> {
-      return this.documentService.updateDocument(documentId,updateDocumentDto);
-  }*/
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard,DocumentExistGuard)
-  @Get(':idDoc/last-version')
-  @ApiOperation({summary: 'Get the las version of the document', description:'',})
+
+  @UseGuards(DocumentExistGuard)
+  @Get(':idDoc/view')
+  @ApiOperation({summary: 'Get the last version of the document idDoc', description:'',})
   @ApiOkResponse({ status: 200, description: 'Provide a list of all your projects.'}) 
   @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
   @ApiParam({ name: 'idDoc', description: 'Gets the document id',})
@@ -58,7 +29,7 @@ export class DocumentController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard,DocumentExistGuard)
   @Get(':idDoc/histories')
-  @ApiOperation({summary: 'Get histories of the document', description:'',})
+  @ApiOperation({summary: 'Get all raw histories of the document idDoc', description:'',})
   @ApiOkResponse({ status: 200, description: 'Provide a list of all the document history.'}) 
   @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
   @ApiParam({ name: 'idDoc', description: 'Gets the document id',})
@@ -69,24 +40,40 @@ export class DocumentController {
     return await this.documentService.getHistoriesDocument(document);
   }
 
+  @UseGuards(DocumentExistGuard)
+  @Get(':idDoc/total-visits')
+  @ApiOperation({summary: 'Get total visits of the document idDoc', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide number of visits to the document.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  @ApiParam({ name: 'idDoc', description: 'Gets the document id',})
+  async getVisitsDocument(
+    @Param('idDoc') idDoc: number,
+    @CurrentDocument() document: Document
+  ): Promise<number> {
+    return await this.documentService.getVisitsDocument(document);
+  }
+  
+  @Get('most-viewed')
+  @ApiOperation({summary: 'Lists all documents sorted by number of visits.From most viewed to least seen', description:'',})
+  @ApiOkResponse({ status: 200, description: 'List documents sorted by number of visits.'}) 
+  async mostViewed()
+  {
+    return this.documentService.mostViewed();
+  }
+  
+  @Get('most-recent')
+  @ApiOperation({summary: 'List all documents sorted by their creation date. Newest to oldest.'})
+  @ApiOkResponse({ status: 200, description: 'List documents sorted by their creation date.'}) 
+  async mostRecent()
+  {
+    return this.documentService.mostRecent();
+  }
     
   @Get('/view/all')
-  findAll() {
+  @ApiOperation({summary: 'Get all raw documents', description:'',})
+  @ApiResponse({ status: 201, description: 'Give all the documents.'}) 
+  async findAll():Promise<Document[]> {
     return this.documentService.findAll();
   }
 
-  @Get(':id/view')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.documentService.getOne(id);
-  }
-
-  /*@Patch(':id')
-  update(@Param('id') id: string, @Body() updateDocumentDto: UpdateDocumentDto) {
-    return this.documentService.update(+id, updateDocumentDto);
-  }*/
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.documentService.remove(+id);
-  }
 }

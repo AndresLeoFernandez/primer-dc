@@ -2,11 +2,12 @@ import { Controller, Post, Get, Body, UseGuards,} from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User  } from 'src/user/entities/user.entity';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/Login.dto';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { UserService } from 'src/user/user.service';
+import { LoginDto } from './dto/Login.dto';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/currentUser.decorator';
+
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -31,11 +32,11 @@ export class AuthController {
   }
   
   @Post('signup')
-  @ApiOperation({summary: 'Register user in the app', description:'Add a new user to the system.',})
-  @ApiBody({ type: CreateUserDto, description:'<p>The request body its an object with CreateUserDto structure.</p><p>Its mandatory username, email and password.</p><p>Email must be unique in the system.The username and password must have at least 5 characters.</p>' })
-  @ApiOkResponse({ status: 201, description: 'The User has been successfully created.'})  
+  @ApiOperation({summary: 'Register new user in the App', description:'Add a new user to the App.',})
+  @ApiBody({ type: CreateUserDto, description:'<p>The request body its an object with CreateUserDto structure.</p><p>Its mandatory username, email and password.</p><p>Email must be unique in the App.The username and password must have at least 5 characters.</p>' })
+  @ApiOkResponse({ status: 201, description: 'The User has been successfully created in the App.'})  
   @ApiResponse({ status: 400, description: 'Any requirement is not met in the input data.Show error message.' })
-  @ApiResponse({ status: 409, description: 'The user email is already in use in the system.' })
+  @ApiResponse({ status: 409, description: 'The user email is already in use in the App.' })
   async signUp(@Body() createUserDto: CreateUserDto) {
     const result = await this.userService.createUser(createUserDto);    
     return result;
@@ -43,14 +44,14 @@ export class AuthController {
    
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  @ApiOperation({summary: 'Show profile user logon', description:'',})
-  @ApiOkResponse({ status: 200, description: 'This is the user profile.'})  
+  @ApiOperation({summary: 'Displays the profile of the logged-in user', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Current user profile.'})  
   @ApiResponse({ status: 401, description: 'User Unauthorized.'})  
   @Get('profile')
   async profile(@CurrentUser() user:User) {
     return {
-      message: 'Petición correcta',
-      user,
+      message: 'User Data',
+      user:user,
     };
   }
 
@@ -67,12 +68,4 @@ export class AuthController {
       data,
     };
   }
-
-  /* No utilizamos solo se genera logout desde frontend una vez el usuario determina logout*/
-  /*@UseGuards(AuthGuard)
-  @Get('signout')
-  async signOut(@Headers('authorization') bearer: string) {
-    return this.authService.signOut(bearer)
-  }*/
-
 }

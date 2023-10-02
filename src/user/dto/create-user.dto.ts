@@ -1,8 +1,9 @@
 import { IsString, IsOptional, IsNotEmpty, MinLength, IsEmail, Matches, NotContains, IsAlpha } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { lowercaseString, sanitizeInput } from 'src/helpers/utils.helpers';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('CreateUserDto')
 export class CreateUserDto {
 
   @ApiProperty({ type: () => String, required: true, example: 'cuenta@demo.com',})

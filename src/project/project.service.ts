@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, In, Repository } from 'typeorm';
 import { Project } from './entities/project.entity';
 import { User } from '../user/entities/user.entity';
 import { Document } from '../document/entities/document.entity';
@@ -103,7 +103,7 @@ export class ProjectService {
   }
 
 
-/* Devuelve los proyectos donde el usuario es Collaborator*/
+/* Devuelve los proyectos donde el usuario es Dueño*/
   async getProjectsOwner(currentUser:User):Promise<any> {
     const criteriaOwner : FindManyOptions = {/*relations:['author'],*/ where:{author:{userId:currentUser.getUserId(),}}};
     const allProyects = await this.projectRepository.find(criteriaOwner);
@@ -171,6 +171,9 @@ export class ProjectService {
     return existe? existe: false;
     
   }
+  async removeDocument(currentDocument:Document):Promise<void>{
+    void await this.documentService.deleteDocument(currentDocument);
+  }
 
   async removeDocuments(currentProject:Project){
     const documents = await this.documentService.getDocumentsByProjectId(currentProject.getProjectId());
@@ -179,6 +182,34 @@ export class ProjectService {
       const current = await this.documentService.deleteDocument(doc);
       console.log(`Operation finished. Document ${doc.getDocumentId()} is deleted Ok.`);
     } 
+  }
+
+  async searchProjects(query: { author: number, categoryIds: string[], sortBy: 'hot' | 'top', skip: number,}){
+    console.log('qqqqqqq5qqqqqqqqqqqqq');
+    console.log(typeof query.categoryIds);
+    console.log('qqqqqqqqqqqqqqqqqqqq');
+    const criteria : FindManyOptions = {
+      relations:['author','category'],
+      where: {
+          ...query.author && {
+              author: {
+                userId: query.author
+              },
+          ...query.categoryIds && {
+              category: {
+                name: In (query.categoryIds)
+              }
+            },                 
+              
+          },
+      },
+      order: {
+          ...query.sortBy === undefined && {
+              creationDate: 'DESC',
+          },
+      },
+    };
+    return this.projectRepository.find(criteria);
   }
 
 }
