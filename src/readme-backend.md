@@ -111,22 +111,31 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 <table border="1" width=100%>
 <thead><tr><th>Nombre</th><th>Detalle</th></tr></thead>
 <tbody>
-<tr><td>projectId</td><td>Descripción: Representa el número de identificación del proyecto.</br>
- Se genera automaticamente de forma incremental al darse de alta el proyecto.</br>
-Restricción: Único para cada proyecto de la aplicación. </br>
-Obligatoriedad: Requerida.</td></tr>
-<tr><td>title</td><td>Descripción: Representa el título del proyecto.</br>
-Restricción: El título debe ser único por autor de proyecto. No puede ser vacio.</br>
-Obligatoriedad: Requerida.</td></tr>
-<tr><td>category</td><td>
-Descripción:Representa la categoría del proyecto.</br> 
-Restricción: Debe estar vigente dentro de la aplicación. De no existir la puede crear previamnente.</br>
-Obligatoriedad: Requerida.</td></tr>
+<tr><td>projectId</td><td><ul><li>Representa el número de identificación del proyecto.</li>
+<li>Se genera automáticamente de forma incremental al darse de alta el proyecto.</li>
+<li>Restricción: Valor único para cada proyecto de la aplicación. </li>
+</ul></td></tr>
+<tr><td>title</td><td><ul><li>Representa el título del proyecto.</li>
+<li>Restricción: El título debe ser único por autor de proyecto. No puede ser vacio.</li>
+<li>Obligatoriedad: Requerida.</li></ul></td></tr>
 <tr><td>creationDate</td><td>
-Descripción: Representa la fecha de creación del proyecto en la aplicación.</br>
-Restricción: No posee. Se asigna automaticamente cuando se crea el proyecto.</br>
-Obligatoriedad: Requerida.
-</td></tr>
+<ul><li>Representa la fecha de creación del proyecto en la aplicación.</li>
+<li>Se asigna automáticamente cuando se crea el proyecto.</li>
+</ul></td></tr>
+<tr><td>author</td><td><ul><li>Relación que vincula a un usuario como author del proyecto.</li>
+<li>Obligatoriedad: Requerida.</li></ul></td></tr>
+<tr><td>category</td><td>
+<ul><li>Relacion que vincula una categoría con el proyecto.</li> 
+<li>Restricción: La categoría debe estar vigente dentro de la aplicación. De no existir la puede crear previamnente.</li>
+<li>Obligatoriedad: Requerida.</li></ul></td></tr>
+<tr><td>documents</td><td>
+<ul><li>Relación que vincula los documentos que posee el proyecto.</li> 
+<li>Obligatoriedad: Opcional.</li></ul></td></tr>
+<tr><td>collaborators</td><td>
+<ul><li>Relación que vincula los collaboradores que posee el proyecto.</li>
+<li>Obligatoriedad: Opcional.</li>
+</ul></td></tr>
+ 
 </tbody>
 </table>
 </br>
@@ -153,23 +162,23 @@ Obligatoriedad: Requerida.
 <table border="1" width=100%>
 <thead><tr><th>Nombre</th><th>Detalle</th></tr></thead>
 <tbody>
- <tr><td>categoryId</td><td>Descripción: Representa el número de identificación de la categoria.</br>Se genera automáticamente de forma incremental al darse de alta.</br>
-Restricción: Único para cada categoría en la Aplicación. </br>
-Obligatorio: Requerida.</td></tr>
-<tr><td>name</td><td>
-Descripción: Representa el nombre de la categoría.</br>
-Restricción: No puede ser vacia.</br>
-Obligatoriedad: Requerida.</td></tr>
+<tr><td>categoryId</td><td><ul>
+<li>Representa el número de identificación de la categoria.</li>
+<li>Se genera automáticamente de forma incremental al darse de alta.</li>
+<li>Restricción: Valor único para cada categoría en la aplicación.</li>
+</ul></td></tr>
+<tr><td>name</td><td><ul>
+<li>Representa el nombre de la categoría.</li>
+<li>No puede ser vacia.</li>
+<li>Obligatoriedad: Requerida.</li></ul></td></tr>
+<tr><td>createdAt</td><td><ul>
+<li>Representa la fecha de creación de la categoría en la aplicación.</li>
+<li>Se asigna automáticamente cuando se crea.</li>
+</ul></td></tr>
 <tr><td>createdAt</td><td>
-Descripción: Representa la fecha de creación de la categoría en la aplicación.</br>
-Restricción: No posee. Se asigna automáticamente cuando se crea.</br>
-Obligatoriedad: Requerida.
-</td></tr>
-<tr><td>createdAt</td><td>
-Descripción: Representa la fecha de última actualización del nombre de la categoría.</br>
-Restricción: No posee. Se aplica automáticamente cuando se modifica.</br>
-Obligatoriedad: Requerida.
-</td></tr>
+<ul><li>Representa la fecha de última actualización del nombre de la categoría.</li>
+<li>Se aplica automáticamente cuando se modifica.</li>
+</ul></td></tr>
 </tbody>
 </table>
 </br></br>
@@ -193,23 +202,23 @@ Obligatoriedad: Requerida.
 <table border="1" width=100%>
 <thead><tr><th>Nombre</th><th>Detalle</th></tr></thead>
 <tbody>
- <tr><td>collaboratorId</td><td>Descripción: Representa el número de identificación del colaborador.</br>Se genera automáticamente de forma incremental al darse de alta.</br>
-Restricción: Único para cada collaborador segun el proyecto. </br>
-Obligatorio: Requerida.</td></tr>
-<tr><td>role</td><td>
-Descripción: Representa el rol que tendra el usuario dentro del proyecto pudiendo ser "OWNER" o "COLLABORATOR".</br>
-Restricción: No puede ser vacia.</br>
-Obligatoriedad: Requerida.</td></tr>
+<tr><td>collaboratorId</td>
+<td><ul><li>Representa el número de identificación del colaborador.</li>
+<li>Se genera automáticamente de forma incremental al darse de alta.</li>
+<li>Valor único para cada collaborador segun el proyecto.</li>
+</ul></td></tr>
+<tr><td>role</td><td><ul>
+<li>Representa el rol que tendra el usuario dentro del proyecto pudiendo ser "OWNER" o "COLLABORATOR".</li>
+<li>No puede ser vacia,solo una de las opciones.</li>
+<li>Obligatoriedad: Requerida.</li></ul></td></tr>
 <tr><td>createdAt</td><td>
-Descripción: Representa la fecha de creacion de la categoría en la aplicación.</br>
-Restricción: No posee. Se asigna automáticamente cuando se crea.</br>
-Obligatoriedad: Requerida.
-</td></tr>
-<tr><td>createdAt</td><td>
-Descripción: Representa la fecha de última actualización del nombre de la categoría.</br>
-Restricción: No posee. Se aplica automáticamente cuando se modifica.</br>
-Obligatoriedad: Requerida.
-</td></tr>
+<ul><li>Representa la fecha de creación de la categoría en la aplicación.</li>
+<li>Se asigna automáticamente cuando se crea.</li>
+</ul></td></tr>
+<tr><td>createdAt</td><td><ul>
+<li>Representa la fecha de última actualización del nombre de la categoría.</li>
+<li>Se aplica automáticamente cuando se modifica.</li>
+</ul></td></tr>
 </tbody>
 </table>
 </br></br>
