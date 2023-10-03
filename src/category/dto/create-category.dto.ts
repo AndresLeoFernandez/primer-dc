@@ -10,5 +10,3 @@ export class CreateCategoryDto {
     @Transform(({ value }) => lowercaseString(value?.trim()))
     name: string;
 }
-
-/*export class CategoryDto extends CreateCategoryDto {}*/

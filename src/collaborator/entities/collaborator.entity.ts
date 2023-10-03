@@ -12,7 +12,6 @@ import { RolesCollaborators } from "src/constants/roles-collaborators";
 @Unique(["project", "user"])
 export class Collaborator {
     @ApiProperty({  type: () => Number, example:4, readOnly: true, description:'Autoincremental integer value.' })
-    /*@IsInt()*/
     @PrimaryGeneratedColumn({ name: 'collaborator_id' })
     collaboratorId: number;
 
