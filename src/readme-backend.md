@@ -19,45 +19,64 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 </ul>
 </p>
 
-## Entidad USUARIO (user)
+## DML Proyectos Colaborativos
+<p>Como resultado del analisis se resuelve ejecutar el siguiente modelado para cubrir las necesidades del proyecto.</p>
+<p align=center><img src="images/diagrama.png" alt="diagrama" width="70%"/></p> 
+</br>
+<p>A continuación se detallan las entidades con sus atributos, funcionalidaes declaradas y se comenta tambien la relación que van a mantener entre las mismas.</p>
+</br>
+
+## Entidad USUARIO (tabla users)
 
 <strong>Atributos</strong>
 <table border="1" width=100%>
 <thead><tr><th>Nombre</th><th>Detalle</th></tr></thead>
 <tbody>
- <tr><td>userId</td><td>Descripción: Representa el número de identificación del usuario.</br>Se genera automaticamente de forma incremental al darse de alta el usuario.</br>
-Restricción: Único para cada usuario en la Aplicación. </br>
-Obligatoriedad: Requerida.</td></tr>
-<tr><td>email</td><td>Descripción: Representa el correo electrónico del usuario.</br>Como tal debe ser un formato válido de correo electrónico.</br>
-Restricción: Debe ser único en la Aplicación, no pudiendo ser utilizado por otro usuario. </br>
-Obligatoriedad: Requerida. </td></tr>
+<tr><td>userId</td><td>
+<ul>
+<li>Representa el número de identificación del usuario.</li>
+<li>Se genera automáticamente de forma incremental al darse de alta los usuarios.</li>
+<li>Es único para cada usuario en la aplicación. </li>
+</ul></td></tr>
+<tr><td>email</td><td><ul>
+<li>Representa el correo electrónico del usuario.</li>
+<li>Como tal debe ser un formato válido de correo electrónico.</li>
+<li>Debe ser único su uso en la aplicación, no pudiendo ser utilizado por otro usuario.</li>
+<li>Obligatoriedad: Requerida.</li></ul> </td></tr>
 <tr><td>password</td><td>
-Descripción:Representa la contraseña del usuario.</br> 
-Restricción: Debe contar con mas de 5 caracteres. No puede contener el caracter " ". </br>
-Obligatoriedad: Requerida. </td></tr>
+<ul><li>Representa la contraseña del usuario.</li> 
+<li>Restricción: Debe contar con mas de 5 caracteres. No puede contener el caracter " ". </li>
+<li>Obligatoriedad: Requerida.</li></ul> </td></tr>
 <tr><td>firstName</td><td>
-Descripción: Representa el nombre de pila del usuario.</br>
-Restricción: No puede contener el caracter " ".De estar no puede ser vacio. </br>
-Obligatoriedad: Opcional.</td></tr>
+<ul><li>Representa el nombre de pila del usuario.</li>
+<li>Restricción: No puede contener el caracter " ".De estar no puede ser vacio. </li>
+<li>Obligatoriedad: Opcional.</li></ul></td></tr>
 <tr><td>lastName</td><td>
-Descripción: Representa el apellido del usuario.</br>
-Restricción: No puede contener el caracter " ".De estar no puede ser vacio. </br>
-Obligatoriedad: Opcional.
+<ul><li>Representa el apellido del usuario.</li>
+<li>Restricción: No puede contener el caracter " ".De estar no puede ser vacio. </li>
+<li>Obligatoriedad: Opcional.</li></ul>
 </td></tr>
 <tr><td>username</td><td>
-Descripción: Representa el nombre de usuario en la aplicacion.</br>
-Restricción: Debe contar con mas de 5 caracteres.No puede contener el caracter " ".</br>
-Obligatoriedad: Requerida.
+<ul><li>Representa el nombre de usuario en la aplicación.</li>
+<li>Restricción: Debe contar con mas de 5 caracteres.No puede contener el caracter " ".</li>
+<li>Obligatoriedad: Requerida.</li></ul>
 </td></tr>
 <tr><td>dateRegistration</td><td>
-Descripción: Representa la fecha de alta del usuario en la aplicación.</br>
-Restricción: No posee. Se asigna automaticamente cuando se crea el usuario.</br>
-Obligatoriedad: Requerida.
+<ul><li>Representa la fecha de alta del usuario en la aplicación.</li>
+<li>Se asigna automaticamente cuando se crea el usuario.</li>
+</ul>
 </td></tr>
 <tr><td>isActive</td><td>
-Descripción: Representa si el usuario esta activo en la aplicación.</br>
-Restricción: No posee. Se asigna automáticamente cuando se crea el usuario.</br>
-Obligatoriedad: Requerida. 
+<ul><li>Representa si el usuario esta activo en la aplicación.</li>
+<li>Se asigna automáticamente cuando se crea el usuario.</li>
+</ul></td></tr>    
+<tr><td>projects</td><td>
+<ul><li>Relación que vincula al usuario con los proyectos de su autoría.</li>
+<li>Obligatoriedad: Opcional.</li></ul>
+</td></tr>    
+<tr><td>collaborators</td><td>
+<ul><li>Relación que vincula al usuario como collaborador de los distintos proyectos donde es participe.</li>
+<li>Obligatoriedad: Opcional.</li></ul> 
 </td></tr>    
 </tbody>
 </table>
@@ -86,7 +105,7 @@ Obligatoriedad: Requerida.
 </br>
 </br>
 
-## Entidad PROYECTO (project)
+## Entidad PROYECTO (tabla projects)
 
 <strong>Atributos</strong>
 <table border="1" width=100%>
@@ -128,16 +147,57 @@ Obligatoriedad: Requerida.
 </br>
 </br>
 
-## Entidad CATEGORÍA (category)
+## Entidad CATEGORÍA (tabla categories)
 
+<strong>Atributos</strong>
 <table border="1" width=100%>
 <thead><tr><th>Nombre</th><th>Detalle</th></tr></thead>
 <tbody>
- <tr><td>categoryId</td><td>Descripción: Representa el número de identificación de la categoria.</br>Se genera automaticamente de forma incremental al darse de alta.</br>
+ <tr><td>categoryId</td><td>Descripción: Representa el número de identificación de la categoria.</br>Se genera automáticamente de forma incremental al darse de alta.</br>
 Restricción: Único para cada categoría en la Aplicación. </br>
 Obligatorio: Requerida.</td></tr>
 <tr><td>name</td><td>
 Descripción: Representa el nombre de la categoría.</br>
+Restricción: No puede ser vacia.</br>
+Obligatoriedad: Requerida.</td></tr>
+<tr><td>createdAt</td><td>
+Descripción: Representa la fecha de creación de la categoría en la aplicación.</br>
+Restricción: No posee. Se asigna automáticamente cuando se crea.</br>
+Obligatoriedad: Requerida.
+</td></tr>
+<tr><td>createdAt</td><td>
+Descripción: Representa la fecha de última actualización del nombre de la categoría.</br>
+Restricción: No posee. Se aplica automáticamente cuando se modifica.</br>
+Obligatoriedad: Requerida.
+</td></tr>
+</tbody>
+</table>
+</br></br>
+
+<strong>Funcionalidades</strong>
+
+<table border="1" width=100%>
+<thead><tr><th>Función</th><th>Descripción</th></tr></thead>
+<tbody>
+<tr><td>getCategoryId():number</td><td>Retorna el número de identificación de la categoría.</td></tr>
+<tr><td>getName():string </td><td>Retorna el nombre de la categoría.</td></tr>
+<tr><td>setName(newName:String): void </td><td>Asigna newName como nombre de la categoría.</td></tr>
+</tbody>
+</table>
+</br>
+</br>
+
+## Entidad COLABORADOR (tabla collaborators)
+
+<strong>Atributos</strong>
+<table border="1" width=100%>
+<thead><tr><th>Nombre</th><th>Detalle</th></tr></thead>
+<tbody>
+ <tr><td>collaboratorId</td><td>Descripción: Representa el número de identificación del colaborador.</br>Se genera automáticamente de forma incremental al darse de alta.</br>
+Restricción: Único para cada collaborador segun el proyecto. </br>
+Obligatorio: Requerida.</td></tr>
+<tr><td>role</td><td>
+Descripción: Representa el rol que tendra el usuario dentro del proyecto pudiendo ser "OWNER" o "COLLABORATOR".</br>
 Restricción: No puede ser vacia.</br>
 Obligatoriedad: Requerida.</td></tr>
 <tr><td>createdAt</td><td>
@@ -167,13 +227,12 @@ Obligatoriedad: Requerida.
 </br>
 </br>
 
-## Entidad COLABORADOR (collaborator)
 
-## Entidad DOCUMENTO (document)
+## Entidad DOCUMENTO (tabla documents)
 
-## Entidad REVISION (history)
+## Entidad REVISION (tabla histories)
 
-## Entidad COMENTARIO (comment)
+## Entidad COMENTARIO (tabla comments)
 
 
 ### Objetivo General
