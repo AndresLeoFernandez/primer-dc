@@ -80,9 +80,6 @@ export class User {
     public getPassword(): string {
         return this.password
     }
-    public getCollaborators(): Collaborator[]{
-        return this.collaborators
-    } 
     public getDateRegistration(): any {
         this.dateRegistration
     }

@@ -1,12 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Project } from "src/project/entities/project.entity"
-import {    Column,
-            CreateDateColumn,
-            Entity,
-            OneToMany,
-            PrimaryGeneratedColumn,
-            UpdateDateColumn
-        } from "typeorm"
+import {    Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 
 @Entity('Categories')
 export class Category {    
@@ -25,7 +19,7 @@ export class Category {
 
     @ApiProperty({  type: () => Date, example:'25-08-2023', description:'Date of last update in the system.' })
     @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
-    updatedAt: Date;
+    private updatedAt: Date;
 
     /* relations */
 
@@ -41,8 +35,8 @@ export class Category {
     public getName(): string {
         return this.name
     }
-    public setName(newname:string ) {
-        this.name = newname;
+    public setName(newName:string ) {
+        this.name = newName;
     }
 
     constructor(name: string) {

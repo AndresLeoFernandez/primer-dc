@@ -33,11 +33,11 @@ export class Project {
     category: Category;       
     
     @ApiPropertyOptional({ type: () => Document, isArray: true })
-    @OneToMany(()=> Document, (document) => document.project,{ nullable: true, cascade:true/*cascade: ["remove"] */ })
+    @OneToMany(()=> Document, (document) => document.project,{ nullable: true, cascade:true })
     documents?: Document[];
 
     @ApiPropertyOptional({  type: () => Collaborator, isArray: true })
-    @OneToMany(()=> Collaborator, (collaborator) => collaborator.user,{cascade:true/*cascade: ["remove"]*/ })
+    @OneToMany(()=> Collaborator, (collaborator) => collaborator.user,{cascade:true })
     collaborators?: Collaborator[];
 
     /* Functions getters and setters */
@@ -61,10 +61,7 @@ export class Project {
     public setTitle(newTitle: string): void {
         this.title = newTitle
     }
-    /*public setCategory(newCategory: Category): void {
-        this.category = newCategory
-    }*/
-    
+      
 
     constructor( title:string, author: User, category: Category,collaborators?: Collaborator[], documents?:Document[]){
         this.title = title;
