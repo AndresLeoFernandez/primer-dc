@@ -179,6 +179,10 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 <ul><li>Representa la fecha de última actualización del nombre de la categoría.</li>
 <li>Se aplica automáticamente cuando se modifica.</li>
 </ul></td></tr>
+ <tr><td>projects</td><td>
+ <ul><li>Relación que vincula la categoría con los proyectos donde es asignada.</li>
+<li>Obligatoriedad: Opcional.</li></ul>
+</td></tr>
 </tbody>
 </table>
 </br></br>
@@ -211,14 +215,15 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 <li>Representa el rol que tendra el usuario dentro del proyecto pudiendo ser "OWNER" o "COLLABORATOR".</li>
 <li>No puede ser vacia,solo una de las opciones.</li>
 <li>Obligatoriedad: Requerida.</li></ul></td></tr>
-<tr><td>createdAt</td><td>
-<ul><li>Representa la fecha de creación de la categoría en la aplicación.</li>
-<li>Se asigna automáticamente cuando se crea.</li>
-</ul></td></tr>
-<tr><td>createdAt</td><td><ul>
-<li>Representa la fecha de última actualización del nombre de la categoría.</li>
-<li>Se aplica automáticamente cuando se modifica.</li>
-</ul></td></tr>
+<tr><td>project</td><td>
+<ul><li>Relación que vincula el colaborador con el proyecto.</li>
+<li>Obligatoriedad: Opcional.</li></ul></td></tr>
+<tr><td>user</td><td>
+<ul><li>Relación que vincula el colaborador con el usuario.</li>
+<li>Obligatoriedad: Opcional.</li></ul></td></tr>
+<tr><td>documents</td><td>
+<ul><li>Relación que vincula el colaborador con los documentos donde puede operar.</li>
+<li>Obligatoriedad: Opcional.</li></ul></td></tr>
 </tbody>
 </table>
 </br></br>
@@ -239,6 +244,21 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 
 ## Entidad DOCUMENTO (tabla documents)
 
+<strong>Atributos</strong>
+<table border="1" width=100%>
+<thead><tr><th>Nombre</th><th>Detalle</th></tr></thead>
+<tbody>
+<tr><td>documentId</td>
+<td><ul><li>Representa el número de identificación del documento.</li>
+<li>Se genera automáticamente de forma incremental al darse de alta.</li>
+<li>Valor único para cada documento en la aplicacion proyecto.</li>
+</ul></td></tr>
+<tr><td>type</td>
+<td><ul><li>Representa el número de identificación del documento.</li>
+<li>Se genera automáticamente de forma incremental al darse de alta.</li>
+<li>Valor único para cada documento en la aplicacion proyecto.</li>
+</ul></td></tr>
+ 
 ## Entidad REVISION (tabla histories)
 
 ## Entidad COMENTARIO (tabla comments)
