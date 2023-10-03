@@ -1,5 +1,3 @@
-
-
 # Proyectos Colaborativos
 <p align="center"><img src="images/logo.png" alt="logo" width="300" height="300"/></p>
 
@@ -21,23 +19,22 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 </ul>
 </p>
 
-## Entidad USUARIO
+## Entidad USUARIO (user)
 
 <strong>Atributos</strong>
-
-<table border="1">
+<table border="1" width=100%>
 <thead><tr><th>Nombre</th><th>Detalle</th></tr></thead>
 <tbody>
  <tr><td>userId</td><td>Descripción: Representa el número de identificación del usuario.</br>Se genera automaticamente de forma incremental al darse de alta el usuario.</br>
 Restricción: Único para cada usuario en la Aplicación. </br>
-Obligatorio: Si.</td></tr>
+Obligatoriedad: Requerida.</td></tr>
 <tr><td>email</td><td>Descripción: Representa el correo electrónico del usuario.</br>Como tal debe ser un formato válido de correo electrónico.</br>
 Restricción: Debe ser único en la Aplicación, no pudiendo ser utilizado por otro usuario. </br>
-Obligatorio: Si.</td></tr>
+Obligatoriedad: Requerida. </td></tr>
 <tr><td>password</td><td>
 Descripción:Representa la contraseña del usuario.</br> 
 Restricción: Debe contar con mas de 5 caracteres. No puede contener el caracter " ". </br>
-Obligatorio: Si.</td></tr>
+Obligatoriedad: Requerida. </td></tr>
 <tr><td>firstName</td><td>
 Descripción: Representa el nombre de pila del usuario.</br>
 Restricción: No puede contener el caracter " ".De estar no puede ser vacio. </br>
@@ -50,92 +47,133 @@ Obligatoriedad: Opcional.
 <tr><td>username</td><td>
 Descripción: Representa el nombre de usuario en la aplicacion.</br>
 Restricción: Debe contar con mas de 5 caracteres.No puede contener el caracter " ".</br>
-Obligatorio: Si.
+Obligatoriedad: Requerida.
 </td></tr>
 <tr><td>dateRegistration</td><td>
 Descripción: Representa la fecha de alta del usuario en la aplicación.</br>
 Restricción: No posee. Se asigna automaticamente cuando se crea el usuario.</br>
-Obligatorio: Si.
+Obligatoriedad: Requerida.
 </td></tr>
 <tr><td>isActive</td><td>
 Descripción: Representa si el usuario esta activo en la aplicación.</br>
-Restricción: No posee. Se asigna automaticamente cuando se crea el usuario.</br>
-Obligatorio: Si. 
+Restricción: No posee. Se asigna automáticamente cuando se crea el usuario.</br>
+Obligatoriedad: Requerida. 
 </td></tr>    
 </tbody>
 </table>
-
-
+</br>
 <strong>Funcionalidades</strong>
+</br>
+</br>
 
-<table border="1" style="width:100%">
+<table border="1" width=100%>
 <thead><tr><th>Función</th><th>Descripción</th></tr></thead>
 <tbody>
-<tr><td>getUserId():number</td><td>Retorna el numero de identificación del usuario.</td></tr>
+<tr><td>getUserId():number</td><td>Retorna el número de identificación del usuario.</td></tr>
 <tr><td>getFirstName():string </td><td>Retorna el firstname del usuario.</td></tr>
 <tr><td>getLastName():string </td><td>Retorna el lastname del usuario.</td></tr>
 <tr><td>getEmail(): string </td><td>Retorna el email del usuario.</td></tr>
 <tr><td>getUsername(): String</td><td>Retorna el username del usuario.</td></tr>
 <tr><td>getPassword(): string </td><td>Retorna el password encriptado del usuario.</td></tr>
-<tr><td>getDateRegistration(): any</td><td>Retorna la fecha de alta en la aplicación del usuario.</td></tr>
-<tr><td>IsActive(): Boolean </td><td>Retorna verdadero si el usuario se encuentra activo, falso en caso contrario.</td></tr>
+<tr><td>getDateRegistration(): any</td><td>Retorna la fecha de alta del usuario en la aplicación.</td></tr>
+<tr><td>IsActive(): Boolean </td><td>Retorna verdadero si el usuario se encuentra activo,</br> falso en caso contrario.</td></tr>
 <tr><td>setFirstName( newFirstName: string ): string</td><td>Asigna newFirstName al firstName del usuario.</td></tr>
 <tr><td>setLastName( newLastName: string ): string </td><td>Asigna newLastName al lastName del usuario.</td></tr>
-<tr><td>setPassword(newPassword: string): string </td><td>Asigna newLastName al lastName del usuario.</td></tr>
-<tr><td>deactivate()</td><td>Asigna estado falso al usuario.</td></tr>
+<tr><td>setPassword(newPassword: string): string </td><td>Asigna newPassword al usuario.</td></tr>
+<tr><td>deactivate()</td><td>Asigna estado falso a isActive.</td></tr>
 </tbody>
 </table>
+</br>
+</br>
 
-### Entidad PROYECTO
+## Entidad PROYECTO (project)
 
 <strong>Atributos</strong>
-
-<table border="1">
+<table border="1" width=100%>
 <thead><tr><th>Nombre</th><th>Detalle</th></tr></thead>
 <tbody>
-<tr><td>projectId</td><td>Descripción: Representa el número de identificación del projecto.</br>
- Se genera automaticamente de forma incremental al darse de alta el projecto.</br>
-Restricción: Único para cada usuario en la Aplicación. </br>
-Obligatorio: Si.</td></tr>
-
-<tr><td>title</td><td>Descripción: Representa el título del projecto.</br>
-Restricción: El título debe ser único por autor de projecto. No puede ser vacio.</br>
-Obligatorio: Si.</td></tr>
+<tr><td>projectId</td><td>Descripción: Representa el número de identificación del proyecto.</br>
+ Se genera automaticamente de forma incremental al darse de alta el proyecto.</br>
+Restricción: Único para cada proyecto de la aplicación. </br>
+Obligatoriedad: Requerida.</td></tr>
+<tr><td>title</td><td>Descripción: Representa el título del proyecto.</br>
+Restricción: El título debe ser único por autor de proyecto. No puede ser vacio.</br>
+Obligatoriedad: Requerida.</td></tr>
 <tr><td>category</td><td>
-Descripción:Representa la categoría del projecto.</br> 
+Descripción:Representa la categoría del proyecto.</br> 
 Restricción: Debe estar vigente dentro de la aplicación. De no existir la puede crear previamnente.</br>
-Obligatorio: Si.</td></tr>
+Obligatoriedad: Requerida.</td></tr>
 <tr><td>creationDate</td><td>
-Descripción: Representa la fecha de creación del projecto en la aplicación.</br>
-Restricción: No posee. Se asigna automaticamente cuando se crea el projecto.</br>
-Obligatorio: Si.
+Descripción: Representa la fecha de creación del proyecto en la aplicación.</br>
+Restricción: No posee. Se asigna automaticamente cuando se crea el proyecto.</br>
+Obligatoriedad: Requerida.
 </td></tr>
-
 </tbody>
 </table>
+</br>
+<strong>Funcionalidades</strong>
+</br></br>
+
+<table border="1" width=100%>
+<thead><tr><th>Función</th><th>Descripción</th></tr></thead>
+<tbody>
+<tr><td>getProjectId():number</td><td>Retorna el número de identificación del proyecto.</td></tr>
+<tr><td>getTitle():string </td><td>Retorna el título del proyecto.</td></tr>
+<tr><td>getCreationDate():any </td><td>Retorna la fecha de creación del proyecto.</td></tr>
+<tr><td>getAuthor(): User </td><td>Retorna el usuario autor del proyecto.</td></tr>
+<tr><td>getCategory(): Category</td><td>Retorna la categoría del proyecto.</td></tr>
+<tr><td>setTitle(newTitle:String): void </td><td>Asigna newTitle al título del proyecto.</td></tr>
+</tbody>
+</table>
+</br>
+</br>
+
+## Entidad CATEGORÍA (category)
+
+<table border="1" width=100%>
+<thead><tr><th>Nombre</th><th>Detalle</th></tr></thead>
+<tbody>
+ <tr><td>categoryId</td><td>Descripción: Representa el número de identificación de la categoria.</br>Se genera automaticamente de forma incremental al darse de alta.</br>
+Restricción: Único para cada categoría en la Aplicación. </br>
+Obligatorio: Requerida.</td></tr>
+<tr><td>name</td><td>
+Descripción: Representa el nombre de la categoría.</br>
+Restricción: No puede ser vacia.</br>
+Obligatoriedad: Requerida.</td></tr>
+<tr><td>createdAt</td><td>
+Descripción: Representa la fecha de creacion de la categoría en la aplicación.</br>
+Restricción: No posee. Se asigna automáticamente cuando se crea.</br>
+Obligatoriedad: Requerida.
+</td></tr>
+<tr><td>createdAt</td><td>
+Descripción: Representa la fecha de última actualización del nombre de la categoría.</br>
+Restricción: No posee. Se aplica automáticamente cuando se modifica.</br>
+Obligatoriedad: Requerida.
+</td></tr>
+</tbody>
+</table>
+</br></br>
 
 <strong>Funcionalidades</strong>
 
-<table border="1" style="width:100%">
+<table border="1" width=100%>
 <thead><tr><th>Función</th><th>Descripción</th></tr></thead>
 <tbody>
-<tr><td>getProjectId():number</td><td>Retorna el numero de identificación del projecto.</td></tr>
-<tr><td>getTitle():string </td><td>Retorna el título del projecto.</td></tr>
-<tr><td>getCreationDate():any </td><td>Retorna la fechad de creación del projecto.</td></tr>
-<tr><td>getAuthor(): User </td><td>Retorna el usuario autor del projecto.</td></tr>
-<tr><td>getCategory(): Category</td><td>Retorna la Categoría del projecto.</td></tr>
-<tr><td>setTitle(newTitle:String): void </td><td>Asigna newTitle al titulo del projecto.</td></tr>
+<tr><td>getCategoryId():number</td><td>Retorna el número de identificación de la categoría.</td></tr>
+<tr><td>getName():string </td><td>Retorna el nombre de la categoría.</td></tr>
+<tr><td>setName(newName:String): void </td><td>Asigna newName como nombre de la categoría.</td></tr>
 </tbody>
 </table>
-### Descripción de Entidad CATEGORIA
+</br>
+</br>
 
-### Descripción de Entidad COLABORADOR
+## Entidad COLABORADOR (collaborator)
 
-### Descripción de Entidad DOCUMENTO
+## Entidad DOCUMENTO (document)
 
-### Descripción de Entidad REVISION
+## Entidad REVISION (history)
 
-### Descripción de Entidad COMENTARIO
+## Entidad COMENTARIO (comment)
 
 
 ### Objetivo General
