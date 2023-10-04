@@ -38,20 +38,19 @@ export class CategoryService {
   async findOneByName(name: string): Promise<Category> {
     const criteria : FindOneOptions = { where:{ name }}
     const foundCategory = await this.categoryRepository.findOne(criteria);
-    if (!foundCategory) {
-      throw new NotFoundException('Category not found');
-    }
-    console.log(foundCategory)
+    if (!foundCategory)
+    throw new NotFoundException('Category not found.');
     return foundCategory;
   }
 
-
+  /* sin documentar */
   async update(id: number, updateCategoryDto: UpdateCategoryDto): Promise<Category> {
     const category = await this.findOne(id);    
     const newCategory = Object.assign(category, updateCategoryDto);
     return await this.categoryRepository.save(newCategory);       
   }
-
+  
+  /* sin documentar */
   async remove(categoryId: number): Promise<any> {
     return await this.categoryRepository.delete(categoryId);
   }

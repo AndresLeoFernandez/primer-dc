@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, FindOneOptions, In, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, In, Like, Repository } from 'typeorm';
 import { Project } from './entities/project.entity';
 import { User } from '../user/entities/user.entity';
 import { Document } from '../document/entities/document.entity';
@@ -154,6 +154,12 @@ export class ProjectService {
       throw new NotFoundException('Proyect does not exist.');
     return proyect;
   }
+
+  async getProjectsByCategoryName(name:string):Promise<Project[]> {
+    const criteria : FindManyOptions = {relations:['category'], where: { category:{ name: name,},},};
+    const projects = await this.projectRepository.find(criteria);
+    return projects;
+  }
   
   /* El remove solo autorizado para el dueño del proyecto.  
   * Elimina projecto y sus colaboradores siempre que no posea documentos vigentes*/
@@ -184,22 +190,25 @@ export class ProjectService {
     } 
   }
 
-  async searchProjects(query: { author: number, categoryIds: string[], sortBy: 'hot' | 'top', skip: number,}){
-    console.log('qqqqqqq5qqqqqqqqqqqqq');
+  async searchProjects(query: { title: string, author: number, /*categoryIds: string[], */sortBy: "ASC" | "DESC", skip: number,}){
+    /*console.log('qqqqqqq5qqqqqqqqqqqqq');
     console.log(typeof query.categoryIds);
-    console.log('qqqqqqqqqqqqqqqqqqqq');
+    console.log('qqqqqqqqqqqqqqqqqqqq');*/
     const criteria : FindManyOptions = {
       relations:['author','category'],
       where: {
+          ...query.title && {
+            title: Like(`%${query.title}%`),
+          },
           ...query.author && {
               author: {
                 userId: query.author
               },
-          ...query.categoryIds && {
+          /*...query.categoryIds && {
               category: {
                 name: In (query.categoryIds)
               }
-            },                 
+            },  */               
               
           },
       },
@@ -207,6 +216,9 @@ export class ProjectService {
           ...query.sortBy === undefined && {
               creationDate: 'DESC',
           },
+          ...(query.sortBy === 'ASC' || query.sortBy === 'DESC') && {
+            creationDate: query.sortBy,
+        }
       },
     };
     return this.projectRepository.find(criteria);

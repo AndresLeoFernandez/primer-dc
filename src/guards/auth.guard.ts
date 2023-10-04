@@ -33,10 +33,7 @@ export class AuthGuard implements CanActivate {
             secret: jwtConstants.secret,
             });
             request['user'] = payload;
-            /*console.log(request['user']);  */  
             request['currentuser'] = await this.userService.getOne(request.user.userId);
-            /*console.log(`Este es CURRENT USER`);
-            console.log(request['currentuser']);*/
         } catch {
         throw new UnauthorizedException('Token invalid');
         }

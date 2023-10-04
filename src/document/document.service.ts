@@ -18,7 +18,11 @@ export class DocumentService {
     ) {}
 
   async createDocument(dto: CreateDocumentDto,project:Project, author:Collaborator):Promise<Document> {
-    const newDocument = new Document(dto.type,project,author);
+    /* como mejora se puede requerir en CreateDocumentDto el type*/
+    /* Una vez incorporado modificar creacion del document con los siguientes parametros
+    * const newDocument = new Document(dto.type,project,author);
+    */
+    const newDocument = new Document('Text',project,author);
     const document = await this.documentRepository.save(newDocument);
     const newHistory = new History(dto.title,document,author,dto.content,dto.messaggesLog);
     const history = await this.historyRepository.save(newHistory);

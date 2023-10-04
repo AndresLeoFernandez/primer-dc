@@ -254,11 +254,13 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 <li>Valor único para cada documento en la aplicacion proyecto.</li>
 </ul></td></tr>
 <tr><td>type</td>
-<td><ul><li>Representa el número de identificación del documento.</li>
-<li>Se genera automáticamente de forma incremental al darse de alta.</li>
-<li>Valor único para cada documento en la aplicacion proyecto.</li>
+<td><ul><li>Representa el tipo de documento.</li>
+<li>Al momento se requiere poner text, como mejora la idea es incorporar otros tipos de documentos.</li>
 </ul></td></tr>
- 
+ </tbody>
+</table>
+</br>
+</br>
 ## Entidad REVISION (tabla histories)
 
 ## Entidad COMENTARIO (tabla comments)
