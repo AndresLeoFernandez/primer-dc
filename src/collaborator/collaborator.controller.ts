@@ -29,11 +29,15 @@ export class CollaboratorController {
   async findOne( @Param('id', ParseIntPipe) id: number):Promise<Collaborator> {
     return this.collaboratorService.findOne(id);
   }
-  
+  /*
+  Se puede incorporar a futuro la funcionalidad de elimar verificando feachientemente que el colaborador es quien esta generando la baja y determinar que procedimiento seguir con respecto de los documentos que haya generado en el proyecto
+  Ejemplo transferir al dueño del proyecto la autoria de los documentos u optar por eliminar todos los documentos que lo comprometen.-
+
   @Delete(':id')
   @ApiOperation({summary: 'Delete Collaborator by id', description:' la descripcion',})
   @ApiParam({ name: 'id', description: 'collaboratorId' })
   remove(@Param('id',ParseIntPipe) id: number) {
     return this.collaboratorService.remove(id);
   }
+  */
 }

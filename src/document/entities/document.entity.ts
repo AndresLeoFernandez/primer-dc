@@ -17,7 +17,7 @@ export class Document {
     @PrimaryGeneratedColumn({ name: 'document_id' })
     private documentId: number;
   
-    @ApiProperty({  type: () => String, required: true, example:'Text', description:'Type Document.' })
+    @ApiProperty({  type: () => String, required: true, example:'Text',default:"text", description:'Type Document.' })
     @Column({ name:'type' })
     private type: string;
     
@@ -75,13 +75,12 @@ export class Document {
     }
     public getVisits():number{
         return this.visits;
-      }
-      public setAddVisit():number {
+    }
+    public setAddVisit():number {
         this.visits++;
         return this.visits;
-      }
-    
-        
+    }
+            
     constructor(type: string, project: Project,author: Collaborator,comments?: Comment[],histories?: History[]){
         this.type = type;
         this.project = project;

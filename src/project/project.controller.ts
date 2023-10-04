@@ -144,20 +144,31 @@ export class ProjectController {
   ): Promise<Project[]> {
     return await this.projectService.getProjectsCollaborator(currentUser);
   }
+  
+  @Get('/by-category/:name')
+  @ApiOperation({summary: 'Get all projects by category name', description:'',})
+  @ApiParam({ name: 'name', description: 'Get the category name',})
+  @ApiOkResponse({ status: 200, description: ' Show List of projects by category name.'}) 
+  @ApiResponse({ status: 404, description: 'Not found.' }) 
+  async getProjectsByCategoryName(
+    @Param('name') name:string
+  ): Promise<Project[]> {
+    return await this.projectService.getProjectsByCategoryName(name);
+  }
 
-  @ApiOperation({summary: 'Search projects by author or categories', description:'',})
+  @ApiOperation({summary: 'Search projects by title or author and order', description:'',})
   @ApiOkResponse({ status: 200, description: ' Show result.'})  
-  @ApiQuery({ name:'author', description: 'author', required: false,type: Number})
-  @ApiQuery({ 
+  /*@ApiQuery({ name:'author', description: 'author', required: false,type: Number})*/
+  /*@ApiQuery({ 
     description: 'Tags to filter by',
     required: false,
     explode: true,
     isArray:true,
     type: Object
-    })
+    })*/
   @Get('search')
   async searchProjects(
-    @Query() query: {author: number,categoryIds: string[], sortBy: 'hot' | 'top',
+    @Query() query: {title:string, author: number,/*categoryIds: string[],*/ sortBy: 'ASC' | 'DESC',
       skip: number,})
   {
     return this.projectService.searchProjects(query);

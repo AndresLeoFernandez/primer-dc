@@ -8,15 +8,13 @@ import { Repository, FindOneOptions } from 'typeorm';
 export class CollaboratorService {
 
   constructor(
-    @InjectRepository(Collaborator) private readonly collaboratorRepository: Repository<Collaborator>)
-    {}
-  create(createCollaboratorDto: CreateCollaboratorDto) {
-    return 'This action adds a new collaborator';
-  }
+    @InjectRepository(Collaborator) private readonly collaboratorRepository: Repository<Collaborator>
+  )
+  {}
+  
   async findAll(): Promise<Collaborator[]> {
     return await this.collaboratorRepository.find()
   }
-
   
   async findOne(id: number): Promise<Collaborator> {
     const criteria : FindOneOptions = {relations:['user','project'], where: { collaboratorId: id } }
@@ -25,10 +23,6 @@ export class CollaboratorService {
       throw new NotFoundException('Collaborator does not exists');
     return collaborator;    
   }
-
-  /*update(id: number, updateCollaboratorDto: UpdateCollaboratorDto) {
-    return `This action updates a #${id} collaborator`;
-  }*/
 
   async remove(id: number):Promise<Collaborator | null>  {
     const collaborator = await this.findOne(id);
