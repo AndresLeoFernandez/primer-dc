@@ -1,3 +1,51 @@
+# Category
+
+## Generales
+
+## Atributos de Entidad
+
+<table border="1" width=100%>
+<thead><tr><th>Nombre</th><th>Detalle</th></tr></thead>
+<tbody>
+<tr><td>collaboratorId</td>
+<td><ul><li>Representa el número de identificación del colaborador.</li>
+<li>Se genera automáticamente de forma incremental al darse de alta.</li>
+<li>Valor único para cada collaborador segun el proyecto.</li>
+</ul></td></tr>
+<tr><td>role</td><td><ul>
+<li>Representa el rol que tendra el usuario dentro del proyecto pudiendo ser "OWNER" o "COLLABORATOR".</li>
+<li>No puede ser vacia,solo una de las opciones.</li>
+<li>Obligatoriedad: Requerida.</li></ul></td></tr>
+<tr><td>project</td><td>
+<ul><li>Relación que vincula el colaborador con el proyecto.</li>
+<li>Obligatoriedad: Opcional.</li></ul></td></tr>
+<tr><td>user</td><td>
+<ul><li>Relación que vincula el colaborador con el usuario.</li>
+<li>Obligatoriedad: Opcional.</li></ul></td></tr>
+<tr><td>documents</td><td>
+<ul><li>Relación que vincula el colaborador con los documentos donde puede operar.</li>
+<li>Obligatoriedad: Opcional.</li></ul></td></tr>
+<tr><td>histories</td><td>
+<ul><li>Relación que vincula el colaborador con las histories donde participa.</li>
+<li>Obligatoriedad: Opcional.</li></ul></td></tr>
+</tbody>
+</table>
+</br></br>
+
+## Métodos Publicos de Entidad
+
+<table border="1" width=100%>
+<thead><tr><th>Función</th><th>Descripción</th></tr></thead>
+<tbody>
+<tr><td>getCollaboratorId():number</td><td>Retorna el número de identificación del collaborador.</td></tr>
+<tr><td>getRole():any </td><td>Retorna el rol del colaborador.</td></tr>
+<tr><td>getUser(): User </td><td>Retorna el usuario colaborador.</td></tr>
+<tr><td>getProject(): Project </td><td>Retorna el projecto.</td></tr>
+</tbody>
+</table>
+</br>
+</br>
+
 # Endpoints del modulo Collaborator
 **Ruta:** collaborator
 

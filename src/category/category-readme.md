@@ -1,4 +1,55 @@
-# Endpoints del modulo Category
+# Category
+
+## Generales
+
+- Las categorias son unicas e irrepetibles en la aplicación.
+- La creación esta determinada solo para Usuarios autenticados.
+
+## Atributos de Entidad
+
+<table border="1" width=100%>
+<thead><tr><th>Nombre</th><th>Detalle</th></tr></thead>
+<tbody>
+<tr><td>categoryId</td><td><ul>
+<li>Representa el número de identificación de la categoria.</li>
+<li>Se genera automáticamente de forma incremental al darse de alta.</li>
+<li>Restricción: Valor único para cada categoría en la aplicación.</li>
+</ul></td></tr>
+<tr><td>name</td><td><ul>
+<li>Representa el nombre de la categoría.</li>
+<li>No puede ser vacia.</li>
+<li>Obligatoriedad: Requerida.</li></ul></td></tr>
+<tr><td>createdAt</td><td><ul>
+<li>Representa la fecha de creación de la categoría en la aplicación.</li>
+<li>Se asigna automáticamente cuando se crea.</li>
+</ul></td></tr>
+<tr><td>createdAt</td><td>
+<ul><li>Representa la fecha de última actualización del nombre de la categoría.</li>
+<li>Se aplica automáticamente cuando se modifica.</li>
+</ul></td></tr>
+ <tr><td>projects</td><td>
+ <ul><li>Relación que vincula la categoría con los proyectos donde es asignada.</li>
+<li>Obligatoriedad: Opcional.</li></ul>
+</td></tr>
+</tbody>
+</table>
+</br></br>
+
+## Métodos Publicos de Entidad
+
+<table border="1" width=100%>
+<thead><tr><th>Función</th><th>Descripción</th></tr></thead>
+<tbody>
+<tr><td>getCategoryId():number</td><td>Retorna el número de identificación de la categoría.</td></tr>
+<tr><td>getName():string </td><td>Retorna el nombre de la categoría.</td></tr>
+<tr><td>setName(newName:String): void </td><td>Asigna newName como nombre de la categoría.</td></tr>
+</tbody>
+</table>
+</br>
+</br>
+
+## Endpoints
+
 **RUTA GENERAL:** category
 
 **Aclaración:** 
