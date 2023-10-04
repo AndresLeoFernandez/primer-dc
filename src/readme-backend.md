@@ -28,7 +28,7 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 <p>A continuación se detallan las entidades con sus atributos, funcionalidades declaradas y se comenta tambien la relación que van a mantener entre las mismas.</p>
 </br>
 
-## Entidad USUARIO (tabla users)
+### Entidad USUARIO (tabla users)
 
 <strong>Atributos</strong>
 <table border="1" width=100%>
@@ -107,7 +107,7 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 </br>
 </br>
 
-## Entidad PROYECTO (tabla projects)
+### Entidad PROYECTO (tabla projects)
 
 <strong>Atributos</strong>
 <table border="1" width=100%>
@@ -158,7 +158,7 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 </br>
 </br>
 
-## Entidad CATEGORÍA (tabla categories)
+### Entidad CATEGORÍA (tabla categories)
 
 <strong>Atributos</strong>
 <table border="1" width=100%>
@@ -202,7 +202,7 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 </br>
 </br>
 
-## Entidad COLABORADOR (tabla collaborators)
+### Entidad COLABORADOR (tabla collaborators)
 
 <strong>Atributos</strong>
 <table border="1" width=100%>
@@ -248,7 +248,7 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 </br>
 
 
-## Entidad DOCUMENTO (tabla documents)
+### Entidad DOCUMENTO (tabla documents)
 
 <strong>Atributos</strong>
 <table border="1" width=100%>
@@ -313,7 +313,7 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 </br>
 </br>
 
-## Entidad REVISION (tabla histories)
+### Entidad REVISION (tabla histories)
 
 <strong>Atributos</strong>
 <table border="1" width=100%>
@@ -379,7 +379,7 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 </br>
 </br>
 
-## Entidad COMENTARIO (tabla comments)
+### Entidad COMENTARIO (tabla comments)
 
 <strong>Atributos</strong>
 <table border="1" width=100%>
@@ -437,7 +437,16 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 </br>
 
 
-### Objetivo General
+## Objetivo 
+
+El proyecto surge como requerimientos de cursado y la finalidad es aplicar los distintos conocimientos adquiridos a lo largo del curso.
+Para el proyecto en particular se utilizaron las siguientes herramientas para su composición:
+1. El manejo de Base de Datos lo trabajamos a traves de la aplicacion Workbencch donde se diseño el modelado de la base. Se utilizo una base relacional mediante el lenguaje MySQL. 
+2. Backend desarrollado con Nest y la libreria TypeORM para lograr el mapeo de datos.
+3. Se implemento Swagger para realizar pruebas y visualizacion de la API con sus respectivos Endpoints.
+4. Se utilizo Markdown para escribir la documentacion como tal.
+
+   
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
