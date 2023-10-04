@@ -41,7 +41,7 @@ export class Comment {
     public getCreationDate(): any {
         this.creationDate
     }
-    public getEmailComentAuthor():string {
+    public getEmailCommentAuthor():string {
         return this.email
     }
         

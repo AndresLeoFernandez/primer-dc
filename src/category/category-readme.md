@@ -76,50 +76,78 @@ Esta funcionalidad permite a los usuarios ver una lista completa de todas las ca
 - Se pueden aplicar filtros o funciones de ordenamiento para organizar la lista de categorías según las preferencias del usuario.
 La funcionalidad "findAll" es esencial para proporcionar a los usuarios una visión general de las categorías disponibles en la plataforma, lo que facilita la navegación y el descubrimiento de proyectos relacionados con sus intereses.
 
-### Funcionalidad: Mostrar Categoría por ID 
+### Mostrar Categoría por ID 
+
 **verbo:** GET
+
 **Ruta:** category/:id/view
+
 **Acceso** 
+
 - Publico
+
 **Descripción:**
+
 Esta funcionalidad permite a los usuarios buscar y ver una categoría específica en la plataforma utilizando su ID numérico único. No es necesario estar autenticado para utilizar esta función. Si no se encuentra la categoría con el ID proporcionado, se muestra un mensaje de error informando que la categoría no se ha encontrado.
+
 **Entradas:**
+
 - **ID de la Categoría(Id):** El ID numérico único de la categoría que el usuario desea buscar y ver.
+
 **Flujo de Trabajo:**
+
 1. Un usuario, autenticado o no, visita un formulario de búsqueda en la plataforma.
 2. El usuario ingresa el ID numérico único de la categoría que desea buscar en el campo de búsqueda.
 3. El usuario envía la solicitud de búsqueda.
 4. La plataforma realiza una consulta a la base de datos para buscar la categoría por su ID.
 5. Si se encuentra una coincidencia, la plataforma muestra la categoría encontrada en la interfaz de usuario.
 6. Si no se encuentra ninguna coincidencia, la plataforma muestra un mensaje de error que indica que la categoría no se ha encontrado.
+
 **Salidas:**
+
 - La categoría encontrada por su ID, incluyendo sus detalles.
 - Un mensaje de "Categoría no encontrada" si no se encuentra ninguna categoría con el ID proporcionado.
+
 **Escenarios Adicionales:**
+
 - Cada categoría encontrada puede estar vinculada a una página que muestra proyectos relacionados con esa categoría si corresponde.
 Esta funcionalidad "findOne" proporciona a los usuarios la capacidad de buscar y acceder a categorías específicas en la plataforma utilizando su ID único.
 
 
-### Funcionalidad: Mostrar una Categoría por Nombre
+### Mostrar una Categoría por Nombre
+
 **verbo:** GET
+
 **Ruta:** category/:name
+
 **Acceso** 
+
 - Publico
+
 **Descripción:**
+
 Esta funcionalidad permite a los usuarios, incluso aquellos que no están autenticados, buscar y ver una categoría específica en la plataforma utilizando su nombre. Si no se encuentra la categoría con el nombre proporcionado, se muestra un mensaje de error informando que la categoría no se ha encontrado.
+
 **Entradas:**
+
 - **Nombre de la Categoría(name):** El nombre de la categoría que el usuario desea buscar.
+
 **Flujo de Trabajo:**
+
 1. Un usuario, autenticado o no, visita un formulario de búsqueda en la plataforma.
 2. El usuario ingresa el nombre de la categoría que desea buscar en el campo de búsqueda.
 3. El usuario envía la solicitud de búsqueda.
 4. La plataforma realiza una consulta a la base de datos para buscar la categoría por nombre.
 5. Si se encuentra una coincidencia, la plataforma muestra la categoría encontrada en la interfaz de usuario.
 6. Si no se encuentra ninguna coincidencia, se muestra un mensaje indicando que no se encontró la categoría con el nombre proporcionado.
+
 **Salidas:**
+
 - La categoría encontrada por nombre, incluyendo sus detalles.
 - Un mensaje de "Categoría no encontada" si no se encuentra ninguna categoría con el nombre proporcionado.
+
 **Escenarios Adicionales:**
+
 - Se pueden implementar opciones de búsqueda avanzada, como búsqueda por palabras clave o filtros adicionales para refinar los resultados.
 - Se pueden implementar opciones avanzadas de búsqueda, como la coincidencia parcial del nombre de la categoría.
 - Cada categoría encontrada puede estar vinculada a una página que muestra proyectos relacionados con esa categoría.

@@ -3,19 +3,21 @@
 
 ## Idea Original
 <p align="justify">Generar una aplicación web que albergue de forma online proyectos, con distintos escritos (documentos), que puedan ser consultados por cualquier persona que navegue el sitio. Los proyectos estarán categorizados y los documentos podrán ser editados por distintos usuarios registrados que estén asignados para tal fin.</p>
+<p align="justify"> El sitio brindara herramientas para visualizar los proyectos a los usuarios por medio de un buscador general y ademas mostrara distintas secciones que agruparan por mas vistos, mas recientes entre otros.
+Como particularidad cualquier usuario podra generar comentarios en los documentos para conocimientos del autor.</p>
 
 
 ## Descripción
 <p align="justify">Para poder llevar a cabo la idea se resuelve entonces la creación de la aplicación <strong>Proyectos Colaborativos</strong>. De manera resumida podemos decir que los usuarios una vez registrados en la plataforma contarán con la posibilidad de crear uno o más proyectos, al que le deberán asignar una categoría al momento de su creación, conforme a las existentes, y además; el autor contara con la facultad de poder agregar distintos colaboradores (usuarios registrados en la plataforma) para que puedan ser parte en la edición, actualización y eliminación de los distintos documentos con que contará en su interior el proyecto creado.
 Para poder lograr el sistema vamos a contar principalmente con las siguientes entidades que estarán interactuando según la necesidad planteada:
 <ul>
-<li>Usuario</li>
-<li>Proyecto</li>
-<li>Categoría</li>
-<li>Colaborador</li>
-<li>Documento</li>
-<li>Revisión</li>
-<li>Comentario</li>
+<li>Usuario (user)</li>
+<li>Proyecto (project)</li>
+<li>Categoría (category)</li>
+<li>Colaborador (collaborator)</li>
+<li>Documento (document)</li>
+<li>Revisión(history)</li>
+<li>Comentario (comment)</li>
 </ul>
 </p>
 
@@ -272,6 +274,36 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 <ul><li>Registra la cantidad de visitas que obtuvo el documento desde su creación.</li>
 <li>Se incrementa a partir de las visualizaciones de forma automática.</li>
 </ul></td></tr> 
+<tr><td>project</td><td>
+<ul><li>Relación que vincula los documentos con el projecto al cual pertenece.</li>
+<li>Obligatoriedad: Requerida.</li>
+</ul></td></tr>
+<tr><td>author</td><td>
+<ul><li>Relación que vincula los documentos con el colaborador que es el autor del documento.</li>
+<li>Obligatoriedad: Requerida.</li></ul></td></tr>
+<tr><td>comments</td><td>
+<ul><li>Relación que vincula el documento con los comentarios asignados.</li>
+<li>Obligatoriedad: Opcional.</li></td></tr>
+<tr><td>histories</td><td>
+<ul><li>Relación que vincula el documento con las revisiones que obtuvo.</li>
+</td></tr>
+</tbody>
+</table>
+</br>
+</br>
+
+<strong>Funcionalidades</strong>
+
+<table border="1" width=100%>
+<thead><tr><th>Función</th><th>Descripción</th></tr></thead>
+<tbody>
+<tr><td>getDocumentId():number</td><td>Retorna el número de identificación del documento.</td></tr>
+<tr><td>getCreationDate()</td><td>Retorna la fecha de creación del documento.</td></tr>
+<tr><td>getType():string </td><td>Retorna el tipo de documento.</td></tr>
+<tr><td>getLastHistoryId():number </td><td>Retorna el último número de revisión generada en el documento.</td></tr>
+<tr><td>getVisits():number </td><td>Retorna la cantidad de visitas que obtuvo el documentos hasta el momento.</td></tr>
+<tr><td>setLastHistoryId(newHistoryId:number) void </td><td>Asigna newHistoryId como ultima revisión del documento.</td></tr>
+<tr><td>setAddVisit():number </td><td>Incrementa el número de visitas del documentos en uno.</td></tr>
 </tbody>
 </table>
 </br>
@@ -279,7 +311,126 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 
 ## Entidad REVISION (tabla histories)
 
+<strong>Atributos</strong>
+<table border="1" width=100%>
+<thead><tr><th>Nombre</th><th>Detalle</th></tr></thead>
+<tbody>
+<tr><td>historyId</td>
+<td>
+<ul><li>Representa el número de identificación de la revisión.</li>
+<li>Se genera automáticamente de forma incremental al darse de alta.</li>
+<li>Valor único para cada documento en la aplicación.</li>
+</ul>
+</td></tr>
+<tr><td>title</td>
+<td><ul><li>Representa el título del documento.</li>
+<li>Puede contener un maximo de 255 caracteres y no tiene restricciones sobre letras y numeros a utilizar.</li>
+<li>Obligatoriedad: Requerida.</li>
+</ul></td></tr>
+<tr><td>content</td>
+<td><ul><li>Representa el contenido del documento.</li>
+<li>Puede contener un maximo de 65.535 caracteres y no tiene restricciones sobre letras y numeros a utilizar en su interior.</li>
+<li>Obligatoriedad: Opcional.</li>
+</ul></td></tr>
+<tr><td>creationDate</td>
+<td>
+<ul><li>Representa la fecha de creación de la revisión en la aplicación.</li>
+<li>Se asigna automáticamente cuando se crea la revisión.</li>
+</ul></td></tr>
+<tr><td>messaggeLog</td><td>
+<ul><li>Representa un mensaje que se quiera dejar acentado al momento de hacer los cambios en el documento.</li>
+<li>Obligatoriedad: Opcional.</li>
+</ul></td></tr>
+<tr><td>visits</td><td>
+<ul><li>Registra la cantidad de visitas que obtuvo la revisión desde su creación.</li>
+<li>Se incrementa a partir de las visualizaciones de forma automática.</li>
+</ul></td></tr> 
+<tr><td>document</td><td>
+<ul><li>Relación que vincula las revisiones con el documento al cual pertenecen.</li>
+<li>Obligatoriedad: Requerida.</li>
+</ul></td></tr>
+<tr><td>author</td><td>
+<ul><li>Relación que vincula las revisiones con el colaborador que la genera.</li>
+<li>Obligatoriedad: Requerida.</li></ul></td></tr>
+</tbody>
+</table>
+</br>
+</br>
+
+<strong>Funcionalidades</strong>
+
+<table border="1" width=100%>
+<thead><tr><th>Función</th><th>Descripción</th></tr></thead>
+<tbody>
+<tr><td>getHistoryId():number</td><td>Retorna el número de identificación de la revisión.</td></tr>
+<tr><td>getTitle():string </td><td>Retorna el nombre de la revisión.</td></tr>
+<tr><td>getCreationDate()</td><td>Retorna la fecha de creación de la revisión.</td></tr>
+<tr><td>getAuthor():Collaborator </td><td>Retorna el Collaborator que es el escritor de la revisión.</td></tr>
+<tr><td>getContent():string </td><td>Retorna el contenido de la revisión.</td></tr>
+<tr><td>getMessageLog():string </td><td>Retorna el mensaje registrado en la revisión.</td></tr>
+<tr><td>getVisits():number </td><td>Retorna la cantidad de visitas que obtuvo la revisión.</td></tr>
+<tr><td>setAddVisit():number </td><td>Incrementa el número de visitas de la revisión en uno.</td></tr>
+</tbody>
+</table>
+</br>
+</br>
+
 ## Entidad COMENTARIO (tabla comments)
+
+<strong>Atributos</strong>
+<table border="1" width=100%>
+<thead><tr><th>Nombre</th><th>Detalle</th></tr></thead>
+<tbody>
+<tr><td>commentId</td>
+<td>
+<ul><li>Representa el número de identificación del comentario.</li>
+<li>Se genera automáticamente de forma incremental al darse de alta.</li>
+<li>Valor único para cada comentario en la aplicación.</li>
+</ul>
+</td></tr>
+<tr><td>author</td>
+<td><ul><li>Representa el nombre del usuario que inscribe el comentario.</li>
+<li>Puede contener un maximo de 255 caracteres y no tiene restricciones sobre letras y numeros a utilizar.</li>
+<li>Obligatoriedad: Requerida.</li>
+</ul></td></tr>
+<tr><td>email</td><td><ul>
+<li>Representa el correo electrónico del usuario.</li>
+<li>Como tal debe ser un formato válido de correo electrónico.</li>
+<li>Obligatoriedad: Requerida.</li></ul> </td></tr>
+<tr><td>content</td>
+<td><ul><li>Representa el contenido del comentario.</li>
+<li>Puede contener un maximo de 65.535 caracteres y no tiene restricciones sobre letras y numeros a utilizar en su interior.</li>
+<li>Obligatoriedad: Requerida.</li>
+</ul></td></tr>
+<tr><td>creationDate</td>
+<td>
+<ul><li>Representa la fecha de creación del comentario en la aplicación.</li>
+<li>Se asigna automáticamente cuando se crea el comentario.</li>
+</ul></td></tr>
+<tr><td>document</td><td>
+<ul><li>Relación que vincula los comentarios con el documento al cual se aplica.</li>
+<li>Obligatoriedad: Requerida.</li>
+</ul></td></tr>
+</tbody>
+</table>
+</br>
+</br>
+
+<strong>Funcionalidades</strong>
+
+<table border="1" width=100%>
+<thead><tr><th>Función</th><th>Descripción</th></tr></thead>
+<tbody>
+<tr><td>getCommentId():number</td><td>Retorna el número de identificación del comentario.</td></tr>
+<tr><td>getTitle():string </td><td>Retorna el nombre de la revisión.</td></tr>
+<tr><td>getCreationDate()</td><td>Retorna la fecha de creación del comentario.</td></tr>
+<tr><td>getAuthor():string</td><td>Retorna el nombre descriptivo del escritor del comentario.</td></tr>
+<tr><td>getContent():string </td><td>Retorna el contenido del comentario.</td></tr>
+<tr><td>getEmailCommentAuthor():string </td><td>Retorna el correo electronico informado en el comentario.</td></tr>
+</tbody>
+</table>
+</br>
+</br>
 
 
 ### Objetivo General

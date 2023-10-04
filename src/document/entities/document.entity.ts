@@ -66,15 +66,14 @@ export class Document {
     public getType(): string {
         return this.type
     }
-
-    public setLastHistoryId(newHistoryId:number){
-        this.lastHistoryId = newHistoryId;
-    }
     public getLastHistoryId():number {
         return this.lastHistoryId;
     }
     public getVisits():number{
         return this.visits;
+    }
+    public setLastHistoryId(newHistoryId:number){
+        this.lastHistoryId = newHistoryId;
     }
     public setAddVisit():number {
         this.visits++;
