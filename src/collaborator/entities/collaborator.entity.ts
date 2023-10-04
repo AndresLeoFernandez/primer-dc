@@ -4,7 +4,6 @@ import { Project } from "src/project/entities/project.entity";
 import { User } from "src/user/entities/user.entity";
 import { History } from "src/history/entities/history.entity";
 import { ApiProperty, ApiTags } from "@nestjs/swagger";
-import { IsInt } from "class-validator";
 import { RolesCollaborators } from "src/constants/roles-collaborators";
 
 @ApiTags('Collaborator')
@@ -13,11 +12,11 @@ import { RolesCollaborators } from "src/constants/roles-collaborators";
 export class Collaborator {
     @ApiProperty({  type: () => Number, example:4, readOnly: true, description:'Autoincremental integer value.' })
     @PrimaryGeneratedColumn({ name: 'collaborator_id' })
-    collaboratorId: number;
+    private collaboratorId: number;
 
     @ApiProperty({ enum: ['COLLABORATOR', 'OWNER']})
     @Column({ type: 'enum', enum: RolesCollaborators, default: RolesCollaborators.COLLABORATOR })
-    role: RolesCollaborators;    
+    private role: RolesCollaborators;    
     
     /* Relations */
 
@@ -38,6 +37,19 @@ export class Collaborator {
     @ApiProperty({  type: () => History,required: true,description: '',example: ''})
     @OneToMany(()=> History, (history) => history.author,{onDelete: 'CASCADE',orphanedRowAction: 'delete'})
     histories: History[] 
+
+    public getCollaboratorId():number {
+        return this.collaboratorId
+    }
+    public getRole():any {
+        return this.role
+    }
+    public getUser():User {
+        return this.user
+    }
+    public getProject():Project {
+        return this.project
+    }
 
     constructor(project: Project, user: User, role: RolesCollaborators, documents?: Document[],histories?: History[]){
         this.project = project;

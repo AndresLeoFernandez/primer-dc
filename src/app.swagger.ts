@@ -3,9 +3,9 @@ import { INestApplication } from '@nestjs/common';
 
 export const initSwagger = (app: INestApplication) => {
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('Documentos Compartidos API')
+    .setTitle('Proyectos Comlaborativos API')
     .addBearerAuth()
-    .setDescription('API Creada con NestJS para Aplicación Documentos Compartidos.')
+    .setDescription('API Creada con NestJS para Aplicación Proyectos Colaborativos.')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('/docs', app, document);
