@@ -226,6 +226,9 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 <tr><td>documents</td><td>
 <ul><li>Relación que vincula el colaborador con los documentos donde puede operar.</li>
 <li>Obligatoriedad: Opcional.</li></ul></td></tr>
+<tr><td>histories</td><td>
+<ul><li>Relación que vincula el colaborador con las histories donde participa.</li>
+<li>Obligatoriedad: Opcional.</li></ul></td></tr>
 </tbody>
 </table>
 </br></br>
@@ -235,9 +238,10 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 <table border="1" width=100%>
 <thead><tr><th>Función</th><th>Descripción</th></tr></thead>
 <tbody>
-<tr><td>getCategoryId():number</td><td>Retorna el número de identificación de la categoría.</td></tr>
-<tr><td>getName():string </td><td>Retorna el nombre de la categoría.</td></tr>
-<tr><td>setName(newName:String): void </td><td>Asigna newName como nombre de la categoría.</td></tr>
+<tr><td>getCollaboratorId():number</td><td>Retorna el número de identificación del collaborador.</td></tr>
+<tr><td>getRole():any </td><td>Retorna el rol del colaborador.</td></tr>
+<tr><td>getUser(): User </td><td>Retorna el usuario colaborador.</td></tr>
+<tr><td>getProject(): Project </td><td>Retorna el projecto.</td></tr>
 </tbody>
 </table>
 </br>
