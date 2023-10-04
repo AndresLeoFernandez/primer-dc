@@ -249,15 +249,18 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 <thead><tr><th>Nombre</th><th>Detalle</th></tr></thead>
 <tbody>
 <tr><td>documentId</td>
-<td><ul><li>Representa el número de identificación del documento.</li>
+<td>
+<ul><li>Representa el número de identificación del documento.</li>
 <li>Se genera automáticamente de forma incremental al darse de alta.</li>
 <li>Valor único para cada documento en la aplicación.</li>
-</ul></td></tr>
+</ul>
+</td></tr>
 <tr><td>type</td>
 <td><ul><li>Representa un tipo de documento.</li>
 <li>Se aplica un valor predeterminado de nombre "TEXT".</br> Esta pensado para poder ampliar en un futuro tipo de documentos que se puedan generar.</li>
 </ul></td></tr>
- <tr><td>creationDate</td><td>
+<tr><td>creationDate</td>
+<td>
 <ul><li>Representa la fecha de creación del documentos en la aplicación.</li>
 <li>Se asigna automáticamente cuando se crea el documento.</li>
 </ul></td></tr>
