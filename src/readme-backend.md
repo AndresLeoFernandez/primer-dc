@@ -1,7 +1,7 @@
 # Proyectos Colaborativos
 <p align="center"><img src="images/logo.png" alt="logo" width="300" height="300"/></p>
 
-## Idea Original
+## Idea
 <p align="justify">Generar una aplicación web que albergue de forma online proyectos, con distintos escritos (documentos), que puedan ser consultados por cualquier persona que navegue el sitio. Los proyectos estarán categorizados y los documentos podrán ser editados por distintos usuarios registrados que estén asignados para tal fin.</p>
 <p align="justify"> El sitio brindara herramientas para visualizar los proyectos a los usuarios por medio de un buscador general y ademas mostrara distintas secciones que agruparan por mas vistos, mas recientes entre otros.
 Como particularidad cualquier usuario podra generar comentarios en los documentos para conocimientos del autor.</p>
