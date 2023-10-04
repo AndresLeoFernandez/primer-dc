@@ -23,7 +23,7 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 <p>Como resultado del analisis se resuelve ejecutar el siguiente modelado para cubrir las necesidades del proyecto.</p>
 <p align=center><img src="images/diagrama.png" alt="diagrama" width="70%"/></p> 
 </br>
-<p>A continuación se detallan las entidades con sus atributos, funcionalidaes declaradas y se comenta tambien la relación que van a mantener entre las mismas.</p>
+<p>A continuación se detallan las entidades con sus atributos, funcionalidades declaradas y se comenta tambien la relación que van a mantener entre las mismas.</p>
 </br>
 
 ## Entidad USUARIO (tabla users)
@@ -75,7 +75,7 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 <li>Obligatoriedad: Opcional.</li></ul>
 </td></tr>    
 <tr><td>collaborators</td><td>
-<ul><li>Relación que vincula al usuario como collaborador de los distintos proyectos donde es participe.</li>
+<ul><li>Relación que vincula al usuario como colaborador de los distintos proyectos donde es participe.</li>
 <li>Obligatoriedad: Opcional.</li></ul> 
 </td></tr>    
 </tbody>
@@ -251,14 +251,29 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 <tr><td>documentId</td>
 <td><ul><li>Representa el número de identificación del documento.</li>
 <li>Se genera automáticamente de forma incremental al darse de alta.</li>
-<li>Valor único para cada documento en la aplicacion proyecto.</li>
+<li>Valor único para cada documento en la aplicación.</li>
 </ul></td></tr>
 <tr><td>type</td>
-<td><ul><li>Representa el número de identificación del documento.</li>
-<li>Se genera automáticamente de forma incremental al darse de alta.</li>
-<li>Valor único para cada documento en la aplicacion proyecto.</li>
+<td><ul><li>Representa un tipo de documento.</li>
+<li>Se aplica un valor predeterminado de nombre "TEXT".</br> Esta pensado para poder ampliar en un futuro tipo de documentos que se puedan generar.</li>
 </ul></td></tr>
- 
+ <tr><td>creationDate</td><td>
+<ul><li>Representa la fecha de creación del documentos en la aplicación.</li>
+<li>Se asigna automáticamente cuando se crea el documento.</li>
+</ul></td></tr>
+<tr><td>lastHistoryId</td><td>
+<ul><li>Registra el ultimo identificador de history genenerado del documento.</li>
+<li>Se asigna automáticamente cuando se crea el proyecto.</li>
+</ul></td></tr>
+<tr><td>visits</td><td>
+<ul><li>Registra la cantidad de visitas que obtuvo el documento desde su creación.</li>
+<li>Se incrementa a partir de las visualizaciones de forma automática.</li>
+</ul></td></tr> 
+</tbody>
+</table>
+</br>
+</br>
+
 ## Entidad REVISION (tabla histories)
 
 ## Entidad COMENTARIO (tabla comments)
