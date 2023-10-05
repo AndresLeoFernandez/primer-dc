@@ -376,7 +376,7 @@ Esta funcionalidad permite a cualquier usuario buscar y mostrar todos los proyec
 - Los proyectos pueden ser presentados en forma de lista o tarjetas, y se pueden proporcionar enlaces para acceder a los proyectos directamente desde la lista.
 
 
-### Buscar y Mostrar Proyectos
+### Buscar y Mostrar Proyectos según el filtro aplicado
 
 **Verbo:** GET
 
