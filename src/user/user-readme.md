@@ -58,7 +58,7 @@
 </br>
 
    
-## Métodos Publicos de Entidad
+## Métodos Públicos de Entidad
 
 <table border="1" width=100%>
 <thead><tr><th>Función</th><th>Descripción</th></tr></thead>
@@ -156,10 +156,9 @@ Esta funcionalidad permite a los usuarios autenticados obtener la información d
 
 **Restricción de Acceso:** 
 - Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
-- Se verifica que la contraseña sea correcta con **changePasswordDto**.
-
+  
 **Descripción:**
-Esta funcionalidad permite a un usuario autenticado cambiar su contraseña actual por una nueva. Para ello, se debe proporcionar una nueva contraseña.
+Esta funcionalidad permite a un usuario autenticado cambiar su contraseña actual por una nueva. Para ello, se debe proporcionar una nueva contraseña que se verifica a través del objeto **changePasswordDto**.
 
 **Entradas:**
 - **newPasswordDto:** Nueva contraseña del usuario.
