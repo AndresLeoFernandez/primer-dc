@@ -31,40 +31,39 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 
 ## Documentación segun Estructura del Proyecto
 
->src
+>### src
 >
->  - [auth]()
+>  - [auth](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/auth-readme.md)
 >
 >  - [category](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/category-readme.md)
 >
->  - collaborator
+>  - [collaborator](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/collaborator-readme.md)
 >
->  - comment
+>  - [comment](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/comment-readme.md)
 >
 >  common
 >
 >  constants
 >
->  decorators
+>  [decorators](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/decorators-readme.md)
 >
->  document
+>  [document](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/document-readme.md)
 >
->  guards
+>  [guards](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/guards-readme.md)
 >
 >  helpers
 >
->  history
+>  [history](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/history-readme.md)
 >
 >  images
 >
->  project
+>  [project](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/project-readme.md)
 >
->  user
+>  [user](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/user-readme.md)
 >
-   [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+   
 
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Installation
 
