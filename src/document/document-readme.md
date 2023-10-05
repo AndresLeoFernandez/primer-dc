@@ -49,7 +49,7 @@
 </br>
 </br>
 
-## Métodos Publicos de Entidad
+## Métodos Públicos de Entidad
 
 <table border="1" width=100%>
 <thead><tr><th>Función</th><th>Descripción</th></tr></thead>
@@ -143,7 +143,7 @@ Esta funcionalidad permite a los usuarios buscar y mostrar el historial de un do
 
 **Verbo:** GET
 
-**Ruta:**  'document/total-visits'
+**Ruta:** 'document/total-visits'
 
 **Restricción de Acceso:** 
 - documento existente: El id del documento debe ser valido.
