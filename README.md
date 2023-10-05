@@ -35,7 +35,11 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 
 1. Del proyecto
    
-2. [Del Grupo de Trabajo](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/readme-backend.md)
+<p align="justify">Actualmente el proyecto es funcional conforme a lo pactado y planeado por el Grupo de Trabajo. Probablemente cuando se genere el Front End se detectara alguna necesidad la cual se adecuara conforme al requerimiento del momento. 
+Si tenemos que dejar realizada la aclaración que a efectos de realizar las pruebas, el proyecto se configuro en su totalidad para poder utilizar swagger en la direccion localhost:puerto/docs y hay un endpoint puntualmente el de generar busquedas de proyectos, conforme a titulo, author, categoria el cual no pudimos generar la configuración en Swagger para que se pueda ejecutar desde alli debido a que no detectamos como aplicar el decorador @ApiQuery correspondiente para array[]. 
+Para este caso particular utilizamos el programa Thunder Client sin problemas.</p>
+   
+3. [Del Grupo de Trabajo](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/readme-backend.md)
 
 
 ### Estructura del Proyecto
