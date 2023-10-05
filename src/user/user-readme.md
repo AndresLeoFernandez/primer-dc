@@ -57,6 +57,7 @@
 </table>
 </br>
 
+   
 ## Métodos Publicos de Entidad
 
 <table border="1" width=100%>
@@ -79,3 +80,130 @@
 </br>
 </br>
 
+
+## Endpoints del módulo User
+
+**Ruta:** user
+
+**Aclaración:** 
+1. Los datados de salida se muestran en formato raw.
+2. Para mayor detalle se puede ver información de los endpoints mediante la implementación generada mediante swagger accediendo en la dirección url ruta_del_proyecto/docs.
+
+### Mostrar Todos los Usuarios
+
+**Verbo:** GET
+
+**Ruta:**  'user/view'
+
+**Restricción de Acceso:** 
+- Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
+
+**Descripción:**
+Esta funcionalidad permite a los usuarios autenticados ver una lista completa de todos los usuarios registrados en la plataforma. No se requiere proporcionar parámetros adicionales.
+
+**Entradas:**
+Ninguna.
+
+**Flujo de Trabajo:**
+1. Un usuario autenticado desea ver una lista completa de todos los usuarios registrados en la plataforma.
+2. El usuario accede a la función "Ver usuarios" de usuarios para obtener la lista.
+3. La plataforma recopila y muestra una lista de todos los usuarios registrados.
+
+**Salidas:**
+- Lista completa de todos los usuarios registrados en la plataforma.
+
+**Escenarios Adicionales:**
+- Esta funcionalidad permite a los usuarios conocer a otros usuarios registrados en la plataforma.
+- Es necesario estar autenticado para utilizar esta función, lo que garantiza la privacidad de la lista de usuarios y el acceso solo para usuarios autorizados.
+
+
+### Funcionalidad: Obtener un Usuario por ID
+
+**Verbo:** GET
+
+**Ruta:** 'user/:id/view'
+
+**Restricción de Acceso:** 
+- Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
+
+**Descripción:**
+Esta funcionalidad permite a los usuarios autenticados obtener la información de un usuario específico según su ID. Se requiere proporcionar el ID del usuario como parámetro para utilizar esta función.
+
+**Entradas:**
+- **userId:** El ID único del usuario del cual se desea obtener la información.
+
+**Flujo de Trabajo:**
+1. Un usuario autenticado desea obtener la información de otro usuario específico en la plataforma.
+2. El usuario proporciona el ID del usuario del cual desea obtener información.
+3. La plataforma verifica si el usuario con el ID especificado existe en la plataforma.
+4. Si se encuentra el usuario con el ID proporcionado, la plataforma muestra la información detallada de ese usuario.
+5. Si no se encuentra ningún usuario con el ID especificado, se muestra un mensaje indicando que no se ha encontrado el usuario.
+
+**Salidas:**
+- Información detallada del usuario que coincide con el ID proporcionado.
+- Mensaje de error si no se encuentra ningún usuario con el ID especificado.
+
+**Escenarios Adicionales:**
+- Esta funcionalidad permite a los usuarios obtener información detallada de otros usuarios en la plataforma.
+- Es necesario estar autenticado y proporcionar el ID del usuario para utilizar esta función, lo que garantiza la privacidad y seguridad de la información de usuario.
+
+
+### Cambiar Contraseña de Usuario
+
+**Verbo:** PATCH
+
+**Ruta:** 'user/change-password'
+
+**Restricción de Acceso:** 
+- Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
+- Se verifica que la contraseña sea correcta con **changePasswordDto**.
+
+**Descripción:**
+Esta funcionalidad permite a un usuario autenticado cambiar su contraseña actual por una nueva. Para ello, se debe proporcionar una nueva contraseña.
+
+**Entradas:**
+- **newPasswordDto:** Nueva contraseña del usuario.
+- **currentUser:** El usuario actual que desea cambiar su contraseña.
+
+**Flujo de Trabajo:**
+1. Un usuario autenticado desea cambiar su contraseña actual por una nueva.
+2. El usuario proporciona la nueva contraseña a través del objeto 'changePasswordDto'.
+3. La plataforma verifica la autenticación del usuario actual (currentUser) para garantizar que tiene permiso para cambiar su contraseña.
+4. Si la autenticación es exitosa y se proporciona una nueva contraseña válida, la plataforma actualiza la contraseña del usuario con la nueva contraseña.
+5. La plataforma confirma al usuario que la contraseña ha sido cambiada exitosamente.
+
+**Salidas:**
+- Confirmación de que la contraseña ha sido cambiada con éxito.
+
+**Escenarios Adicionales:**
+- Esta funcionalidad proporciona a los usuarios la capacidad de mantener su contraseña segura y actualizarla según sea necesario.
+- La autenticación del usuario actual (currentUser) es esencial para garantizar que solo el usuario legítimo pueda cambiar su contraseña.
+
+### Eliminar la cuenta de Usuario
+
+*Verbo:** DELETE
+
+**Ruta:** 'user/delete'
+
+**Restricción de Acceso:** 
+- Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
+
+**Descripción:**
+Esta funcionalidad permite a un usuario autenticado eliminar su propia cuenta de usuario en la plataforma.
+
+**Entradas:**
+- **currentUser:** El usuario actual que desea eliminar su cuenta.
+
+**Flujo de Trabajo:**
+1. Un usuario autenticado decide eliminar su cuenta de usuario en la plataforma.
+2. El usuario proporciona su información de autenticación a través de 'currentUser' para confirmar su identidad.
+3. La plataforma verifica la autenticación del usuario y confirma que tiene permiso para eliminar su cuenta.
+4. Si la autenticación es exitosa y se confirma que el usuario tiene permiso, la plataforma procede a eliminar la cuenta del usuario.
+5. La plataforma muestra un mensaje de confirmación al usuario informándole que su cuenta ha sido eliminada con éxito.
+
+**Salidas:**
+- Mensaje de confirmación de que la cuenta del usuario ha sido eliminada con éxito.
+
+**Escenarios Adicionales:**
+- Esta funcionalidad proporciona a los usuarios la capacidad de eliminar su cuenta si lo desean.
+- La autenticación del usuario actual (currentUser) es fundamental para garantizar que solo el usuario legítimo pueda eliminar su cuenta.  
