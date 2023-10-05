@@ -21,7 +21,7 @@
 <tr><td>author</td><td><ul><li>Relación que vincula a un usuario como author del proyecto.</li>
 <li>Obligatoriedad: Requerida.</li></ul></td></tr>
 <tr><td>category</td><td>
-<ul><li>Relacion que vincula una categoría con el proyecto.</li> 
+<ul><li>Relación que vincula una categoría con el proyecto.</li> 
 <li>Restricción: La categoría debe estar vigente dentro de la aplicación. De no existir la puede crear previamnente.</li>
 <li>Obligatoriedad: Requerida.</li></ul></td></tr>
 <tr><td>documents</td><td>
@@ -35,7 +35,7 @@
 </table>
 </br>
 
-## Métodos Publicos de Entidad
+## Métodos Públicos de Entidad
 
 <table border="1" width=100%>
 <thead><tr><th>Función</th><th>Descripción</th></tr></thead>
@@ -53,13 +53,14 @@
 
 ## Endpoints del módulo Project
 
-**Ruta:** project
+**Ruta general:** project
 
 **Aclaración:** 
 1. Los datados de salida se muestran en formato raw.
 2. Para mayor detalle se puede ver información de los endpoints mediante la implementación generada mediante swagger accediendo en la dirección url ruta_del_proyecto/docs.
+   
 
-## Crear un Proyecto
+### Crear un Proyecto
 
 **Verbo:** POST
 
@@ -95,7 +96,7 @@ Esta funcionalidad permite a los usuarios autenticados crear un nuevo proyecto e
 - Después de la creación exitosa, el usuario puede ser redirigido a la página de detalles del proyecto recién creado.
 
 
-## Agregar Colaborador a un Proyecto
+### Agregar Colaborador a un Proyecto
 
 **Verbo:** POST
 
@@ -133,7 +134,7 @@ Esta funcionalidad permite al propietario de un proyecto agregar un colaborador 
 - Solo el propietario del proyecto debe tener permisos para agregar colaboradores.
 - Se debe realizar una validación para garantizar que el correo electrónico proporcionado esté en un formato válido.
 
-## Agregar un Documento a un Proyecto
+### Agregar un Documento a un Proyecto
 
 **Verbo:** POST
 
@@ -153,7 +154,6 @@ Esta funcionalidad permite a los colaboradores agregar documentos a un proyecto 
   - **title (obligatorio):** El título del documento.
   - **content (obligatorio):** El contenido del documento.
   - **messagesLog (opcional):** Un registro de mensajes o notas relacionados con el documento.
-- 
 
 **Flujo de Trabajo:**
 1. Un colaborador que ha iniciado sesión en la plataforma desea agregar un nuevo documento a un proyecto.
@@ -174,7 +174,7 @@ Esta funcionalidad permite a los colaboradores agregar documentos a un proyecto 
 - Se realiza una validación para garantizar que el título y el contenido del documento cumplan con los requisitos establecidos.
 - Los colaboradores tienen la opción de editar o eliminar documentos existentes en el proyecto según la configuración de permisos.
 
-- ## Buscar y Mostrar Colaboradores de un Proyecto
+- ### Buscar y Mostrar Colaboradores de un Proyecto
 
 **Verbo:** GET
 
@@ -184,7 +184,6 @@ Esta funcionalidad permite a los colaboradores agregar documentos a un proyecto 
 - Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
 - Dueño del Proyecto o Colaborador: El usuario antes descripto debe ser dueño del proyecto o colaborador.
 - Proyecto existente: El id del proyecto debe ser valido.
-
 
 **Descripción:**
 Esta funcionalidad permite a los usuarios autenticados dueños o colaboradores del proyecto buscar y mostrar todos los colaboradores asociados a un proyecto específico utilizando su ID único. La función verifica que el usuario esté logueado y recibe el ID del proyecto y 'currentProject' para verificar la existencia del proyecto. Si el proyecto no existe, se muestra un mensaje de error.
@@ -211,7 +210,7 @@ Esta funcionalidad permite a los usuarios autenticados dueños o colaboradores d
 - Los colaboradores pueden ser presentados en forma de lista o tarjetas, y se pueden proporcionar enlaces para acceder a los perfiles de colaboradores.
 
 
-## Buscar y Mostrar Documentos de un Proyecto por ID 
+### Buscar y Mostrar Documentos de un Proyecto por ID 
 
 **Verbo:** GET
 
@@ -248,14 +247,14 @@ Esta funcionalidad permite a los usuarios autenticados buscar y mostrar todos lo
 - Los documentos pueden ser presentados en forma de lista o tarjetas, y se pueden proporcionar enlaces para acceder a cada documento.
 
 
-## Buscar y Mostrar un Proyecto por ID 
+### Buscar y Mostrar un Proyecto por ID 
 
 **Verbo:** GET
 
 **Ruta:** 'project/:id/view'
 
 **Restricción de Acceso:** 
-- Público: No posee.
+- No posee.
 
 **Descripción:**
 Esta funcionalidad permite a cualquier usuario, incluso aquellos que no están autenticados, buscar y visualizar un proyecto en particular utilizando su ID único en la aplicación. Si el proyecto con el ID especificado no se encuentra, se muestra un mensaje de error indicando que no se encontró la información.
@@ -280,7 +279,7 @@ Esta funcionalidad permite a cualquier usuario, incluso aquellos que no están a
 - Después de encontrar un proyecto, los usuarios pueden tener la opción de interactuar con él, como unirse al proyecto, seguirlo o acceder a más detalles.
 
 
-## Buscar y Mostrar Proyectos Propios del Usuario
+### Buscar y Mostrar Proyectos Propios del Usuario
 
 **Verbo:** GET
 
@@ -313,7 +312,7 @@ Esta funcionalidad permite a los usuarios autenticados buscar y mostrar todos lo
 - Los proyectos pueden ser presentados en forma de lista o tarjetas, y se pueden proporcionar enlaces para acceder a los proyectos directamente.
 
 
-## Buscar y Mostrar Proyectos donde el Usuario es Colaborador
+### Buscar y Mostrar Proyectos donde el Usuario es Colaborador
 
 **Verbo:** GET
 
@@ -345,14 +344,14 @@ Esta funcionalidad permite a los usuarios autenticados buscar y mostrar todos lo
 - Los proyectos pueden ser presentados en forma de lista o tarjetas, y se pueden proporcionar enlaces para acceder a los proyectos directamente.
 
 
-## Buscar y Mostrar Proyectos por Nombre de Categoría
+### Buscar y Mostrar Proyectos por Nombre de Categoría
 
 **Verbo:** GET
 
 **Ruta:**  'project/by-category/:name'
 
 **Restricción de Acceso:** 
-- Público: No posee.
+- No posee.
 
 **Descripción:**
 Esta funcionalidad permite a cualquier usuario buscar y mostrar todos los proyectos asociados a una categoría específica utilizando el nombre de la categoría. No se requiere estar logueado para acceder a esta función. Si la categoría no existe, se muestra un mensaje de error.
@@ -377,14 +376,14 @@ Esta funcionalidad permite a cualquier usuario buscar y mostrar todos los proyec
 - Los proyectos pueden ser presentados en forma de lista o tarjetas, y se pueden proporcionar enlaces para acceder a los proyectos directamente desde la lista.
 
 
-## Buscar y Mostrar Proyectos
+### Buscar y Mostrar Proyectos
 
 **Verbo:** GET
 
 **Ruta:**  'project/search'
 
 **Restricción de Acceso:** 
-- Público: No posee.
+- No posee.
   
 **Descripción:**
 Esta funcionalidad permite a los usuarios buscar y mostrar proyectos en la plataforma en función de diferentes criterios, como título y autor. Los resultados pueden ser ordenados en forma ascendente o descendente, y se puede limitar la cantidad de proyectos buscados.
@@ -413,14 +412,14 @@ Esta funcionalidad permite a los usuarios buscar y mostrar proyectos en la plata
 - El usuario puede elegir no aplicar orden y recibir una lista completa de proyectos encontrados.
 - Los proyectos se muestran en función de los criterios de búsqueda proporcionados, lo que permite a los usuarios encontrar proyectos específicos de manera eficiente.
 
-## Mostrar Todos los Proyectos
+### Mostrar Todos los Proyectos
 
 **Verbo:** GET
 
 **Ruta:**  'project/view/all'
 
 **Restricción de Acceso:** 
-- Público: No posee.
+- No posee.
 
 **Descripción:**
 Esta funcionalidad permite a cualquier usuario acceder y ver todos los proyectos disponibles en la plataforma sin necesidad de estar logueado. Proporciona una vista general de todos los proyectos disponibles.
@@ -443,7 +442,7 @@ No posee.
 - Los usuarios tienen la opción de realizar acciones adicionales en los proyectos, como filtrar proyectos por categoría o realizar búsquedas específicas.
 
 
-## Editar un Documento en un Proyecto
+### Editar un Documento en un Proyecto
 
 **Verbo:** PUT
 
@@ -488,7 +487,7 @@ Esta funcionalidad permite a los colaboradores modificar documentos en un proyec
 - Los usuarios pueden tener la opción de cancelar la edición en cualquier momento antes de guardar los cambios si se proporciona esa funcionalidad en la plataforma.
 
 
-## Eliminar un Proyecto
+### Eliminar un Proyecto
 
 **Verbo:** DELETE
 
@@ -523,7 +522,7 @@ Esta funcionalidad permite al dueño del proyecto eliminar un proyecto y todos s
 - Los documentos vigentes en el proyecto actúan como una restricción para la eliminación del proyecto. Los usuarios pueden tener la opción de eliminar documentos vigentes antes de proceder con la eliminación del proyecto si se proporciona esa funcionalidad en la plataforma.
 
 
-## Eliminar un Documento Específico de un Proyecto
+### Eliminar un Documento Específico de un Proyecto
 
 **Verbo:** DELETE
 
@@ -563,7 +562,7 @@ Esta funcionalidad permite al dueño del proyecto eliminar un documento específ
 - Esta funcionalidad elimina el documento específico del proyecto, lo que implica que se borrará todo su historial y contenido relacionado con el documento.
 
 
-## Eliminar Todos los Documentos de un Proyecto
+### Eliminar Todos los Documentos de un Proyecto
 
 **Verbo:** DELETE
 
@@ -597,7 +596,7 @@ Esta funcionalidad permite al dueño del proyecto eliminar todos los documentos,
 - Esta funcionalidad elimina todos los documentos del proyecto, lo que implica que se borrará todo el historial y contenido relacionado con los documentos.
 
 
-##  Eliminar un Colaborador de un Proyecto
+###  Eliminar un Colaborador de un Proyecto
 
 **Verbo:** DELETE
 
