@@ -60,13 +60,13 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 >
 >  - helpers
 >
->  [history](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/history-readme.md)
+>  - [history](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/history-readme.md)
 >
->  images
+>  - images
 >
->  [project](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/project/project-readme.md)
+>  - [project](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/project/project-readme.md)
 >
->  [user](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/user/user-readme.md)
+>  - [user](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/user/user-readme.md)
 >
 
 ## Tecnologías Utilizadas
