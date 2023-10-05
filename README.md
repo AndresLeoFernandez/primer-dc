@@ -25,11 +25,44 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 <p>Como resultado del analisis se resuelve ejecutar el siguiente modelado para cubrir las necesidades del proyecto.</p>
 <p align=center><img src="src/images/diagrama.png" alt="diagrama" width="70%"/></p> 
 </br>
-<p>A continuación se detallan las entidades con sus atributos, funcionalidades declaradas y se comenta tambien la relación que van a mantener entre las mismas.</p>
+<p>En la sección de documentación se encuentra el detalle tecnico de cada una de las entidades mencionadas con sus atributos, metodos, relaciones y el detalle exhaustivo de cada uno de los Endpoints disponibles para su utilización.</p>
 </br>
 
 
-## Description
+## Documentación segun Estructura del Proyecto
+
+>src
+>
+>  - [auth]()
+>
+>  - [category](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/category-readme.md)
+>
+>  - collaborator
+>
+>  - comment
+>
+>  common
+>
+>  constants
+>
+>  decorators
+>
+>  document
+>
+>  guards
+>
+>  helpers
+>
+>  history
+>
+>  images
+>
+>  project
+>
+>  user
+>
+   [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
