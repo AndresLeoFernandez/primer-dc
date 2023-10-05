@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 
 export const initSwagger = (app: INestApplication) => {
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('Proyectos Comlaborativos API')
+    .setTitle('Proyectos Colaborativos API')
     .addBearerAuth()
     .setDescription('API Creada con NestJS para Aplicación Proyectos Colaborativos.')
     .build();
