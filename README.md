@@ -32,9 +32,11 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 ## Documentación 
 
 ### Aclaraciones Importantes
+
 1. Del proyecto
-2. Del Grupo de Trabajo
-3. Otros.
+   
+2. [Del Grupo de Trabajo](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/readme-backend.md)
+
 
 ### Estructura del Proyecto
 
