@@ -91,11 +91,16 @@ cd nombre-carpeta-proyecto
 ```bash
 $ npm install
 ```
-**Crea una base datos vacia**
-
-**Accede a la carpeta del proyecto src**
-
-**Edita el archivo de nombre app.module**
+**Crea BD y aplica los datos en el archivo correpondiente**
+```bash
+1. Crea una base de datos vacia en algun Gestor de Base de Datos
+2. Accede a la carpeta del proyecto src
+3. Edita el archivo de nombre app.module.ts
+4. Modifica key username por el que asignaste en el administrador de base de datos del punto 1.
+5. Modifica key password por el que asignaste en el administrador de base de datos del punto 1.
+6. Modifica key database por el que asignaste en el administrador de base de datos del punto 1.
+7. Para correr el proyecto por primera vez deberas dejar la key synchronize: true  
+```    
 
 **Corre la aplicación**
 
