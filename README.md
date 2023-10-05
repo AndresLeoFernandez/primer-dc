@@ -69,6 +69,15 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 >  [user](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/user/user-readme.md)
 >
 
+## Tecnologías Utilizadas
+- [Node.js](https://nodejs.org/es)
+- [Typescript](https://www.typescriptlang.org/)
+- [NestJS](https://github.com/nestjs/nest)
+- [MySQL](https://www.mysql.com/)
+- [JWT](https://jwt.io/)
+- [Typeorm](https://typeorm.io/)
+- [Swagger](https://swagger.io/)
+
 ## Instalación
 
 **Accede a tu carpeta de Trabajo**
