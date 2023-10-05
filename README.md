@@ -25,15 +25,20 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 <p>Como resultado del analisis se resuelve ejecutar el siguiente modelado para cubrir las necesidades del proyecto.</p>
 <p align=center><img src="src/images/diagrama.png" alt="diagrama" width="70%"/></p> 
 </br>
-<p>En la sección de documentación se encuentra el detalle tecnico de cada una de las entidades mencionadas con sus atributos, metodos, relaciones y el detalle exhaustivo de cada uno de los Endpoints disponibles para su utilización.</p>
+<p>En la sección de documentación se encuentra el detalle tecnico de cada una de las entidades mencionadas con sus atributos, metodos, relaciones y el detalle exhaustivo de cada uno de los Endpoints disponibles para su utilización segun modulo de pertenencia.</p>
 </br>
 
 
 ## Documentación 
+
 ### Aclaraciones Importantes
+1. Del proyecto
+2. Del Grupo de Trabajo
+3. Otros.
+
 ### Estructura del Proyecto
 
->#### src
+>src
 >
 >  - [auth](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/auth/auth-readme.md)
 >
@@ -63,17 +68,31 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 >
 >  [user](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/user/user-readme.md)
 >
-   
-
-
 
 ## Instalación
+
+#### Accede a tu carpeta de Trabajo
+```bash
+cd carpeta
+```
+#### Clona el proyecto
+
+```bash
+git clone https://github.com/AndresLeoFernandez/primer-dc.git **nombre-carpeta**
+```
+
+#### Accede a tu carpeta nombre-carpeta
+
+```bash
+cd nombre-carpeta
+```
+#### Instalación
 
 ```bash
 $ npm install
 ```
 
-## Correr la aplicación
+#### Corre la aplicación
 
 ```bash
 # development
@@ -86,7 +105,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Code Contributors
+## Grupo de Trabajo
 
 - Author - [Andrés Fernández](https://github.com/AndresLeoFernandez)
 - Author - [Gisela Gentile](https://github.com/Gisela-Gentile)
