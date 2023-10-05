@@ -43,7 +43,7 @@
 </br>
 </br>
 
-## Métodos Publicos de Entidad
+## Métodos Públicos de Entidad
 
 <table border="1" width=100%>
 <thead><tr><th>Función</th><th>Descripción</th></tr></thead>
@@ -59,9 +59,9 @@
 </br>
 </br>
 
-## Endpoints
+## Endpoints del módulo comment
 
-**RUTA GENERAL:** comment
+**Ruta general:** comment
 
 **Aclaración:** 
 1. Los datados de salida se muestran en formato raw.
@@ -75,7 +75,7 @@
 **Ruta:**  'comment/:idDoc'
 
 **Restricción de Acceso:** 
-- Público
+- No posee.
 
 **Descripción:**
 Esta funcionalidad permite a los usuarios agregar comentarios a los documentos de un proyecto. Los comentarios incluyen información como el autor, el contenido y el email del autor. No es necesario estar logueado para utilizar esta funcionalidad.
@@ -109,7 +109,7 @@ Esta funcionalidad permite a los usuarios agregar comentarios a los documentos d
 **Ruta:**  'comment/view/all'
 
 **Restricción de Acceso:** 
-- Público
+- No posee.
 
 **Descripción:**
 Esta funcionalidad permite a los usuarios ver todos los comentarios disponibles en la plataforma, sin necesidad de estar logueados.
@@ -137,7 +137,7 @@ Ninguna.
 **Ruta:**  'comment/':id/view'
 
 **Restricción de Acceso:** 
-- Público
+- No posee.
 
 **Descripción:**
 Esta funcionalidad permite a los usuarios buscar y mostrar un comentario específico en la plataforma utilizando su ID único. No es necesario estar logueado para utilizar esta función.
