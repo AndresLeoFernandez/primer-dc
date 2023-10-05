@@ -15,6 +15,17 @@ export class DocumentExistGuard implements CanActivate {
         @InjectRepository(Document) private readonly documentRepository: Repository<Document>)
     {}    
     
+    /**
+    *  Autoriza acceso a procesar el endpoint 
+    *  Si el param idDoc se corresponde con un 
+    *  documento valido en la tabla de documentos.
+    * @param {ExecutionContext} context
+    * @returns {Promise<boolean>}
+    * True si se verifica que existe
+    * Exception caso contrario
+    * Obs: 
+    *   1 - Genera key currentdocument en la request 
+    */
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();        
         const documentId = request.params.idDoc;
@@ -23,8 +34,6 @@ export class DocumentExistGuard implements CanActivate {
         if (!document)
         throw new NotFoundException('Document does not exist.');
         request['currentdocument'] = document;
-        console.log(`Este es CURRENT document`);
-        console.log(request['currentdocument']);
         return true;
     }
 }

@@ -18,7 +18,18 @@ export class ProjectCollaboratorGuard implements CanActivate {
         @InjectRepository(Collaborator) private readonly collaboratorRepository:Repository<Collaborator>,
         )
     {}       
-    
+    /**
+    *  Autoriza acceso a procesar el endpoint 
+    *  Si el param id se corresponde con un projectId valido y  
+    *  user.userid es colaborador del proyecto verificando 
+    *  en la tabla de colaboradores.
+    * @param {ExecutionContext} context
+    * @returns {Promise<boolean>}
+    * True si se verifica que existe
+    * Exception caso contrario
+    * Obs: 
+    *   1 - Genera key collaborator en la request 
+    */
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();        
         const currentUser= request.user;
@@ -35,13 +46,9 @@ export class ProjectCollaboratorGuard implements CanActivate {
             }
         };
         const collaborator = await this.collaboratorRepository.findOne(criteriaCollaborator);
-        if (!collaborator){
-           throw new UnauthorizedException('Current user not a user or collaborator of the project');
-        }
+        if (!collaborator)
+        throw new UnauthorizedException('Current user not a user or collaborator of the project');
         request['collaborator'] = collaborator;
-        /*console.log(`Este es COLLABORADOR QUE INTENTA EJECUTAR LA ACCION`);
-        console.log(request['ownerOrCol']);*/
-        
         return true;
     }
 }

@@ -1,8 +1,5 @@
-import { CanActivate, ExecutionContext, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
-/*import { JwtService } from "@nestjs/jwt";
-import { jwtConstants } from "./constants";
-import { Request } from "express";
-import { ProjectService } from "src/project/project.service";*/
+import { CanActivate, ExecutionContext, Injectable, NotFoundException, } from "@nestjs/common";
+
 import { InjectRepository } from "@nestjs/typeorm";
 import { Project } from "src/project/entities/project.entity";
 import { FindOneOptions, Repository } from "typeorm";
@@ -20,7 +17,17 @@ export class ProjectExistGuard implements CanActivate {
     constructor( 
         @InjectRepository(Project) private readonly projectRepository: Repository<Project>,)
     {}    
-    
+    /**
+    *  Autoriza acceso a procesar el endpoint 
+    *  Si el param id se corresponde con un 
+    *  project valido en la tabla de proyectos.
+    * @param {ExecutionContext} context
+    * @returns {Promise<boolean>}
+    * True si se verifica que existe
+    * Exception caso contrario
+    * Obs: 
+    *   1 - Genera key currentproject en la request 
+    */
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();        
         const currentUser= request.user;

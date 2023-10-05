@@ -7,7 +7,6 @@ import { CommentModule } from './comment/comment.module';
 import { CollaboratorModule } from './collaborator/collaborator.module';
 import { CategoryModule } from './category/category.module';
 import { DocumentModule } from './document/document.module';
-import { HistoryModule } from './history/history.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 
@@ -23,7 +22,7 @@ import { AuthModule } from './auth/auth.module';
       entities: [
         "dist/**/**.entity{.ts,.js}"
       ],
-      synchronize: /*true */ false
+      synchronize:/* true */ false
     }),
     AuthModule,
     UserModule,
@@ -31,7 +30,6 @@ import { AuthModule } from './auth/auth.module';
     CommentModule,
     CollaboratorModule,
     DocumentModule,
-    /*HistoryModule,*/
     ProjectModule,    
     ],
   controllers: [AppController],
