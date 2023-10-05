@@ -1,43 +1,11 @@
 
-## Objetivo 
+## Importante 
 
-El proyecto surge como requerimientos de cursado y la finalidad es aplicar los distintos conocimientos adquiridos a lo largo del curso.
-Para el proyecto en particular se utilizaron las siguientes herramientas para su composición:
-1. El manejo de Base de Datos lo trabajamos a traves de la aplicacion Workbencch donde se diseño el modelado de la base. Se utilizo una base relacional mediante el lenguaje MySQL. 
-2. Backend desarrollado con Nest y la libreria TypeORM para lograr el mapeo de datos.
-3. Se implemento Swagger para realizar pruebas y visualizacion de la API con sus respectivos Endpoints.
-4. Se utilizo Markdown para escribir la documentacion como tal.
+<p align=justify>El proyecto fue llevado a cabo por ambos en su totalidad por medio de reuniones por meet diarias de aproximadamente dos horas de trabajo donde se fue consensuando todo el seguimiento del proyecto hasta el día de hoy.</p>
+<p align=justify>Se comenzo trabajando por separado en la sección correspondiente al modelado de la base de datos y una vez logrado el DML definitivo se distribuyeron algunas tareas como la generación de las entidades mas representativas para poder continuar a la siguiente etapa.</p>
+<p align=justify> Luego, con la confirmación de la reducción del Grupo de Trabajo original decidimos codear juntos para ir adquiriendo los conocimientos en equipo y vencer las distintas problematicas que se fueron presentando a lo largo del desarrollo.</p>
+<p align=justify> Se realizo una evaluación bastante minuciosa respecto de lo que se prentendia para el desarrollo pero coincidimos plenamente en garantizar la seguridad de las operaciones haciendo uso de los Guards como metodos de autorización de las operaciones y del manejo de Jwt para el registro y autorizacion de login de los usuarios.</p>
 
-   
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
- <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-</p>
-
-## Installation
-
-```bash
-$ npm install
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
 ## Code Contributors
 
