@@ -71,28 +71,33 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 
 ## Instalación
 
-#### Accede a tu carpeta de Trabajo
-```bash
-cd carpeta
-```
-#### Clona el proyecto
-
-```bash
-git clone https://github.com/AndresLeoFernandez/primer-dc.git **nombre-carpeta**
-```
-
-#### Accede a tu carpeta nombre-carpeta
-
+**Accede a tu carpeta de Trabajo**
 ```bash
 cd nombre-carpeta
 ```
-#### Instalación
+**Clona el proyecto**
+
+```bash
+git clone https://github.com/AndresLeoFernandez/primer-dc.git **nombre-carpeta-proyecto**
+```
+
+**Accede a tu carpeta nombre-carpeta**
+
+```bash
+cd nombre-carpeta-proyecto
+```
+**Instalación**
 
 ```bash
 $ npm install
 ```
+**Crea una base datos vacia**
 
-#### Corre la aplicación
+**Accede a la carpeta del proyecto src**
+
+**Edita el archivo de nombre app.module**
+
+**Corre la aplicación**
 
 ```bash
 # development
