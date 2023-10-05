@@ -29,9 +29,11 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 </br>
 
 
-## Documentación segun Estructura del Proyecto
+## Documentación 
+### Aclaraciones Importantes
+### Estructura del Proyecto
 
->### src
+>#### src
 >
 >  - [auth](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/auth-readme.md)
 >
@@ -65,13 +67,13 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 
 
 
-## Installation
+## Instalación
 
 ```bash
 $ npm install
 ```
 
-## Running the app
+## Correr la aplicación
 
 ```bash
 # development
