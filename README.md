@@ -35,23 +35,23 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 
 >#### src
 >
->  - [auth](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/auth-readme.md)
+>  - [auth](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/auth/auth-readme.md)
 >
 >  - [category](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/category-readme.md)
 >
->  - [collaborator](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/collaborator-readme.md)
+>  - [collaborator](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/collaborator/collaborator-readme.md)
 >
->  - [comment](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/comment-readme.md)
+>  - [comment](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/comment/comment-readme.md)
 >
 >  common
 >
 >  constants
 >
->  [decorators](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/decorators-readme.md)
+>  [decorators](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/decorators/decorators-readme.md)
 >
->  [document](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/document-readme.md)
+>  [document](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/document/document-readme.md)
 >
->  [guards](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/guards-readme.md)
+>  [guards](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/guards/guards-readme.md)
 >
 >  helpers
 >
@@ -59,9 +59,9 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 >
 >  images
 >
->  [project](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/project-readme.md)
+>  [project](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/project/project-readme.md)
 >
->  [user](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/user-readme.md)
+>  [user](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/user/user-readme.md)
 >
    
 
