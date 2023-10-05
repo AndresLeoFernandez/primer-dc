@@ -32,7 +32,7 @@
 </table>
 </br></br>
 
-## Métodos Publicos de Entidad
+## Métodos Públicos de Entidad
 
 <table border="1" width=100%>
 <thead><tr><th>Función</th><th>Descripción</th></tr></thead>
@@ -47,33 +47,31 @@
 </br>
 
 # Endpoints del modulo Collaborator
-**Ruta:** collaborator
+
+**Ruta general:** collaborator
 
 **Aclaración:** 
 1. Los datados de salida se muestran en formato raw.
 2. Para mayor detalle se puede ver información de los endpoints mediante la implementación generada mediante swagger accediendo en la dirección url ruta_del_proyecto/docs.
 
 ## Mostrar Lista de Todos los Colaboradores en la aplicación
-**verbo:** GET
+
+**Verbo:** GET
 
 **Ruta:** collaborator/view/all
 
-**Acceso** 
-
+**Restricción de Acceso:** 
 - Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
   
 **Descripción:**
-
 Esta funcionalidad permite a los usuarios autenticados ver una lista de todos los colaboradores que están registrados en la aplicación en formato raw. Proporciona una forma de conocer a otros usuarios que participan en proyectos colaborativos y fomenta la interacción entre ellos.
 
 **Flujo de Trabajo:**
-
 1. Un usuario autenticado inicia sesión en la plataforma.
 2. El usuario navega a la sección o página que muestra la lista de colaboradores.
 3. La plataforma recopila y presenta una lista de todos los colaboradores registrados, mostrando sus nombres de usuario y otra información relevante.
    
 **Salidas:**
-
 - Lista de todos los colaboradores registrados en la plataforma, que puede incluir información como nombres de usuario y los datos requeridos en el registro.
   
 **Escenarios Adicionales:**
@@ -83,10 +81,14 @@ Esta funcionalidad permite a los usuarios autenticados ver una lista de todos lo
 - Se pueden proporcionar enlaces o botones que permitan a los usuarios conectarse o interactuar con los colaboradores, como enviar mensajes o invitaciones a proyectos colaborativos.
 
 ## Buscar y Mostrar un Colaborador por ID 
-**verbo:** GET
-**Ruta:** collaborator/:id/view
-**Acceso** 
+
+**Verbo:** GET
+
+**Ruta:** 'collaborator/:id/view'
+
+**Restricción de Acceso:** 
 - Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
+  
 **Descripción:**
 Esta funcionalidad permite a los usuarios autenticados buscar y visualizar un colaborador en particular mediante la búsqueda de su ID único en la aplicación. Si el colaborador con el ID especificado no se encuentra, se muestra un mensaje de error indicando que no se encontró la información.
 
@@ -100,7 +102,7 @@ Esta funcionalidad permite a los usuarios autenticados buscar y visualizar un co
 4. La plataforma verifica si existe un colaborador con el ID proporcionado en la base de datos.
 5. Si se encuentra un colaborador con ese ID, se muestra la información del colaborador, que puede incluir detalles como su nombre de usuario y otra información relevante.
 6. Si no se encuentra un colaborador con el ID especificado, se muestra un mensaje de error indicando que no se encontró la información buscada.
-7. 
+
 **Salidas:**
 - Información del colaborador encontrado, que puede incluir su nombre de usuario y otra información relevante.
 - Mensaje de error si el colaborador con el ID especificado no se encuentra en la aplicación.
