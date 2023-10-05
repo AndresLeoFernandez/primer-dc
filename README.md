@@ -48,17 +48,17 @@ Para poder lograr el sistema vamos a contar principalmente con las siguientes en
 >
 >  - [comment](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/comment/comment-readme.md)
 >
->  common
+>  - common
 >
->  constants
+>  - constants
 >
->  [decorators](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/decorators/decorators-readme.md)
+>  - [decorators](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/decorators/decorators-readme.md)
 >
->  [document](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/document/document-readme.md)
+>  - [document](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/document/document-readme.md)
 >
->  [guards](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/guards/guards-readme.md)
+>  - [guards](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/guards/guards-readme.md)
 >
->  helpers
+>  - helpers
 >
 >  [history](https://github.com/AndresLeoFernandez/primer-dc/blob/main/src/category/history-readme.md)
 >
