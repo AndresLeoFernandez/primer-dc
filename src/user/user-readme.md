@@ -117,7 +117,7 @@ Ninguna.
 - Es necesario estar autenticado para utilizar esta función, lo que garantiza la privacidad de la lista de usuarios y el acceso solo para usuarios autorizados.
 
 
-### Funcionalidad: Obtener un Usuario por ID
+### Obtener un Usuario por ID
 
 **Verbo:** GET
 
