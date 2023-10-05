@@ -1,4 +1,57 @@
-# Descripción de Endpoints del módulo Project
+# Project
+
+## Generales
+
+## Atributos de Entidad
+
+<table border="1" width=100%>
+<thead><tr><th>Nombre</th><th>Detalle</th></tr></thead>
+<tbody>
+<tr><td>projectId</td><td><ul><li>Representa el número de identificación del proyecto.</li>
+<li>Se genera automáticamente de forma incremental al darse de alta el proyecto.</li>
+<li>Restricción: Valor único para cada proyecto de la aplicación. </li>
+</ul></td></tr>
+<tr><td>title</td><td><ul><li>Representa el título del proyecto.</li>
+<li>Restricción: El título debe ser único por autor de proyecto. No puede ser vacio.</li>
+<li>Obligatoriedad: Requerida.</li></ul></td></tr>
+<tr><td>creationDate</td><td>
+<ul><li>Representa la fecha de creación del proyecto en la aplicación.</li>
+<li>Se asigna automáticamente cuando se crea el proyecto.</li>
+</ul></td></tr>
+<tr><td>author</td><td><ul><li>Relación que vincula a un usuario como author del proyecto.</li>
+<li>Obligatoriedad: Requerida.</li></ul></td></tr>
+<tr><td>category</td><td>
+<ul><li>Relacion que vincula una categoría con el proyecto.</li> 
+<li>Restricción: La categoría debe estar vigente dentro de la aplicación. De no existir la puede crear previamnente.</li>
+<li>Obligatoriedad: Requerida.</li></ul></td></tr>
+<tr><td>documents</td><td>
+<ul><li>Relación que vincula los documentos que posee el proyecto.</li> 
+<li>Obligatoriedad: Opcional.</li></ul></td></tr>
+<tr><td>collaborators</td><td>
+<ul><li>Relación que vincula los collaboradores que posee el proyecto.</li>
+<li>Obligatoriedad: Opcional.</li>
+</ul></td></tr> 
+</tbody>
+</table>
+</br>
+
+## Métodos Publicos de Entidad
+
+<table border="1" width=100%>
+<thead><tr><th>Función</th><th>Descripción</th></tr></thead>
+<tbody>
+<tr><td>getProjectId():number</td><td>Retorna el número de identificación del proyecto.</td></tr>
+<tr><td>getTitle():string </td><td>Retorna el título del proyecto.</td></tr>
+<tr><td>getCreationDate():any </td><td>Retorna la fecha de creación del proyecto.</td></tr>
+<tr><td>getAuthor(): User </td><td>Retorna el usuario autor del proyecto.</td></tr>
+<tr><td>getCategory(): Category</td><td>Retorna la categoría del proyecto.</td></tr>
+<tr><td>setTitle(newTitle:String): void </td><td>Asigna newTitle al título del proyecto.</td></tr>
+</tbody>
+</table>
+</br>
+</br>
+
+## Endpoints del módulo Project
 
 **Ruta:** project
 
@@ -12,14 +65,13 @@
 
 **Ruta:**  'project/add'
 
-**Acceso:** 
+**Restricción de Acceso:** 
 - Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
 
 **Descripción:**
 Esta funcionalidad permite a los usuarios autenticados crear un nuevo proyecto en la plataforma. Se verifica que la categoría especificada exista en la base de datos y que el título del proyecto no esté repetido en otros proyectos.
 
-**Entradas:**
-- **Usuario autenticado (currentUser)**: Un usuario que ha iniciado sesión en la aplicación.
+**Entrada:**
 - **createProjectDto:** Un objeto de transferencia de datos (DTO) que contiene la siguiente información:
   - **Título del Proyecto (title):** El título del proyecto que el usuario desea crear.
   - **Categoría del Proyecto (category):** La categoría a la que se asignará el proyecto.
@@ -49,14 +101,14 @@ Esta funcionalidad permite a los usuarios autenticados crear un nuevo proyecto e
 
 **Ruta:**  'project/:id/add/document'
 
-**Acceso:** 
+**Restricción de Acceso:**
 - Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
+- Dueño del Proyecto: El usuario antes descripto debe ser dueño del proyecto.
 
 **Descripción:**
 Esta funcionalidad permite al propietario de un proyecto agregar un colaborador al mismo. El propietario debe proporcionar el ID del proyecto al que desea agregar al colaborador y el correo electrónico del colaborador que se desea agregar. Se realizan verificaciones para garantizar que el usuario que realiza la acción sea el propietario del proyecto y que el colaborador no esté ya asociado con el proyecto.
 
 **Entradas:**
-- **currentProject:** Verifica que el usuario está autenticado y es propietario del proyecto al que se desea agregar un colaborador.
 - **projectId:** El ID del proyecto al que se desea agregar un colaborador.
 - **emailUserDto:** Un objeto de transferencia de datos (DTO) que contiene la siguiente información:
   - **email:** El correo electrónico del colaborador que se desea agregar.
@@ -87,20 +139,21 @@ Esta funcionalidad permite al propietario de un proyecto agregar un colaborador 
 
 **Ruta:**  'project/:id/add/document'
 
-**Acceso:** 
+**Restricción de Acceso:**
 - Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
+- Dueño del Proyecto o Colaborador: El usuario antes descripto debe ser dueño del proyecto o colaborador.
+- Proyecto existente: El id del proyecto debe ser valido.
 
 **Descripción:**
 Esta funcionalidad permite a los colaboradores agregar documentos a un proyecto específico. Se verifica que el proyecto exista y que el usuario sea un colaborador del proyecto antes de permitir la adición del documento.
 
 **Entradas:**
 - **projectId:** El ID único del proyecto al que se desea agregar el documento.
-- `createDocumentDto:** Un objeto de transferencia de datos (DTO) que contiene la siguiente información:
+- **createDocumentDto:** Un objeto de transferencia de datos (DTO) que contiene la siguiente información:
   - **title (obligatorio):** El título del documento.
   - **content (obligatorio):** El contenido del documento.
   - **messagesLog (opcional):** Un registro de mensajes o notas relacionados con el documento.
-- **currentProject:** Información del proyecto actual para verificar su existencia.
-- **currentCollaborator:** Información del usuario actual para verificar su colaboración en el proyecto.
+- 
 
 **Flujo de Trabajo:**
 1. Un colaborador que ha iniciado sesión en la plataforma desea agregar un nuevo documento a un proyecto.
@@ -127,15 +180,17 @@ Esta funcionalidad permite a los colaboradores agregar documentos a un proyecto 
 
 **Ruta:**  'project/:id/collaborators'
 
-**Acceso:** 
+**Restricción de Acceso:**
 - Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
+- Dueño del Proyecto o Colaborador: El usuario antes descripto debe ser dueño del proyecto o colaborador.
+- Proyecto existente: El id del proyecto debe ser valido.
+
 
 **Descripción:**
-Esta funcionalidad permite a los usuarios autenticados buscar y mostrar todos los colaboradores asociados a un proyecto específico utilizando su ID único. La función verifica que el usuario esté logueado y recibe el ID del proyecto y 'currentProject' para verificar la existencia del proyecto. Si el proyecto no existe, se muestra un mensaje de error.
+Esta funcionalidad permite a los usuarios autenticados dueños o colaboradores del proyecto buscar y mostrar todos los colaboradores asociados a un proyecto específico utilizando su ID único. La función verifica que el usuario esté logueado y recibe el ID del proyecto y 'currentProject' para verificar la existencia del proyecto. Si el proyecto no existe, se muestra un mensaje de error.
 
 **Entradas:**
 - **projectId:** El ID único del proyecto del cual se desean buscar los colaboradores.
-- **currentProject:** Información del proyecto actual para verificar su existencia.
 
 **Flujo de Trabajo:**
 1. Un usuario autenticado inicia sesión en la plataforma.
@@ -162,15 +217,16 @@ Esta funcionalidad permite a los usuarios autenticados buscar y mostrar todos lo
 
 **Ruta:**  'project/:id/documents'
 
-**Acceso:** 
+**Restricción de Acceso:**
 - Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
+- Dueño del Proyecto o Colaborador: El usuario antes descripto debe ser dueño del proyecto o colaborador.
+- Proyecto existente: El id del proyecto debe ser valido.
 
 **Descripción:**
 Esta funcionalidad permite a los usuarios autenticados buscar y mostrar todos los documentos asociados a un proyecto específico utilizando su ID único. La función verifica que el usuario esté logueado y recibe el ID del proyecto y `currentProject` para verificar la existencia del proyecto. Si el proyecto no existe, se muestra un mensaje de error.
 
 **Entradas:**
 - **projectId:** El ID único del proyecto del cual se desean buscar los documentos.
-- **currentProject:** Información del proyecto actual para verificar su existencia.
 
 **Flujo de Trabajo:**
 1. Un usuario autenticado inicia sesión en la plataforma.
@@ -196,10 +252,10 @@ Esta funcionalidad permite a los usuarios autenticados buscar y mostrar todos lo
 
 **Verbo:** GET
 
-**Ruta:**  'project/:id/view'
+**Ruta:** 'project/:id/view'
 
-**Acceso:** 
-- Público
+**Restricción de Acceso:** 
+- Público: No posee.
 
 **Descripción:**
 Esta funcionalidad permite a cualquier usuario, incluso aquellos que no están autenticados, buscar y visualizar un proyecto en particular utilizando su ID único en la aplicación. Si el proyecto con el ID especificado no se encuentra, se muestra un mensaje de error indicando que no se encontró la información.
@@ -228,16 +284,16 @@ Esta funcionalidad permite a cualquier usuario, incluso aquellos que no están a
 
 **Verbo:** GET
 
-**Ruta:**  'project/:id/documents'
+**Ruta:**  'project/my-projects'
 
-**Acceso:** 
+**Restricción de Acceso:**
 - Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
 
 **Descripción:**
 Esta funcionalidad permite a los usuarios autenticados buscar y mostrar todos los proyectos en los que son propietarios. La función verifica que el usuario esté logeado y devuelve la lista de sus proyectos como propietario o un mensaje si no tiene proyectos como propietario.
 
 **Entradas:**
-- **currentUser**: Información del usuario actual para verificar la autenticación.
+ - No posee.
 
 **Flujo de Trabajo:**
 1. Un usuario autenticado inicia sesión en la plataforma.
@@ -261,16 +317,16 @@ Esta funcionalidad permite a los usuarios autenticados buscar y mostrar todos lo
 
 **Verbo:** GET
 
-**Ruta:**  'project/my-collaboration-projects'
+**Ruta:** 'project/my-collaboration-projects'
 
-**Acceso:** 
+**Restricción de Acceso:** 
 - Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
 
 **Descripción:**
-Esta funcionalidad permite a los usuarios autenticados buscar y mostrar todos los proyectos en los que son propietarios o colaboradores. La función verifica que el usuario esté logeado y devuelve la lista de sus proyectos o un mensaje si no tiene proyectos asociados.
+Esta funcionalidad permite a los usuarios autenticados buscar y mostrar todos los proyectos en los que son colaboradores. La función verifica que el usuario esté logeado y devuelve la lista de sus proyectos o un mensaje si no tiene proyectos asociados.
 
 **Entradas:**
-- **currentUser:** Información del usuario actual que verifica la autenticación.
+- No posee.
 
 **Flujo de Trabajo:**
 1. Un usuario autenticado inicia sesión en la plataforma.
@@ -295,8 +351,8 @@ Esta funcionalidad permite a los usuarios autenticados buscar y mostrar todos lo
 
 **Ruta:**  'project/by-category/:name'
 
-**Acceso:** 
-- Público
+**Restricción de Acceso:** 
+- Público: No posee.
 
 **Descripción:**
 Esta funcionalidad permite a cualquier usuario buscar y mostrar todos los proyectos asociados a una categoría específica utilizando el nombre de la categoría. No se requiere estar logueado para acceder a esta función. Si la categoría no existe, se muestra un mensaje de error.
@@ -327,8 +383,8 @@ Esta funcionalidad permite a cualquier usuario buscar y mostrar todos los proyec
 
 **Ruta:**  'project/search'
 
-**Acceso:** 
-- Público
+**Restricción de Acceso:** 
+- Público: No posee.
   
 **Descripción:**
 Esta funcionalidad permite a los usuarios buscar y mostrar proyectos en la plataforma en función de diferentes criterios, como título y autor. Los resultados pueden ser ordenados en forma ascendente o descendente, y se puede limitar la cantidad de proyectos buscados.
@@ -363,8 +419,8 @@ Esta funcionalidad permite a los usuarios buscar y mostrar proyectos en la plata
 
 **Ruta:**  'project/view/all'
 
-**Acceso:** 
-- Público
+**Restricción de Acceso:** 
+- Público: No posee.
 
 **Descripción:**
 Esta funcionalidad permite a cualquier usuario acceder y ver todos los proyectos disponibles en la plataforma sin necesidad de estar logueado. Proporciona una vista general de todos los proyectos disponibles.
@@ -391,10 +447,13 @@ No posee.
 
 **Verbo:** PUT
 
-**Ruta:**  'project/edit/:idDoc/'
+**Ruta:**  'project/:id/edit/:idDoc/'
 
-**Acceso:** 
+**Restricción de Acceso:** 
 - Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
+- Dueño del Proyecto o Colaborador: El usuario antes descripto debe ser dueño del proyecto o colaborador.
+- Proyecto existente: El id del proyecto debe ser valido.
+- Documento existente: El idDoc del documento debe ser valido.
 
 **Descripción:**
 Esta funcionalidad permite a los colaboradores modificar documentos en un proyecto específico. Se verifica que el proyecto, el documento, y el usuario sean válidos antes de permitir la edición del documento.
@@ -406,8 +465,6 @@ Esta funcionalidad permite a los colaboradores modificar documentos en un proyec
   - **title:** El nuevo título del documento.
   - **content:** El nuevo contenido del documento.
   - **messagesLog:** Un registro actualizado de mensajes o notas relacionados con el documento.
-- **currentCollaborator:** Información del usuario actual para verificar su colaboración en el proyecto.
-- **currentDocument:** Información del documento actual para verificar su existencia en el proyecto.
 
 **Flujo de Trabajo:**
 1. Un colaborador que ha iniciado sesión en la plataforma desea editar un documento en un proyecto.
@@ -437,16 +494,16 @@ Esta funcionalidad permite a los colaboradores modificar documentos en un proyec
 
 **Ruta:**  'project/:id/delete/'
 
-**Acceso:** 
+**Restricción de Acceso:** 
 - Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
+- Dueño del Proyecto: El usuario antes descripto debe ser dueño del proyecto.
+- Proyecto existente: El id del proyecto debe ser valido.
 
 **Descripción:**
 Esta funcionalidad permite al dueño del proyecto eliminar un proyecto y todos sus colaboradores, siempre que el proyecto no tenga documentos vigentes. Si el proyecto tiene documentos vigentes, se muestra un mensaje de error.
 
 **Entradas:**
 - **projectId**: El ID único del proyecto que se desea eliminar.
-- **currentProject**: Información del proyecto actual para verificar su existencia.
-- **currentUser**: Información del usuario actual que debe ser el dueño del proyecto para autorizar la eliminación.
 
 **Flujo de Trabajo:**
 1. El dueño del proyecto, que ha iniciado sesión en la plataforma, desea eliminar un proyecto.
@@ -472,8 +529,12 @@ Esta funcionalidad permite al dueño del proyecto eliminar un proyecto y todos s
 
 **Ruta:**  'project/:id/delete/:idDoc'
 
-**Acceso:** 
+**Restricción de Acceso:** 
 - Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
+- Dueño del Proyecto o Colaborador: El usuario antes descripto debe ser dueño del proyecto o colaborador.
+- Proyecto existente: El id del proyecto debe ser valido.
+- Documento existente: El idDoc del documento debe ser valido.
+
 
 **Descripción:**
 Esta funcionalidad permite al dueño del proyecto eliminar un documento específico, incluyendo su historial, de un proyecto. Solo el dueño del proyecto está autorizado para realizar esta acción.
@@ -481,7 +542,6 @@ Esta funcionalidad permite al dueño del proyecto eliminar un documento específ
 **Entradas:**
 - **projectId:** El ID único del proyecto al que pertenece el documento que se desea eliminar.
 - **documentId:** El ID único del documento que se desea eliminar.
-- **currentDocument:** Información del documento actual para verificar su existencia y la autorización del usuario.
 
 **Flujo de Trabajo:**
 1. El dueño del proyecto, que ha iniciado sesión en la plataforma, desea eliminar un documento específico del proyecto.
@@ -509,15 +569,16 @@ Esta funcionalidad permite al dueño del proyecto eliminar un documento específ
 
 **Ruta:**  'project/:id/delete/documents'
 
-**Acceso:** 
+**Restricción de Acceso:** 
 - Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
+- Dueño del Proyecto: El usuario antes descripto debe ser dueño del proyecto.
+- Proyecto existente: El id del proyecto debe ser valido.
 
 **Descripción:**
 Esta funcionalidad permite al dueño del proyecto eliminar todos los documentos, incluyendo su historial, de un proyecto específico. Solo el dueño del proyecto está autorizado para realizar esta acción.
 
 **Entradas:**
 - **projectId:** El ID único del proyecto al que se desea eliminar todos los documentos.
-- **currentProject:** Información del proyecto actual para verificar su existencia y la autorización del usuario.
 
 **Flujo de Trabajo:**
 1. El dueño del proyecto, que ha iniciado sesión en la plataforma, desea eliminar todos los documentos de un proyecto.
@@ -542,17 +603,17 @@ Esta funcionalidad permite al dueño del proyecto eliminar todos los documentos,
 
 **Ruta:**  'project/:id/delete/collaborator'
 
-**Acceso:** 
+**Restricción de Acceso:** 
 - Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
+- Dueño del Proyecto: El usuario antes descripto debe ser dueño del proyecto.
+- Proyecto existente: El id del proyecto debe ser valido.
 
 **Descripción:**
 Esta funcionalidad permite al dueño del proyecto eliminar un colaborador específico del proyecto. Se verifica que el proyecto exista, que el email proporcionado sea correcto y que el usuario actual esté autorizado para realizar esta acción (solo el dueño del proyecto).
 
 **Entradas:**
 - **projectId:** El ID único del proyecto al que se desea eliminar un colaborador.
-- **currentProject:** Información del proyecto actual para verificar su existencia.
 - **emailUserDto:** Objeto que contiene el email del colaborador que se desea eliminar.
-- **currentUser:** Información del usuario actual que debe ser el dueño del proyecto para autorizar la eliminación del colaborador.
 
 **Flujo de Trabajo:**
 1. El dueño del proyecto, que ha iniciado sesión en la plataforma, desea eliminar un colaborador del proyecto.
@@ -574,7 +635,3 @@ Esta funcionalidad permite al dueño del proyecto eliminar un colaborador espec�
 
 **Escenarios Adicionales:**
 - Los colaboradores eliminados del proyecto pierden el acceso a los documentos y a las funciones relacionadas con el proyecto.
-
-
-  
-
