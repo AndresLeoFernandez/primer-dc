@@ -53,8 +53,8 @@ export class UserController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)  
   @Delete('delete')
-  @ApiOperation({summary: 'Delete current User', description:' la descripcion',})
-  @ApiOkResponse({  status: 201, description: 'The record has been successfully deleted.'})  
+  @ApiOperation({summary: 'Delete current User', description:'',})
+  @ApiOkResponse({  status: 201, description: 'The record has been successfully deleted for the App.'})  
   @ApiResponse({  status: 404,description: 'The entered ID does not exist.'})  
   async remove(@CurrentUser() currentUser:User) {
     return await this.userService.deleteUser(currentUser);

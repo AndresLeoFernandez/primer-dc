@@ -20,7 +20,17 @@ export class ProjectOwnerGuard implements CanActivate {
     constructor( 
         @InjectRepository(Project) private readonly projectRepository: Repository<Project>,)
     {}    
-    
+    /**
+    *  Autoriza acceso a procesar el endpoint 
+    *  Si el param id se corresponde con un project valido en la tabla de proyectos
+    * y el currentuser userId es el author del proyecto.
+    * @param {ExecutionContext} context
+    * @returns {Promise<boolean>}
+    * True si se verifica que existe
+    * Exception caso contrario
+    * Obs: 
+    *   1 - Genera key owner en la request 
+    */
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();        
         const currentUser= request.user;
@@ -33,8 +43,6 @@ export class ProjectOwnerGuard implements CanActivate {
            throw new UnauthorizedException('Current user not owner.');
         }
         request['owner'] = project.getAuthor();
-        /*console.log(`Este es CURRENT PROYECT`);
-        console.log(request['currentproject']);*/
         return true;
     }
 }
