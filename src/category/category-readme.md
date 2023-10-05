@@ -35,7 +35,7 @@
 </table>
 </br></br>
 
-## Métodos Publicos de Entidad
+## Métodos Públicos de Entidad
 
 <table border="1" width=100%>
 <thead><tr><th>Función</th><th>Descripción</th></tr></thead>
@@ -48,25 +48,24 @@
 </br>
 </br>
 
-## Endpoints
+## Endpoints del módulo category
 
-**RUTA GENERAL:** category
+**Ruta general:** category
 
 **Aclaración:** 
 1. Los datos de salida se muestran en formato raw.
 2. Para mayor detalle se puede ver información de los endpoints mediante la implementación generada mediante swagger accediendo en la dirección url ruta_del_proyecto/docs.
 
 ### Crear una Nueva Categoría 
-**verbo:** POST
+
+**Verbo:** POST
 
 **Ruta:** category/add
 
-**Acceso** 
-
+**Restricción de Acceso:** 
 - Usuario autenticado: Un usuario que ha iniciado sesión en la aplicación.
   
-**Descripción:**
-  
+**Descripción:**  
 Esta funcionalidad permite a los usuarios crear una nueva categoría para organizar y clasificar proyectos en la plataforma. Al crear una categoría, los usuarios pueden asignar proyectos a esa categoría, facilitando la búsqueda y navegación para otros usuarios.
 
 **Entradas:**
@@ -85,7 +84,7 @@ Esta funcionalidad permite a los usuarios crear una nueva categoría para organi
 **Salidas:**
 - Confirmación de que la categoría se ha creado con éxito.
 - Mensaje de error si la categoría ya existe o si hay un problema en el proceso de creación.
-- 
+  
 **Escenarios Adicionales:**
 - Si un usuario no autenticado intenta crear una categoría, la plataforma debe redirigirlo a la página de inicio de sesión o solicitarle que inicie sesión antes de continuar.
 - Se debe implementar una validación para garantizar que el nombre de la categoría sea único y cumpla con los requisitos de formato.
@@ -94,33 +93,28 @@ Esta funcionalidad permitirá a los usuarios organizar de manera efectiva los pr
 
 ### Mostrar Todas las Categorías
 
-**verbo:** GET
+**Verbo:** GET
 
 **Ruta:** category/view/all
 
-**Acceso** 
-
-- Publico
+**Restricción de Acceso:** 
+- No posee.
   
 **Descripción:**
-
 Esta funcionalidad permite a los usuarios ver una lista completa de todas las categorías disponibles en la plataforma en formato raw. Proporciona una visión general de las categorías existentes, lo que facilita la búsqueda y la navegación de proyectos para los usuarios.
 
 **Entradas:**
 - No posee.
   
 **Flujo de Trabajo:**
-
 1.  Un usuario, autenticado o no, accede a la página o la sección que muestra todas las categorías.
 2. La plataforma recopila la lista de todas las categorías disponibles en la base de datos.
 3. La lista de categorías se presenta en la interfaz de usuario de manera organizada, posiblemente en una lista o una tabla.
    
 **Salidas:**
-
 - Una lista completa de todas las categorías disponibles en la plataforma.
 
-**Escenarios Adicionales:**
-  
+**Escenarios Adicionales:**  
 - Los usuarios pueden realizar búsquedas específicas dentro de la lista de categorías si se implementa una barra de búsqueda.
 - Cada categoría en la lista puede estar vinculada a una página que muestra los proyectos relacionados con esa categoría.
 - Los usuarios pueden examinar la lista de categorías y hacer clic en una categoría específica para ver proyectos relacionados si así lo desean.
@@ -129,24 +123,20 @@ La funcionalidad "findAll" es esencial para proporcionar a los usuarios una visi
 
 ### Mostrar Categoría por ID 
 
-**verbo:** GET
+**Verbo:** GET
 
 **Ruta:** category/:id/view
 
-**Acceso** 
-
-- Publico
+**Restricción de Acceso:** 
+- No posee.
 
 **Descripción:**
-
 Esta funcionalidad permite a los usuarios buscar y ver una categoría específica en la plataforma utilizando su ID numérico único. No es necesario estar autenticado para utilizar esta función. Si no se encuentra la categoría con el ID proporcionado, se muestra un mensaje de error informando que la categoría no se ha encontrado.
 
 **Entradas:**
-
 - **ID de la Categoría(Id):** El ID numérico único de la categoría que el usuario desea buscar y ver.
 
 **Flujo de Trabajo:**
-
 1. Un usuario, autenticado o no, visita un formulario de búsqueda en la plataforma.
 2. El usuario ingresa el ID numérico único de la categoría que desea buscar en el campo de búsqueda.
 3. El usuario envía la solicitud de búsqueda.
@@ -155,36 +145,30 @@ Esta funcionalidad permite a los usuarios buscar y ver una categoría específic
 6. Si no se encuentra ninguna coincidencia, la plataforma muestra un mensaje de error que indica que la categoría no se ha encontrado.
 
 **Salidas:**
-
 - La categoría encontrada por su ID, incluyendo sus detalles.
 - Un mensaje de "Categoría no encontrada" si no se encuentra ninguna categoría con el ID proporcionado.
 
 **Escenarios Adicionales:**
-
 - Cada categoría encontrada puede estar vinculada a una página que muestra proyectos relacionados con esa categoría si corresponde.
 Esta funcionalidad "findOne" proporciona a los usuarios la capacidad de buscar y acceder a categorías específicas en la plataforma utilizando su ID único.
 
 
 ### Mostrar una Categoría por Nombre
 
-**verbo:** GET
+**Verbo:** GET
 
 **Ruta:** category/:name
 
-**Acceso** 
-
-- Publico
+**Restricción de Acceso:** 
+- No posee.
 
 **Descripción:**
-
 Esta funcionalidad permite a los usuarios, incluso aquellos que no están autenticados, buscar y ver una categoría específica en la plataforma utilizando su nombre. Si no se encuentra la categoría con el nombre proporcionado, se muestra un mensaje de error informando que la categoría no se ha encontrado.
 
 **Entradas:**
-
 - **Nombre de la Categoría(name):** El nombre de la categoría que el usuario desea buscar.
 
 **Flujo de Trabajo:**
-
 1. Un usuario, autenticado o no, visita un formulario de búsqueda en la plataforma.
 2. El usuario ingresa el nombre de la categoría que desea buscar en el campo de búsqueda.
 3. El usuario envía la solicitud de búsqueda.
@@ -193,12 +177,10 @@ Esta funcionalidad permite a los usuarios, incluso aquellos que no están autent
 6. Si no se encuentra ninguna coincidencia, se muestra un mensaje indicando que no se encontró la categoría con el nombre proporcionado.
 
 **Salidas:**
-
 - La categoría encontrada por nombre, incluyendo sus detalles.
 - Un mensaje de "Categoría no encontada" si no se encuentra ninguna categoría con el nombre proporcionado.
 
 **Escenarios Adicionales:**
-
 - Se pueden implementar opciones de búsqueda avanzada, como búsqueda por palabras clave o filtros adicionales para refinar los resultados.
 - Se pueden implementar opciones avanzadas de búsqueda, como la coincidencia parcial del nombre de la categoría.
 - Cada categoría encontrada puede estar vinculada a una página que muestra proyectos relacionados con esa categoría.
