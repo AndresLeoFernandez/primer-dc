@@ -26,6 +26,7 @@ export class AuthController {
   async signIn(@Body() loginDto: LoginDto) {
     const data = await this.authService.login(loginDto);    
     return {
+      status: 201,
       message: 'Login exitoso',
       data,
     };
