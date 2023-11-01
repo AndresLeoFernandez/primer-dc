@@ -8,16 +8,16 @@ import { hash } from "bcryptjs";
 @Entity('Users')
 export class User {  
 
-    @ApiProperty({  type: () => Number, example: 4, readOnly: true, description: 'Autoincremental integer value.'})
+    @ApiProperty({ type: () => Number, example: 4, readOnly: true, description: 'Autoincremental integer value.'})
     @PrimaryGeneratedColumn({name:'user_id'})
     private userId: number;
 
-    @ApiPropertyOptional({ type: () => String, required: false, example:'Gisela', description: 'First name.' })
-    @Column({ name: 'first_name', type: 'varchar', length: 50, default: '', nullable: true })
+    @ApiProperty({ type: () => String, required: true, example:'Gisela', description: 'First name.' })
+    @Column({ name: 'first_name', type: 'varchar', length: 50, default: '', nullable: false })
     private firstName?: string; 
 
-    @ApiPropertyOptional({ type: () => String, required: false, example:'Fernandez', description: 'Last name.'})
-    @Column({ name: 'last_name', type: 'varchar', length: 50, default: '', nullable: true })
+    @ApiProperty({ type: () => String, required: true, example:'Fernandez', description: 'Last name.'})
+    @Column({ name: 'last_name', type: 'varchar', length: 50, default: '', nullable:false })
     private lastName?: string;
 
     @ApiProperty({ type: () => String, required: true, example: 'acount@enterprise.com', description: 'Personal Email unique in the sistem.' })

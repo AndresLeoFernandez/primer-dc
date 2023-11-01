@@ -20,7 +20,7 @@ export class CreateUserDto {
   @MinLength(5, { message: 'Password should contain more than 5 letters.' })
   readonly password: string;
 
-  @ApiPropertyOptional({ required: false, example: 'Nombre',})
+  @ApiProperty({type: () => String, required: true, example: 'Nombre',})
   @IsString()
   @NotContains(" ", { message: "No spaces allowed in firstname."})
   @IsOptional()
@@ -29,7 +29,7 @@ export class CreateUserDto {
   @Matches(/^(?!\s*$).+/, { message: 'Name can not be empty or have whitespace.' })
   readonly firstName?: string;
   
-  @ApiPropertyOptional({ type: () => String, required: false, example: 'Apellido',})
+  @ApiProperty({ type: () => String, required: true, example: 'Apellido',})
   @IsString()
   @NotContains(" ", { message: "No spaces allowed in lastname."})
   @IsOptional()

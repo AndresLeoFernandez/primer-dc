@@ -5,7 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class UserDto {
 
-  @ApiProperty({ required: false, example: 'Nombre',})
+  @ApiProperty({type: () => String, required: true, example: 'Nombre',})
   @IsAlpha()
   @IsOptional()
   @IsNotEmpty()
@@ -13,7 +13,7 @@ export class UserDto {
   @Matches(/^(?!\s*$).+/, { message: 'Name can not be empty or whitespace' })
   firstName?: string;
   
-  @ApiProperty({ required: false, example: 'Apellido',})
+  @ApiProperty({type: () => String, required: true, example: 'Apellido',})
   @IsAlpha()
   @IsOptional()
   @IsNotEmpty()
@@ -21,7 +21,7 @@ export class UserDto {
   @Matches(/^(?!\s*$).+/, { message: 'Name can not be empty or whitespace' })
   lastName?: string;
 
-  @ApiProperty({ required: true, example: 'Manue23',})
+  @ApiProperty({type: () => String, required: true, example: 'Manue23',})
   @IsString()
   @IsOptional()
   @IsNotEmpty()
@@ -31,7 +31,7 @@ export class UserDto {
   username?: string;
 
   
-  @ApiProperty({ required: true, example: 'account@demo.com',})
+  @ApiProperty({type: () => String, required: true, example: 'account@demo.com',})
   @IsEmail()
   @Transform(({ value }) => lowercaseString(value?.trim()))
   @IsNotEmpty()

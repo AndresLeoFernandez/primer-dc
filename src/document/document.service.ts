@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
-import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, FindOptions, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Document } from './entities/document.entity';
 import { History } from 'src/history/entities/history.entity';
@@ -60,7 +60,32 @@ export class DocumentService {
     const lastVersionSaved = await this.historyRepository.save(lastVersion);
     document.setAddVisit();
     void await this.documentRepository.save(document);
-    return lastVersionSaved;
+    /* agregar visits al proyecto  */
+    return {
+      "document": document,
+     "lastVersion":lastVersionSaved,
+    }
+  }
+
+  async getHistoryDocument(documentId:number,historyId:number):Promise<History|null> {
+    const criteriaDocument : FindOneOptions = { where:{ documentId: documentId}};
+    const document = await this.documentRepository.findOne(criteriaDocument);
+    if (!document)
+    throw new NotFoundException('Document does not exist.');
+    console.log('22222222222222222222222222222222');
+    console.log(document);
+    console.log('22222222222222222222222222222222');
+    const criteriaHistory: FindOneOptions = {relations:['document'], where:{ historyId: historyId}};
+    const history = await this.historyRepository.findOne(criteriaHistory);
+    if (!history)
+    throw new NotFoundException('History does not exist.');
+    console.log('22222222222222222222222222222222');
+    console.log(history);
+    console.log('22222222222222222222222222222222');
+    if (history.document.getDocumentId()!==documentId)
+    throw new NotFoundException('Error data');
+    return history
+      
   }
 
   async getHistoriesDocument(document:Document):Promise<History[]> {
@@ -78,10 +103,16 @@ export class DocumentService {
     }
     return count
   }
-  async mostViewed():Promise<Document[]>{
+  /*async mostViewed():Promise<Document[]>{
     let criteria : FindManyOptions = { order: { visits:'DESC',},}
     const documents = await this.documentRepository.find(criteria); 
     return  documents;
+  }*/
+  /*New*/
+  async mostViewed():Promise<Document[]>{
+    let criteria : FindManyOptions = {relations:['project','author'], order: { visits:'DESC',},}
+    const documents = await this.documentRepository.find(criteria); 
+    return  documents;    
   }
 
   async mostRecent():Promise<Document[]>{

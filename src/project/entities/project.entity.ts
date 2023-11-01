@@ -12,9 +12,13 @@ export class Project {
     @PrimaryGeneratedColumn({ name: 'project_id' })
     private projectId: number;
 
-    @ApiProperty({  type: () => String, required: true,  example:'El libro de Gisela', description:'Title of Project.'  })
+    @ApiProperty({ type: () => String, required: true,  example:'El libro de Gisela', description:'Title of Project.'  })
     @Column({ name:'title', type: 'varchar', length: 255, default: '', nullable: false })
     private title: string;
+
+    @ApiProperty({  type: () => String, required: true, example:'Breve descripcion de lo que se desarrollara en el proyecto', description:'Project description.' })
+    @Column({ name:'description', type: 'varchar', length: 255, default: '', nullable: false })
+    private description: string;
 
     @ApiProperty({  type: () => Date, example:'25-08-2023', description:'Date of registration in the system.' })
     @CreateDateColumn({ name:'creation_date', type: 'timestamp'})
@@ -48,6 +52,9 @@ export class Project {
     public getTitle():string {
         return this.title
     }
+    public getDescription():string {
+        return this.description
+    }
     public getCreationDate(): any {
         this.creationDate
     }
@@ -61,10 +68,13 @@ export class Project {
     public setTitle(newTitle: string): void {
         this.title = newTitle
     }
-      
+    public setDescription(newDescription: string): void {
+        this.description = newDescription
+    } 
 
-    constructor( title:string, author: User, category: Category,collaborators?: Collaborator[], documents?:Document[]){
+    constructor( title:string, description:string, author: User, category: Category,collaborators?: Collaborator[], documents?:Document[]){
         this.title = title;
+        this.description = description;
         this.author = author;
         this.category = category;
         this.collaborators =  collaborators;

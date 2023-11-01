@@ -111,13 +111,21 @@ export class ProjectController {
   {
     return await this.documentService.getDocumentsByProjectId(project.getProjectId())
   }
-  
-  @Get('/:id/view')
+  /*@Get('/:id/view')*/
+  @Get('/:id')
   @ApiOperation({summary: 'Get raw project by id', description:'',})
   @ApiOkResponse({  status: 200, description: 'The found record', type: Project })
   @ApiResponse({  status: 403, description: 'Forbidden.'})  
   async getOne(@Param('id',ParseIntPipe) id: number):Promise<Project> {
     const data = this.projectService.getOne(id);
+    return data
+  }
+  @Get('/:id/view/complete')
+  @ApiOperation({summary: 'Get raw project by id', description:'',})
+  @ApiOkResponse({  status: 200, description: 'The found record', type: Project })
+  @ApiResponse({  status: 403, description: 'Forbidden.'})  
+  async getOneComplete(@Param('id',ParseIntPipe) id: number):Promise<any> {
+    const data = this.projectService.getOneComplete(id);
     return data
   }
 
@@ -173,7 +181,6 @@ export class ProjectController {
   {
     return this.projectService.searchProjects(query);
   }
-
 
   @Get('view/all')
   @ApiOperation({summary: 'Get all raw projects in the App', description:'',})
@@ -270,9 +277,5 @@ export class ProjectController {
     )
     {
       return await this.projectService.deleteCollaborator(currentUser,emailUserDto.email,currentProject);
-    }
-
-  
+    }  
 }
-
-

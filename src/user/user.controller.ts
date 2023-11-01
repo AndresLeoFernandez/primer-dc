@@ -11,9 +11,11 @@ import { CurrentUser } from 'src/decorators/currentUser.decorator';
 export class UserController {
   constructor(private readonly userService: UserService) 
   {}
-
+  /*Hago visibles a publico general*/
+  /*
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
+  */
   @Get('view/all')
   @ApiOperation({summary: 'Obtain all Users raw', description:'',})
   @ApiOkResponse({ status: 200, description: 'Give all the Users.'}) 
@@ -22,8 +24,11 @@ export class UserController {
     return this.userService.getUsers();
   }
 
+  /*Hago visibles a publico general*/
+  /*
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
+  */
   @Get('/:id/view')
   @ApiOperation({summary: 'Obtain User by id', description:' la descripcion',})
   @ApiParam({ name: 'id', description: 'User id' })

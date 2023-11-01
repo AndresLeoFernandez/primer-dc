@@ -4,6 +4,7 @@ import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiParam, ApiResponse, ApiT
 import { DocumentService } from './document.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Document } from './entities/document.entity';
+import { History } from 'src/history/entities/history.entity';
 import { DocumentExistGuard } from 'src/guards/documentExist.guard';
 import { CurrentDocument } from 'src/decorators/currentDocument.decorator';
 
@@ -52,7 +53,23 @@ export class DocumentController {
   ): Promise<number> {
     return await this.documentService.getVisitsDocument(document);
   }
-  
+  /*new*/
+  /*como no requiere autorizacion 
+  * debo enviar id del document y checkear la existecia dentro del servicio*/
+  @Get(':idDoc/history/:idHis')
+  @ApiOperation({summary: 'Get total visits of the document idDoc', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide number of visits to the document.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  @ApiParam({ name: 'idDoc', description: 'Gets the document id',})
+  async getHistoryDocument(
+    @Param('idDoc') idDoc: number,
+    @Param('idHis') idHis: number,
+    /*@CurrentDocument() document: Document*/
+  ): Promise<History|null> {
+    return await this.documentService.getHistoryDocument(idDoc,idHis);
+  }
+
+
   @Get('most-viewed')
   @ApiOperation({summary: 'Lists all documents sorted by number of visits.From most viewed to least seen', description:'',})
   @ApiOkResponse({ status: 200, description: 'List documents sorted by number of visits.'}) 

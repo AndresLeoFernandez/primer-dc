@@ -13,6 +13,12 @@ export class CreateProjectDto {
     @Transform(({ value }) => lowercaseString(value))
     title: string;
 
+    @ApiProperty({ type: () => String, required: true, example:'El proyecto se trara de...', description:'Description of Project.'})
+    @IsString()
+    @IsNotEmpty()
+    @Transform(({ value }) => lowercaseString(value))
+    description: string;
+
     @ApiProperty({ type: () => String, required: true, example:'programing', description:'Category of the project.'})
     @IsString()
     @IsNotEmpty()
