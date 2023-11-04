@@ -13,14 +13,19 @@ import { AuthGuard } from 'src/guards/auth.guard';
 export class CollaboratorController {
   constructor(private readonly collaboratorService: CollaboratorService)
   {}
-    
-  @UseGuards(AuthGuard)
+   /*Hago visibles a publico general*/
+   /*
+   @UseGuards(AuthGuard)
+   */  
   @Get('view/all')
   @ApiOperation({ summary: 'Get all raw collaborators', description:' Otorga listado en crudo de todos los colaboradores existentes en la aplicación.',})
   async findAll(): Promise<Collaborator[]> {
     return this.collaboratorService.findAll();
   }
-  @UseGuards(AuthGuard)
+   /*Hago visibles a publico general*/
+   /*
+   @UseGuards(AuthGuard)
+   */
   @Get(':id/view')
   @ApiOperation({summary: 'Get collaborator by id', description:' la descripcion',})
   @ApiParam({ name: 'id', description: 'collaboratorId' })
