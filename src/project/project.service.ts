@@ -62,15 +62,13 @@ export class ProjectService {
   /* Dado el proyecto devuelve los colaboradores */
   async getCollaboratorsByProjectId(project:Project){
     const criteriaCollaborator : FindManyOptions = { 
-      /*select: { 
-        user: {
-          title:true,
-        },
-      },*/
       relations: ['user','project'], 
+      select:{
+        project:{
+          projectId:true,
+      }}, 
       where: { 
-        /*user: { email:email,},*/
-        project: { projectId:project.getProjectId(),}, role:RolesCollaborators.COLLABORATOR },};        
+      project: { projectId:project.getProjectId(),}, role:RolesCollaborators.COLLABORATOR },};        
     return  this.collaboratorRepository.find(criteriaCollaborator);
   }
 
@@ -110,8 +108,8 @@ export class ProjectService {
 /* Devuelve los proyectos donde el usuario es Dueño*/
   async getProjectsOwner(currentUser:User):Promise<any> {
     const criteriaOwner : FindManyOptions = {/*relations:['author'],*/ where:{author:{userId:currentUser.getUserId(),}}};
-    const allProyects = await this.projectRepository.find(criteriaOwner);
-    return allProyects;
+    const allProjects = await this.projectRepository.find(criteriaOwner);
+    return allProjects;
   }
   /* Devuelve los proyectos donde el usuario es Collaborator*/
   async getProjectsCollaborator(currentUser:User):Promise<any>{
@@ -156,20 +154,20 @@ export class ProjectService {
 
   async getOne(id: number, userEntity?: User): Promise<Project | null> {
     const criteria: FindOneOptions = {relations: ['author','category'], where: { projectId: id } }
-    let proyect = await this.projectRepository.findOne(criteria);
-    if (!proyect)
+    let project = await this.projectRepository.findOne(criteria);
+    if (!project)
       throw new NotFoundException('Proyect does not exist.');
-    return proyect;
+    return project;
   }
   async getOneComplete(id: number,): Promise<any | null> {
-    const criteria: FindOneOptions = { relations:['author','category',], where: { projectId: id } }
-    let proyect = await this.projectRepository.findOne(criteria);
-    if (!proyect)
-      throw new NotFoundException('Proyect does not exist.');
+    const criteria: FindOneOptions = {select:{author:{email:true,username:true,userId:true},category:{name:true,categoryId:true}}, relations:['author','category',], where: { projectId: id } }
+    let project = await this.projectRepository.findOne(criteria);
+    if (!project)
+      throw new NotFoundException('Project does not exist.');
     
-    const collaborators = await this.getCollaboratorsByProjectId(proyect);
-    const documents = await this.documentService.getDocumentsByProjectId(id);
-    const completo = {proyect, collaborators,documents  }
+    const collaborators = await this.getCollaboratorsByProjectId(project);
+    const documents = await this.documentService.getListDocumentsByProjectId(id);
+    const completo = {project, collaborators,documents  }
 
     return completo;
   }

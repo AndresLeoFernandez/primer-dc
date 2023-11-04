@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, ParseIntPipe, UseGuards, Put, ParseArrayPipe, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, ParseIntPipe, UseGuards, Put, ParseArrayPipe, Query, NotFoundException } from '@nestjs/common';
 import { ApiOperation, ApiBody, ApiResponse, ApiTags, ApiBearerAuth, ApiParam, ApiOkResponse, ApiQuery } from '@nestjs/swagger';
 import { ProjectService } from './project.service';
 import { Project } from './entities/project.entity';
@@ -95,8 +95,26 @@ export class ProjectController {
   {
     return this.projectService.getCollaboratorsByProjectId(project);
   }
+
+  /*agrego este endpoint libre con menos datos*/
+  /*Endpoint publico con menos datos*/
+  @ApiOperation({summary: 'Get documents from project id', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide a list of all the document in the project id.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  @ApiParam({ name: 'id', description: 'Get the project id',})
+  @Get(':id/list-documents')
+  async getListDocumentsByProjectId(
+    @Param('id',ParseIntPipe) id: number,
+    
+  ):Promise<any[]>
+  {
+    const project = await this.getOne(id);
+    if (!project)
+    throw new NotFoundException('Project does not exist.');
+    return await this.documentService.getListDocumentsByProjectId(project.getProjectId());
+  }
   
-  
+
   @ApiBearerAuth()
   @UseGuards(AuthGuard,ProjectExistGuard,ProjectCollaboratorGuard)
   @ApiOperation({summary: 'Get documents from project id', description:'',})
@@ -120,6 +138,7 @@ export class ProjectController {
     const data = this.projectService.getOne(id);
     return data
   }
+
   @Get('/:id/view/complete')
   @ApiOperation({summary: 'Get raw project by id', description:'',})
   @ApiOkResponse({  status: 200, description: 'The found record', type: Project })
@@ -186,7 +205,7 @@ export class ProjectController {
   @ApiOperation({summary: 'Get all raw projects in the App', description:'',})
   @ApiOkResponse({ status: 200, description: 'Give all the Projects.'}) 
   @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
-  async getProyects(): Promise<Project[]> {
+  async getProjects(): Promise<Project[]> {
     return await this.projectService.getProjects();
   }
 
