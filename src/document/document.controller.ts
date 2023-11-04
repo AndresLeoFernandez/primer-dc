@@ -57,15 +57,15 @@ export class DocumentController {
   /*como no requiere autorizacion 
   * debo enviar id del document y checkear la existecia dentro del servicio*/
   @Get(':idDoc/history/:idHis')
-  @ApiOperation({summary: 'Get total visits of the document idDoc', description:'',})
-  @ApiOkResponse({ status: 200, description: 'Provide number of visits to the document.'}) 
+  @ApiOperation({summary: 'Get the history idHis of the document idDoc', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide data history to the document.'}) 
   @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
   @ApiParam({ name: 'idDoc', description: 'Gets the document id',})
+  @ApiParam({ name: 'idHis', description: 'Gets the history id',})
   async getHistoryDocument(
     @Param('idDoc') idDoc: number,
     @Param('idHis') idHis: number,
-    /*@CurrentDocument() document: Document*/
-  ): Promise<History|null> {
+    ): Promise<History|null> {
     return await this.documentService.getHistoryDocument(idDoc,idHis);
   }
 

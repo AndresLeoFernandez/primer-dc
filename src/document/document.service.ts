@@ -66,22 +66,16 @@ export class DocumentService {
      "lastVersion":lastVersionSaved,
     }
   }
-
+/* pruebo de agregar el author*/
   async getHistoryDocument(documentId:number,historyId:number):Promise<History|null> {
-    const criteriaDocument : FindOneOptions = { where:{ documentId: documentId}};
+    const criteriaDocument : FindOneOptions = {where:{ documentId: documentId}};
     const document = await this.documentRepository.findOne(criteriaDocument);
     if (!document)
     throw new NotFoundException('Document does not exist.');
-    console.log('22222222222222222222222222222222');
-    console.log(document);
-    console.log('22222222222222222222222222222222');
-    const criteriaHistory: FindOneOptions = {relations:['document'], where:{ historyId: historyId}};
+    const criteriaHistory: FindOneOptions = {relations:['document','author'], where:{ historyId: historyId}};
     const history = await this.historyRepository.findOne(criteriaHistory);
     if (!history)
     throw new NotFoundException('History does not exist.');
-    console.log('22222222222222222222222222222222');
-    console.log(history);
-    console.log('22222222222222222222222222222222');
     if (history.document.getDocumentId()!==documentId)
     throw new NotFoundException('Error data');
     return history
@@ -109,9 +103,11 @@ export class DocumentService {
     return  documents;
   }*/
   /*New*/
-  async mostViewed():Promise<Document[]>{
-    let criteria : FindManyOptions = {relations:['project','author'], order: { visits:'DESC',},}
-    const documents = await this.documentRepository.find(criteria); 
+  async mostViewed():Promise<any[]>{
+    /*let criteria : FindManyOptions = {relations:['project','author','author.user',''], order: { visits:'DESC',},}*/
+    //const documents = await this.documentRepository.find(criteria); 
+    
+    const documents = await this.documentRepository.query("select h.title,h.content,d.visits,d.creation_date as creationDate,p.project_id as projectId,p.title,d.type,h.documents_id as documentId, d.author_collaborator_id as authorDocument, h.author_collaborator_id as authorRevision from histories h inner join documents d on h.documents_id = d.last_history_id inner join projects p on p.project_id = d.projects_id order by d.visits desc");
     return  documents;    
   }
 
@@ -131,6 +127,16 @@ export class DocumentService {
       throw new NotFoundException('Document does not exists');
     return document;
   }
+  /*
+  * Dado un id de proyecto lo verifico y devuelvo array listado de documents acotado que posee
+  */
+  async getListDocumentsByProjectId(idproject:number):Promise<any[]| null> {
+    /*const criteria : FindManyOptions = {relations:['project'], where: { project:{ projectId: idproject },} }
+    return this.documentRepository.find(criteria);     */
+    return this.documentRepository.query(`select h.title,d.creation_date as creationDateDocument,h.creation_date as creationDateHistory,h.history_id as historyId,h.documents_id as documentId,d.author_collaborator_id as authorDocument, h.author_collaborator_id as authorRevision from histories h inner join documents d on h.documents_id = d.last_history_id inner join projects p on d.projects_id = p.project_id where p.project_id = ${idproject}`);
+  }
+
+
   /*
   * Dado un id de proyecto retorna los documentos que posee
   */  
