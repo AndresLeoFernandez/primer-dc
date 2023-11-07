@@ -107,7 +107,7 @@ export class DocumentService {
     /*let criteria : FindManyOptions = {relations:['project','author','author.user',''], order: { visits:'DESC',},}*/
     //const documents = await this.documentRepository.find(criteria); 
     
-    const documents = await this.documentRepository.query("select h.title,h.content,d.visits,d.creation_date as creationDate,p.project_id as projectId,p.title,d.type,h.documents_id as documentId, d.author_collaborator_id as authorDocument, h.author_collaborator_id as authorRevision from histories h inner join documents d on h.documents_id = d.last_history_id inner join projects p on p.project_id = d.projects_id order by d.visits desc");
+    const documents = await this.documentRepository.query("select h.title,p.title as projectTitle,h.content,d.visits,d.creation_date as creationDate,p.project_id as projectId,d.type,h.documents_id as documentId, d.author_collaborator_id as authorDocument, h.author_collaborator_id as authorRevision from histories h inner join documents d on h.documents_id = d.last_history_id inner join projects p on p.project_id = d.projects_id order by d.visits desc");
     return  documents;    
   }
 
