@@ -156,8 +156,19 @@ export class ProjectController {
   @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
   async getProjectsOwner(
     @CurrentUser() currentUser:User
-  ): Promise<Project[]> {
+  ): Promise<any> {
     return await this.projectService.getProjectsOwner(currentUser);
+  }
+
+    
+  @Get('user/:idUser/owner-projects')
+  @ApiOperation({summary: 'Get all projects where the id user is the owner', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide a list of all your projects.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  async getProjectsOwnerId(
+    @Param('idUser',ParseIntPipe) userId: number,
+  ): Promise<any> {
+    return await this.projectService.getProjectsOwnerId(userId);
   }
 
   @ApiBearerAuth()
@@ -168,8 +179,18 @@ export class ProjectController {
   @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
   async getProjectsCollaborators(
     @CurrentUser() currentUser:User
-  ): Promise<Project[]> {
+  ): Promise<any> {
     return await this.projectService.getProjectsCollaborator(currentUser);
+  }
+/* Agrego servicio publico*/
+@Get('user/:idUser/collaborators-projects')
+  @ApiOperation({summary: 'Get all projects where id user is collaborator', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide a list of all projects where id user is collaborator.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  async getProjectsCollaboratorsId(
+    @Param('idUser',ParseIntPipe) userId: number,
+  ): Promise<any> {
+    return this.projectService.getProjectsCollaboratorsId(userId);
   }
   
   @Get('/by-category/:name')
