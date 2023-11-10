@@ -29,7 +29,7 @@ export class DocumentExistGuard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();        
         const documentId = request.params.idDoc;
-        const criteriaDocument : FindOneOptions = { where:{ documentId: documentId}};
+        const criteriaDocument : FindOneOptions = {relations:['project','author'],select:{ project:{ title:true,projectId:true},author:{collaboratorId:true,}}, where:{ documentId: documentId}};
         const document = await this.documentRepository.findOne(criteriaDocument);
         if (!document)
         throw new NotFoundException('Document does not exist.');
