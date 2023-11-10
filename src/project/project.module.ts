@@ -18,7 +18,7 @@ import { UserModule } from 'src/user/user.module';
     UserModule,
     DocumentModule,
     TypeOrmModule.forFeature([Project,Document,Collaborator,User,Category]),],
-  providers: [ProjectService,/*IsEmailUserAlreadyExistConstraint*/],
+  providers: [ProjectService,],
   controllers: [ProjectController],  
 })
 export class ProjectModule {}
