@@ -54,16 +54,27 @@ export class DocumentService {
   }
 
   async getLastDocumentVersion(document:Document):Promise<any> {
-    const criteria : FindOneOptions = { where: { historyId : document.getLastHistoryId()} }
+    const criteria : FindOneOptions = {relations:['author'], where: { historyId : document.getLastHistoryId()} }
     const lastVersion = await this.historyRepository.findOneOrFail(criteria);
     lastVersion.setAddVisit();
     const lastVersionSaved = await this.historyRepository.save(lastVersion);
-    document.setAddVisit();
+    document.setAddTotalVisits();
     void await this.documentRepository.save(document);
-    /* agregar visits al proyecto  */
+    
     return {
-      "document": document,
-     "lastVersion":lastVersionSaved,
+      "title":lastVersionSaved.getTitle(),
+      "projectTitle":document.project.getTitle(),
+      "creationDate":document.getCreationDate(),
+      "historyId": document.getLastHistoryId(),
+      "documentId": document.getDocumentId(),
+      "authorColDocument": document.getAuthor().getCollaboratorId(),
+      "authorColRevision": lastVersionSaved.getAuthor().getCollaboratorId(),
+      "content":lastVersionSaved.getContent(),
+      "totalVisits": document.getTotalVisits(),  
+      "historyVisits":lastVersionSaved.getVisits(),
+      "projectId": document.project.getProjectId(),
+      "type":document.getType(),  
+      "creationDateRevision":lastVersionSaved.getCreationDate(),      
     }
   }
 /* pruebo de agregar el author*/
@@ -89,7 +100,7 @@ export class DocumentService {
     return currentHistories;
   }
 
-  async getVisitsDocument(document:Document):Promise<number> {
+  async getTotalVisitsDocument(document:Document):Promise<number> {
     const totalHistories = await this.getHistoriesDocument(document);
     let count: number = 0;
     for (const history of totalHistories) {
@@ -97,17 +108,10 @@ export class DocumentService {
     }
     return count
   }
-  /*async mostViewed():Promise<Document[]>{
-    let criteria : FindManyOptions = { order: { visits:'DESC',},}
-    const documents = await this.documentRepository.find(criteria); 
-    return  documents;
-  }*/
+  
   /*New*/
   async mostViewed():Promise<any[]>{
-    /*let criteria : FindManyOptions = {relations:['project','author','author.user',''], order: { visits:'DESC',},}*/
-    //const documents = await this.documentRepository.find(criteria); 
-    
-    const documents = await this.documentRepository.query("select h.title,p.title as projectTitle,h.content,d.visits,d.creation_date as creationDate,p.project_id as projectId,d.type,h.documents_id as documentId, d.author_collaborator_id as authorDocument, h.author_collaborator_id as authorRevision from histories h inner join documents d on h.documents_id = d.last_history_id inner join projects p on p.project_id = d.projects_id order by d.visits desc");
+    const documents = await this.documentRepository.query("select h.title,h.visits as historyVisists,p.title as projectTitle,h.content,d.total_visits as totalVisits,d.creation_date as creationDate,p.project_id as projectId,d.type,h.documents_id as documentId, d.author_collaborator_id as authorDocument, h.author_collaborator_id as authorRevision from histories h inner join documents d on h.documents_id = d.last_history_id inner join projects p on p.project_id = d.projects_id order by d.total_visits desc");
     return  documents;    
   }
 
