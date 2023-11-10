@@ -104,44 +104,46 @@ export class ProjectService {
       throw new NotAcceptableException('Hubo un error en la actualizacion del documento.');
     }
   }
+/* Devuelve los proyectos donde el id de usuario es Owner*/
+async getProjectsOwnerId(userId:number):Promise<any> {
+  const criteriaUser: FindOneOptions = { where:{ userId:userId}};
+  const user = await this.userRepository.findOneOrFail(criteriaUser);
+  return this.getProjectsOwner(user);
+}
+  
 
 /* Devuelve los proyectos donde el usuario es Dueño*/
-  async getProjectsOwner(currentUser:User):Promise<any> {
-    const criteriaOwner : FindManyOptions = {/*relations:['author'],*/ where:{author:{userId:currentUser.getUserId(),}}};
-    const allProjects = await this.projectRepository.find(criteriaOwner);
-    return allProjects;
-  }
+async getProjectsOwner(currentUser:User):Promise<any> {
+  const criteriaOwner : FindManyOptions = {relations:['category'],where:{author:{userId:currentUser.getUserId(),}}};
+  const allProjects = await this.projectRepository.find(criteriaOwner);
+  if (!allProjects)
+  return { message:'Does not have projects as Owner.',status:'Ok',data:allProjects};
+  return { message:'Does have projects as Owner.',status:'Ok',data:allProjects};
+}
+
+/* Devuelve los proyectos donde el id de usuario es Collaborator*/
+async getProjectsCollaboratorsId(userId:number):Promise<any>{
+  const criteriaUser: FindOneOptions = { where:{ userId:userId}};
+  const user = await this.userRepository.findOneOrFail(criteriaUser);
+  return this.getProjectsCollaborator(user);
+  
+}
   /* Devuelve los proyectos donde el usuario es Collaborator*/
   async getProjectsCollaborator(currentUser:User):Promise<any>{
     const criteriaCollaborator : FindManyOptions = { 
-     select: { 
-      project: {
-        projectId:true,
-        title:true,
-      },
-    },
-    relations: ['user','project'],
-    where: { 
-      user: {
-        userId:currentUser.getUserId(),
-      },
-      role:RolesCollaborators.COLLABORATOR 
-    },
-  };        
+    select: { project: { projectId:true, title:true, },}, relations: ['user','project'],
+    where: { user: { userId:currentUser.getUserId(),}, role:RolesCollaborators.COLLABORATOR },};        
   const projectCollaborator = await this.collaboratorRepository.find(criteriaCollaborator);
-  
   if (projectCollaborator.length===0){
-    return { message:'Does not have projects as a collaborator.'}
+    return { message:'Does not have projects as a collaborator.',status:'Ok',data:[]}
   }else {
-    console.log(projectCollaborator);
     const result : Project[] = [];
     for (const pro of projectCollaborator ) {
-      const criteriaCol: FindOneOptions = { where: { projectId: pro.project.getProjectId()}};
+      const criteriaCol: FindOneOptions = { relations:['category'],where: { projectId: pro.project.getProjectId()}};
       const current = await this.projectRepository.findOne(criteriaCol);
       result.push(current);
     };
-    console.log(result);
-    return result;
+    return { message:'Have projects as a collaborator.',status:'Ok',data:result};
   }
 }
 
@@ -208,7 +210,7 @@ export class ProjectService {
     } 
   }
 
-  async searchProjects(query: { title: string, author: number, /*categoryIds: string[], */sortBy: "ASC" | "DESC", skip: number,}){
+  async searchProjects(query: { title: string,/* author: number, *//*categoryIds: string[], */sortBy: "ASC" | "DESC", skip?: number,}){
     /*console.log('qqqqqqq5qqqqqqqqqqqqq');
     console.log(typeof query.categoryIds);
     console.log('qqqqqqqqqqqqqqqqqqqq');*/
@@ -218,17 +220,17 @@ export class ProjectService {
           ...query.title && {
             title: Like(`%${query.title}%`),
           },
-          ...query.author && {
+          /*...query.author && {
               author: {
                 userId: query.author
-              },
+              },*/
           /*...query.categoryIds && {
               category: {
                 name: In (query.categoryIds)
               }
             },  */               
               
-          },
+          /*},*/
       },
       order: {
           ...query.sortBy === undefined && {
