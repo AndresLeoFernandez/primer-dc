@@ -29,9 +29,9 @@ export class Document {
     @Column({ name: 'last_history_id' })
     private lastHistoryId: number;
 
-    @ApiProperty({  type: () => Number, example:4,readOnly: true, default:0, description:'visits.' })
-    @Column({ name: 'visits' })
-    private visits: number;
+    @ApiProperty({  type: () => Number, example:4,readOnly: true, default:0, description:'total visits.' })
+    @Column({ name: 'total_visits' })
+    private totalVisits: number;
 
     /* Relations */
 
@@ -66,18 +66,21 @@ export class Document {
     public getType(): string {
         return this.type
     }
+    public getAuthor():Collaborator{
+        return this.author
+    }
     public getLastHistoryId():number {
         return this.lastHistoryId;
     }
-    public getVisits():number{
-        return this.visits;
+    public getTotalVisits():number{
+        return this.totalVisits;
     }
     public setLastHistoryId(newHistoryId:number){
         this.lastHistoryId = newHistoryId;
     }
-    public setAddVisit():number {
-        this.visits++;
-        return this.visits;
+    public setAddTotalVisits():number {
+        this.totalVisits++;
+        return this.totalVisits;
     }
             
     constructor(type: string, project: Project,author: Collaborator,comments?: Comment[],histories?: History[]){
@@ -86,7 +89,7 @@ export class Document {
         this.author = author;
         this.comments = comments;
         this.histories = histories;
-        this.visits = 0;    
+        this.totalVisits = 0;    
         this.lastHistoryId = 1;    
     }
 }
