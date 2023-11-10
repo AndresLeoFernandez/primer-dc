@@ -17,7 +17,7 @@ export class Project {
     private title: string;
 
     @ApiProperty({  type: () => String, required: true, example:'Breve descripcion de lo que se desarrollara en el proyecto', description:'Project description.' })
-    @Column({ name:'description', type: 'varchar', length: 255, default: '', nullable: false })
+    @Column({ name:'description', type: 'text', nullable: false })
     private description: string;
 
     @ApiProperty({  type: () => Date, example:'25-08-2023', description:'Date of registration in the system.' })
