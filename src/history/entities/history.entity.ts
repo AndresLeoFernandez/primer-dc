@@ -19,7 +19,7 @@ export class History {
   private title: string;
 
   @ApiPropertyOptional({  type: () => String, required: true, example:'Aqui desarrolla el cuerpo del contenido', description:'Content body.' })
-  @Column({ name:'content', type:'text',})
+  @Column({ name:'content', type:'longtext',})
   private content?: string;
 
   @ApiProperty({  type: () => Date, example:'25-08-2023', description:'Date of registration in the system.' })
