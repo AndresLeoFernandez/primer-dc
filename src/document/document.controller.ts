@@ -47,11 +47,11 @@ export class DocumentController {
   @ApiOkResponse({ status: 200, description: 'Provide number of visits to the document.'}) 
   @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
   @ApiParam({ name: 'idDoc', description: 'Gets the document id',})
-  async getVisitsDocument(
+  async getTotalVisitsDocument(
     @Param('idDoc') idDoc: number,
     @CurrentDocument() document: Document
   ): Promise<number> {
-    return await this.documentService.getVisitsDocument(document);
+    return await this.documentService.getTotalVisitsDocument(document);
   }
   /*new*/
   /*como no requiere autorizacion 
@@ -71,8 +71,8 @@ export class DocumentController {
 
 
   @Get('most-viewed')
-  @ApiOperation({summary: 'Lists all documents sorted by number of visits.From most viewed to least seen', description:'',})
-  @ApiOkResponse({ status: 200, description: 'List documents sorted by number of visits.'}) 
+  @ApiOperation({summary: 'Lists all documents sorted by number of total visits.From most viewed to least seen', description:'',})
+  @ApiOkResponse({ status: 200, description: 'List documents sorted by number of total visits.'}) 
   async mostViewed()
   {
     return this.documentService.mostViewed();
