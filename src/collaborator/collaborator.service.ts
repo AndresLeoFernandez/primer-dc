@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateCollaboratorDto } from './dto/create-collaborator.dto';
 import { Collaborator } from './entities/collaborator.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, FindOneOptions } from 'typeorm';

@@ -68,13 +68,13 @@ export class DocumentService {
       "historyId": document.getLastHistoryId(),
       "documentId": document.getDocumentId(),
       "authorColDocument": document.getAuthor().getCollaboratorId(),
-      "authorColRevision": lastVersionSaved.getAuthor().getCollaboratorId(),
+      "authorColHistory": lastVersionSaved.getAuthor().getCollaboratorId(),
       "content":lastVersionSaved.getContent(),
       "totalVisits": document.getTotalVisits(),  
       "historyVisits":lastVersionSaved.getVisits(),
       "projectId": document.project.getProjectId(),
       "type":document.getType(),  
-      "creationDateRevision":lastVersionSaved.getCreationDate(),      
+      "creationDateHistory":lastVersionSaved.getCreationDate(),      
     }
   }
 /* pruebo de agregar el author*/
@@ -110,8 +110,23 @@ export class DocumentService {
   }
   
   /*New*/
+  /*
+  h.title,
+  h.visits as historyVisists,
+  p.title as projectTitle,
+  h.content,
+  d.total_visits as totalVisits,
+  d.creation_date as creationDate,
+  p.project_id as projectId,
+  d.type,
+  h.documents_id as documentId,
+  d.author_collaborator_id as authorColDocument,
+  h.author_collaborator_id as authorRevision,
+  d.last_history_id as historyId
+  h.creation_date as creationDateHistory
+  */
   async mostViewed():Promise<any[]>{
-    const documents = await this.documentRepository.query("select h.title,h.visits as historyVisists,p.title as projectTitle,h.content,d.total_visits as totalVisits,d.creation_date as creationDate,p.project_id as projectId,d.type,h.documents_id as documentId, d.author_collaborator_id as authorDocument, h.author_collaborator_id as authorRevision from histories h inner join documents d on h.documents_id = d.last_history_id inner join projects p on p.project_id = d.projects_id order by d.total_visits desc");
+    const documents = await this.documentRepository.query("select h.title,h.visits as historyVisists,p.title as projectTitle,h.content,d.total_visits as totalVisits,d.creation_date as creationDate,p.project_id as projectId,d.type,h.documents_id as documentId, d.author_collaborator_id as authorColDocument, h.author_collaborator_id as authorColHistory,d.last_history_id as historyId,h.creation_date as creationDateHistory from histories h inner join documents d on h.documents_id = d.last_history_id inner join projects p on p.project_id = d.projects_id order by d.total_visits desc");
     return  documents;    
   }
 
@@ -133,13 +148,18 @@ export class DocumentService {
   }
   /*
   * Dado un id de proyecto lo verifico y devuelvo array listado de documents acotado que posee
+  formato es el siguiente:
+  h.title,
+  d.creation_date as creationDate,
+  h.creation_date as creationDateHistory,
+  h.history_id as historyId,
+  h.documents_id as documentId,
+  d.author_collaborator_id as authorColDocument,
+   h.author_collaborator_id as authorColHistory
   */
   async getListDocumentsByProjectId(idproject:number):Promise<any[]| null> {
-    /*const criteria : FindManyOptions = {relations:['project'], where: { project:{ projectId: idproject },} }
-    return this.documentRepository.find(criteria);     */
-    return this.documentRepository.query(`select h.title,d.creation_date as creationDateDocument,h.creation_date as creationDateHistory,h.history_id as historyId,h.documents_id as documentId,d.author_collaborator_id as authorDocument, h.author_collaborator_id as authorRevision from histories h inner join documents d on h.documents_id = d.last_history_id inner join projects p on d.projects_id = p.project_id where p.project_id = ${idproject}`);
+    return this.documentRepository.query(`select h.title,d.creation_date as creationDate,h.creation_date as creationDateHistory,h.history_id as historyId,h.documents_id as documentId,d.author_collaborator_id as authorColDocument, h.author_collaborator_id as authorColHistory from histories h inner join documents d on h.documents_id = d.last_history_id inner join projects p on d.projects_id = p.project_id where p.project_id = ${idproject}`);
   }
-
 
   /*
   * Dado un id de proyecto retorna los documentos que posee

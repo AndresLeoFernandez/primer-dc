@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { CollaboratorService } from './collaborator.service';
-import { CreateCollaboratorDto } from './dto/create-collaborator.dto';
-import { Collaborator } from './entities/collaborator.entity';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from 'src/guards/auth.guard';
 
-@ApiBearerAuth()
+import { Collaborator } from './entities/collaborator.entity';
+import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+
+
+
 @ApiTags('Collaborator')
 @Controller('collaborator')
 
@@ -13,19 +13,11 @@ import { AuthGuard } from 'src/guards/auth.guard';
 export class CollaboratorController {
   constructor(private readonly collaboratorService: CollaboratorService)
   {}
-   /*Hago visibles a publico general*/
-   /*
-   @UseGuards(AuthGuard)
-   */  
   @Get('view/all')
   @ApiOperation({ summary: 'Get all raw collaborators', description:' Otorga listado en crudo de todos los colaboradores existentes en la aplicación.',})
   async findAll(): Promise<Collaborator[]> {
     return this.collaboratorService.findAll();
   }
-   /*Hago visibles a publico general*/
-   /*
-   @UseGuards(AuthGuard)
-   */
   @Get(':id/view')
   @ApiOperation({summary: 'Get collaborator by id', description:' la descripcion',})
   @ApiParam({ name: 'id', description: 'collaboratorId' })
