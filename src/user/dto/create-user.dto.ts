@@ -23,20 +23,18 @@ export class CreateUserDto {
   @ApiProperty({type: () => String, required: true, example: 'Nombre',})
   @IsString()
   @NotContains(" ", { message: "No spaces allowed in firstname."})
-  @IsOptional()
   @IsNotEmpty()
   @Transform(({ value }) => sanitizeInput(value))
   @Matches(/^(?!\s*$).+/, { message: 'Name can not be empty or have whitespace.' })
-  readonly firstName?: string;
+  readonly firstName: string;
   
   @ApiProperty({ type: () => String, required: true, example: 'Apellido',})
   @IsString()
   @NotContains(" ", { message: "No spaces allowed in lastname."})
-  @IsOptional()
   @IsNotEmpty()
   @Transform(({ value }) => sanitizeInput(value))
   @Matches(/^(?!\s*$).+/, { message: 'LastName can not be empty or have whitespace.' })
-  readonly lastName?: string;
+  readonly lastName: string;
 
   @ApiProperty({ type: () => String, required: true, example: 'Manue23',})
   @IsString()

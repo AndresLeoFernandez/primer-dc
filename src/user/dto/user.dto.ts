@@ -7,28 +7,25 @@ export class UserDto {
 
   @ApiProperty({type: () => String, required: true, example: 'Nombre',})
   @IsAlpha()
-  @IsOptional()
   @IsNotEmpty()
   @Transform(({ value }) => sanitizeInput(value))
   @Matches(/^(?!\s*$).+/, { message: 'Name can not be empty or whitespace' })
-  firstName?: string;
+  firstName: string;
   
   @ApiProperty({type: () => String, required: true, example: 'Apellido',})
   @IsAlpha()
-  @IsOptional()
   @IsNotEmpty()
   @Transform(({ value }) => sanitizeInput(value))
   @Matches(/^(?!\s*$).+/, { message: 'Name can not be empty or whitespace' })
-  lastName?: string;
+  lastName: string;
 
   @ApiProperty({type: () => String, required: true, example: 'Manue23',})
   @IsString()
-  @IsOptional()
   @IsNotEmpty()
   @NotContains(" ", { message: "No spaces allowed"})
   @Transform(({ value }) => sanitizeInput(value))
   @MinLength(5, { message: 'Username should contain more than 5 letters' })
-  username?: string;
+  username: string;
 
   
   @ApiProperty({type: () => String, required: true, example: 'account@demo.com',})
