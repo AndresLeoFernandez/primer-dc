@@ -32,7 +32,7 @@ export class ProjectExistGuard implements CanActivate {
         const request = context.switchToHttp().getRequest();        
         const currentUser= request.user;
         const projectId = request.params.id;
-        const criteriaProject : FindOneOptions = { relations:['author',],where:{ projectId: projectId}};
+        const criteriaProject : FindOneOptions = { relations:['author','category'],where:{ projectId: projectId}};
         const project = await this.projectRepository.findOne(criteriaProject);
         if (!project)
         throw new NotFoundException('Proyect does not exist.');
