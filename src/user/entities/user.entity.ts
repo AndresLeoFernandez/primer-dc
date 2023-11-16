@@ -14,11 +14,11 @@ export class User {
 
     @ApiProperty({ type: () => String, required: true, example:'Gisela', description: 'First name.' })
     @Column({ name: 'first_name', type: 'varchar', length: 50, default: '', nullable: false })
-    private firstName?: string; 
+    private firstName: string; 
 
     @ApiProperty({ type: () => String, required: true, example:'Fernandez', description: 'Last name.'})
     @Column({ name: 'last_name', type: 'varchar', length: 50, default: '', nullable:false })
-    private lastName?: string;
+    private lastName: string;
 
     @ApiProperty({ type: () => String, required: true, example: 'acount@enterprise.com', description: 'Personal Email unique in the sistem.' })
     @Column({   name:'email', type:'varchar', length:255, default: '', unique: true, nullable: false })
