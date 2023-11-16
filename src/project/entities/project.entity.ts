@@ -71,6 +71,9 @@ export class Project {
     public setDescription(newDescription: string): void {
         this.description = newDescription
     } 
+    public setCategory(newCategory: Category): void {
+        this.category = newCategory
+    }
 
     constructor( title:string, description:string, author: User, category: Category,collaborators?: Collaborator[], documents?:Document[]){
         this.title = title;
