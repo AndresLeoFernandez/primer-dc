@@ -11,6 +11,7 @@ import { Category } from 'src/category/entities/category.entity';
 import { DocumentService } from 'src/document/document.service';
 import { CreateDocumentDto } from 'src/document/dto/create-document.dto';
 import { UpdateDocumentDto } from 'src/document/dto/update-document.dto';
+import { UpdateProjectDto } from './dto/update-project.dto';
 
 
 @Injectable()
@@ -104,6 +105,34 @@ export class ProjectService {
       throw new NotAcceptableException('Hubo un error en la actualizacion del documento.');
     }
   }
+
+  async editProject(project:Project,projectDto:UpdateProjectDto,currentUser:User):Promise<any>{
+    if (project.getAuthor().getUserId() === currentUser.getUserId()){
+      if ("title" in projectDto && project.getTitle()!== projectDto.title){  
+        const criteria: FindOneOptions = { relations: ['author', 'category'], where: { title: projectDto.title.toLowerCase(), author: currentUser.getUserId() } };
+        const projectExist = await this.projectRepository.findOne(criteria);
+        if (projectExist && projectExist.getAuthor().getUserId() === currentUser.getUserId())
+        throw new NotAcceptableException('Project already exist.');
+        project.setTitle(projectDto.title);
+      }
+      if ("description" in projectDto && project.getDescription()!==projectDto.description){
+        project.setDescription(projectDto.description)
+      }
+      if ("category" in projectDto && project.getCategory().getName()!== projectDto.category.toLowerCase()){ 
+        /*Check si existe la categoria*/
+        const criteriaCategory: FindOneOptions = { where: { name: projectDto.category.toLowerCase() } };
+        const currentCategory = await this.categoryRepository.findOne(criteriaCategory);
+        if (!currentCategory)
+        throw new NotFoundException('Category not exist.');
+        project.setCategory(currentCategory)
+      }
+      let projectChanged = await this.projectRepository.save(project);      
+      return { message: `Project updated successfull!!`,projectChanged};
+    }
+    return { message: `Project not updated - Error`};
+  }
+
+
 /* Devuelve los proyectos donde el id de usuario es Owner*/
 async getProjectsOwnerId(userId:number):Promise<any> {
   const criteriaUser: FindOneOptions = { where:{ userId:userId}};

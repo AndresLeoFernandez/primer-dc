@@ -19,6 +19,7 @@ import { ProjectExistGuard } from 'src/guards/projectExist.guard';
 import { DocumentExistGuard } from 'src/guards/documentExist.guard';
 import { CurrentDocument } from 'src/decorators/currentDocument.decorator';
 import { DocumentService } from 'src/document/document.service';
+import { UpdateProjectDto } from './dto/update-project.dto';
 
 @ApiTags('Project')
 @Controller('project')
@@ -81,129 +82,6 @@ export class ProjectController {
     return await this.projectService.addDocument(currentProject,documentDto,creator);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard,ProjectExistGuard,ProjectOwnerGuard,ProjectCollaboratorGuard)
-  @ApiOperation({summary: 'Get all raw collaborators from the project id', description:'',})
-  @ApiOkResponse({ status: 200, description: 'Provide a list of all the Collaborators in the project id.'}) 
-  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
-  @ApiParam({ name: 'id', description: 'Get the project id',})
-  @Get(':id/collaborators')
-  async getCollaboratorsByProjectId(
-    @Param('id',ParseIntPipe) id: number,
-    @CurrentProject() project: Project,
-  ):Promise<Collaborator[]>
-  {
-    return this.projectService.getCollaboratorsByProjectId(project);
-  }
-
-  /*agrego este endpoint libre con menos datos*/
-  /*Endpoint publico con menos datos*/
-  @ApiOperation({summary: 'Get documents from project id', description:'',})
-  @ApiOkResponse({ status: 200, description: 'Provide a list of all the document in the project id.'}) 
-  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
-  @ApiParam({ name: 'id', description: 'Get the project id',})
-  @Get(':id/list-documents')
-  async getListDocumentsByProjectId(
-    @Param('id',ParseIntPipe) id: number,
-    
-  ):Promise<any[]>
-  {
-    const project = await this.getOne(id);
-    if (!project)
-    throw new NotFoundException('Project does not exist.');
-    return await this.documentService.getListDocumentsByProjectId(project.getProjectId());
-  }
-  
-
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard,ProjectExistGuard,ProjectCollaboratorGuard)
-  @ApiOperation({summary: 'Get documents from project id', description:'',})
-  @ApiOkResponse({ status: 200, description: 'Provide a list of all the document in the project id.'}) 
-  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
-  @ApiParam({ name: 'id', description: 'Get the project id',})
-  @Get(':id/documents')
-  async getDocumentsByProjectId(
-    @Param('id',ParseIntPipe) id: number,
-    @CurrentProject() project: Project
-  ):Promise<Document[]>
-  {
-    return await this.documentService.getDocumentsByProjectId(project.getProjectId())
-  }
-  /*@Get('/:id/view')*/
-  @Get('/:id')
-  @ApiOperation({summary: 'Get raw project by id', description:'',})
-  @ApiOkResponse({  status: 200, description: 'The found record', type: Project })
-  @ApiResponse({  status: 403, description: 'Forbidden.'})  
-  async getOne(@Param('id',ParseIntPipe) id: number):Promise<Project> {
-    const data = this.projectService.getOne(id);
-    return data
-  }
-
-  @Get('/:id/view/complete')
-  @ApiOperation({summary: 'Get raw project by id', description:'',})
-  @ApiOkResponse({  status: 200, description: 'The found record', type: Project })
-  @ApiResponse({  status: 403, description: 'Forbidden.'})  
-  async getOneComplete(@Param('id',ParseIntPipe) id: number):Promise<any> {
-    const data = this.projectService.getOneComplete(id);
-    return data
-  }
-
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
-  @Get('/my-projects')
-  @ApiOperation({summary: 'Get all projects where the current user is the owner', description:'',})
-  @ApiOkResponse({ status: 200, description: 'Provide a list of all your projects.'}) 
-  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
-  async getProjectsOwner(
-    @CurrentUser() currentUser:User
-  ): Promise<any> {
-    return await this.projectService.getProjectsOwner(currentUser);
-  }
-
-    
-  @Get('user/:idUser/owner-projects')
-  @ApiOperation({summary: 'Get all projects where the id user is the owner', description:'',})
-  @ApiOkResponse({ status: 200, description: 'Provide a list of all your projects.'}) 
-  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
-  async getProjectsOwnerId(
-    @Param('idUser',ParseIntPipe) userId: number,
-  ): Promise<any> {
-    return await this.projectService.getProjectsOwnerId(userId);
-  }
-
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
-  @Get('/my-collaboration-projects')
-  @ApiOperation({summary: 'Get all projects where the current user is collaborator', description:'',})
-  @ApiOkResponse({ status: 200, description: 'Provide a list of all projects where current user collaborator.'}) 
-  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
-  async getProjectsCollaborators(
-    @CurrentUser() currentUser:User
-  ): Promise<any> {
-    return await this.projectService.getProjectsCollaborator(currentUser);
-  }
-/* Agrego servicio publico*/
-@Get('user/:idUser/collaborators-projects')
-  @ApiOperation({summary: 'Get all projects where id user is collaborator', description:'',})
-  @ApiOkResponse({ status: 200, description: 'Provide a list of all projects where id user is collaborator.'}) 
-  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
-  async getProjectsCollaboratorsId(
-    @Param('idUser',ParseIntPipe) userId: number,
-  ): Promise<any> {
-    return this.projectService.getProjectsCollaboratorsId(userId);
-  }
-  
-  @Get('/by-category/:name')
-  @ApiOperation({summary: 'Get all projects by category name', description:'',})
-  @ApiParam({ name: 'name', description: 'Get the category name',})
-  @ApiOkResponse({ status: 200, description: ' Show List of projects by category name.'}) 
-  @ApiResponse({ status: 404, description: 'Not found.' }) 
-  async getProjectsByCategoryName(
-    @Param('name') name:string
-  ): Promise<Project[]> {
-    return await this.projectService.getProjectsByCategoryName(name);
-  }
-
   @ApiOperation({summary: 'Search projects by title or author and order', description:'',})
   @ApiOkResponse({ status: 200, description: ' Show result.'})  
   /*@ApiQuery({ name:'author', description: 'author', required: false,type: Number})*/
@@ -219,7 +97,7 @@ export class ProjectController {
     @Query() query: {title:string, author: number,/*categoryIds: string[],*/ sortBy: 'ASC' | 'DESC',
       skip: number,})
   {
-    return this.projectService.searchProjects(query);
+    return await this.projectService.searchProjects(query);
   }
 
   @Get('view/all')
@@ -250,6 +128,148 @@ export class ProjectController {
     return await this.projectService.editDocument(currentDocument,documentDto,creator);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard,ProjectExistGuard,ProjectCollaboratorGuard)
+  @Put(':id/edit')
+  @ApiOperation({summary: 'Update project id', description:'To perform the operation the user must be logged in and must be the owner.',})
+  @ApiParam({ name: 'id', description: 'Gets the project id',})
+  @ApiBody({type:UpdateProjectDto, description: 'Update project'})
+  @ApiOkResponse({ status: 201, description: 'The project has changed.'}) 
+  @ApiResponse({ status: 401, description: 'Unauthorized log in the app'})
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  async editProject(
+    @Param('id',ParseIntPipe) id: number,
+    @Body() projectDto: UpdateProjectDto,
+    @CurrentUser() creator:User,
+    @CurrentProject() currentProject:Project   
+  ){
+    return await this.projectService.editProject(currentProject,projectDto,creator);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Get('my-projects')
+  @ApiOperation({summary: 'Get all projects where the current user is the owner', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide a list of all your projects.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  async getProjectsOwner(
+    @CurrentUser() currentUser:User
+  ): Promise<any> {
+    return await this.projectService.getProjectsOwner(currentUser);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Get('/my-collaboration-projects')
+  @ApiOperation({summary: 'Get all projects where the current user is collaborator', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide a list of all projects where current user collaborator.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  async getProjectsCollaborators(
+    @CurrentUser() currentUser:User
+  ): Promise<any> {
+    return await this.projectService.getProjectsCollaborator(currentUser);
+  }
+
+  @Get('/by-category/:name')
+  @ApiOperation({summary: 'Get all projects by category name', description:'',})
+  @ApiParam({ name: 'name', description: 'Get the category name',})
+  @ApiOkResponse({ status: 200, description: ' Show List of projects by category name.'}) 
+  @ApiResponse({ status: 404, description: 'Not found.' }) 
+  async getProjectsByCategoryName(
+    @Param('name') name:string
+  ): Promise<Project[]> {
+    return await this.projectService.getProjectsByCategoryName(name);
+  }
+
+
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard,ProjectExistGuard,ProjectOwnerGuard,ProjectCollaboratorGuard)
+  @ApiOperation({summary: 'Get all raw collaborators from the project id', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide a list of all the Collaborators in the project id.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  @ApiParam({ name: 'id', description: 'Get the project id',})
+  @Get(':id/collaborators')
+  async getCollaboratorsByProjectId(
+    @Param('id',ParseIntPipe) id: number,
+    @CurrentProject() project: Project,
+  ):Promise<Collaborator[]>
+  {
+    return await this.projectService.getCollaboratorsByProjectId(project);
+  }
+
+  @ApiOperation({summary: 'Get documents from project id', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide a list of all the document in the project id.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  @ApiParam({ name: 'id', description: 'Get the project id',})
+  @Get(':id/list-documents')
+  async getListDocumentsByProjectId(
+    @Param('id',ParseIntPipe) id: number,    
+  ):Promise<any[]>
+  {
+    const project = await this.getOne(id);
+    if (!project)
+    throw new NotFoundException('Project does not exist.');
+    return await this.documentService.getListDocumentsByProjectId(project.getProjectId());
+  }  
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard,ProjectExistGuard,ProjectCollaboratorGuard)
+  @ApiOperation({summary: 'Get documents from project id', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide a list of all the document in the project id.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  @ApiParam({ name: 'id', description: 'Get the project id',})
+  @Get(':id/documents')
+  async getDocumentsByProjectId(
+    @Param('id',ParseIntPipe) id: number,
+    @CurrentProject() project: Project,
+  ):Promise<Document[]>
+  {
+    return await this.documentService.getDocumentsByProjectId(project.getProjectId())
+  }
+  
+  @Get('/:id')
+  @ApiOperation({summary: 'Get raw project by id', description:'',})
+  @ApiOkResponse({  status: 200, description: 'The found record', type: Project })
+  @ApiResponse({  status: 403, description: 'Forbidden.'})  
+  async getOne(@Param('id',ParseIntPipe) id: number):Promise<Project> {
+    const data = await this.projectService.getOne(id);
+    return data
+  }
+
+  @Get('/:id/view/complete')
+  @ApiOperation({summary: 'Get raw project by id', description:'',})
+  @ApiOkResponse({  status: 200, description: 'The found record', type: Project })
+  @ApiResponse({  status: 403, description: 'Forbidden.'})  
+  async getOneComplete(@Param('id',ParseIntPipe) id: number):Promise<any> {
+    const data = await this.projectService.getOneComplete(id);
+    return data
+  }
+    
+  @Get('user/:idUser/owner-projects')
+  @ApiOperation({summary: 'Get all projects where the id user is the owner', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide a list of all your projects.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  async getProjectsOwnerId(
+    @Param('idUser',ParseIntPipe) userId: number,
+  ): Promise<any> {
+    return await this.projectService.getProjectsOwnerId(userId);
+  }
+
+  
+/* Agrego servicio publico*/
+@Get('user/:idUser/collaborators-projects')
+  @ApiOperation({summary: 'Get all projects where id user is collaborator', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide a list of all projects where id user is collaborator.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  async getProjectsCollaboratorsId(
+    @Param('idUser',ParseIntPipe) userId: number,
+  ): Promise<any> {
+    return await this.projectService.getProjectsCollaboratorsId(userId);
+  }
+  
+  
+  
   @ApiBearerAuth()
   @UseGuards(AuthGuard,ProjectExistGuard,ProjectOwnerGuard)
   @ApiOperation({summary: 'Delete project by id', description:'',})
