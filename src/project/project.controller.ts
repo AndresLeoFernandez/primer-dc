@@ -176,9 +176,11 @@ export class ProjectController {
   @ApiOkResponse({ status: 200, description: ' Show List of projects by category name.'}) 
   @ApiResponse({ status: 404, description: 'Not found.' }) 
   async getProjectsByCategoryName(
-    @Param('name') name:string
+    @Param('name') name:string,
+    @Query('page',ParseIntPipe) page: number ,
+    @Query('pageSize', ParseIntPipe) pageSize: number ,
   ): Promise<Project[]> {
-    return await this.projectService.getProjectsByCategoryName(name);
+    return await this.projectService.getProjectsByCategoryName(name,page,pageSize);
   }
 
 

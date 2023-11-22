@@ -203,13 +203,23 @@ async getProjectsCollaboratorsId(userId:number):Promise<any>{
     return completo;
   }
 
+ 
 
-  async getProjectsByCategoryName(name:string):Promise<Project[]> {
-    const criteria : FindManyOptions = {relations:['category'], where: { category:{ name: name,},},};
-    const projects = await this.projectRepository.find(criteria);
-    return projects;
-  }
+async getProjectsByCategoryName(name: string, page: number , pageSize: number): Promise<Project[]> {
   
+  const criteria: FindManyOptions = {
+    relations: ['category'],
+    where: {
+      category: { name: name },
+    },
+    skip: (Number(page) - 1) * pageSize, 
+    take: Number(pageSize), 
+  };
+
+  const projects = await this.projectRepository.find(criteria);
+  return projects;
+}
+
   /* El remove solo autorizado para el dueño del proyecto.  
   * Elimina projecto y sus colaboradores siempre que no posea documentos vigentes*/
   async deleteProject(project: Project, currentUser:User): Promise<Project | null> {
