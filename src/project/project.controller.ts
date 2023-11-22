@@ -225,9 +225,11 @@ export class ProjectController {
   async getDocumentsByProjectId(
     @Param('id',ParseIntPipe) id: number,
     @CurrentProject() project: Project,
-  ):Promise<Document[]>
+  /*):Promise<Document[]>*/
+  ):Promise<any[]>
   {
-    return await this.documentService.getDocumentsByProjectId(project.getProjectId())
+    /*return await this.documentService.getDocumentsByProjectId(project.getProjectId())*/
+    return await this.documentService.getListDocumentsByProjectId(project.getProjectId());
   }
   
   @Get('/:id')
