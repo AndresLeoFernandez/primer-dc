@@ -143,7 +143,7 @@ async getProjectsOwnerId(userId:number):Promise<any> {
 
 /* Devuelve los proyectos donde el usuario es Dueño*/
 async getProjectsOwner(currentUser:User):Promise<any> {
-  const criteriaOwner : FindManyOptions = {relations:['category'],where:{author:{userId:currentUser.getUserId(),}}};
+  const criteriaOwner : FindManyOptions = {relations:['category'],where:{author:{userId:currentUser.getUserId(),}},order:{creationDate: 'DESC',}};
   const allProjects = await this.projectRepository.find(criteriaOwner);
   if (!allProjects)
   return { message:'Does not have projects as Owner.',status:'Ok',data:allProjects};
@@ -178,7 +178,7 @@ async getProjectsCollaboratorsId(userId:number):Promise<any>{
 
   async getProjects(): Promise<Project[] | null> {
     /*agrego entidades para que sea mas completo lo que devuelve */
-    const criteriaProjects : FindManyOptions = {relations: ['author','category'],};   
+    const criteriaProjects : FindManyOptions = {relations: ['author','category'],order:{creationDate: 'DESC'}};   
    return await this.projectRepository.find(criteriaProjects);
     /*return await this.projectRepository.find()*/
   }

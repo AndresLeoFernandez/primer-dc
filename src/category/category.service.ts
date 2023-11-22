@@ -3,7 +3,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOneOptions } from 'typeorm';
+import { Repository, FindOneOptions, FindManyOptions } from 'typeorm';
 
 @Injectable()
 export class CategoryService {
@@ -23,7 +23,8 @@ export class CategoryService {
   }
 
   async findAll(): Promise<Category[]> {
-    return await this.categoryRepository.find()
+    const criteria : FindManyOptions = { order:{name: 'ASC'}}
+    return await this.categoryRepository.find(criteria);
   }
 
   async findOne(id: number):Promise<Category> {
