@@ -323,8 +323,8 @@ export class ProjectController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(AuthGuard,ProjectExistGuard,ProjectOwnerGuard,ProjectCollaboratorGuard)
-  @Delete('/:id/delete/collaborator')
+  @UseGuards(AuthGuard,ProjectExistGuard,ProjectOwnerGuard/*,ProjectCollaboratorGuard*/)
+  @Delete('/:id/collaborator')
   @ApiOperation({summary: 'Delete collaborator from project id', description:'',})
   @ApiParam({name:'id',type:Number, description:'Id project to delete Collaborator'})
   @ApiBody({type: EmailUserDto, description:'Email user to delete.'})
