@@ -4,10 +4,6 @@ import { Project } from "src/project/entities/project.entity";
 import { History } from "src/history/entities/history.entity";
 import { Column, JoinColumn,CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ApiProperty, ApiPropertyOptional, ApiTags } from "@nestjs/swagger";
-import { Transform } from "class-transformer";
-import { IsInt, IsString, IsAlpha, IsNotEmpty, MinLength, IsDate, IsArray, ValidateNested } from "class-validator";
-import { sanitizeInput } from "src/helpers/utils.helpers";
-import { User } from "src/user/entities/user.entity";
 
 @ApiTags('Document')
 @Entity({ name: 'Documents' })
