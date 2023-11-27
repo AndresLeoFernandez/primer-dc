@@ -126,8 +126,8 @@ export class DocumentService {
   h.creation_date as creationDateHistory
   */
   async mostViewed():Promise<any[]>{
-    const documents = await this.documentRepository.query("select h.title,h.visits as historyVisists,p.title as projectTitle,h.content,d.total_visits as totalVisits,d.creation_date as creationDate,p.project_id as projectId,d.type,h.documents_id as documentId, d.author_collaborator_id as authorColDocument, h.author_collaborator_id as authorColHistory,d.last_history_id as historyId,h.creation_date as creationDateHistory from histories h inner join documents d on h.documents_id = d.last_history_id inner join projects p on p.project_id = d.projects_id order by d.total_visits desc");
-    return  documents;    
+    const documents = await this.documentRepository.query(`select p.title as projectTitle, h.content, d.total_visits as totalVisits, d.creation_date as creationDate,p.project_id as projectId, d.type, h.documents_id as documentId, d.author_collaborator_id as authorColDocument, h.author_collaborator_id as authorColHistory, d.last_history_id as historyId, h.creation_date as creationDateHistory from documents d inner join histories h on d.last_history_id = h.history_id inner join projects p on p.project_id = d.projects_id order by d.total_visits DESC`);
+    return documents;    
   }
 
   async mostRecent():Promise<Document[]>{
@@ -157,8 +157,8 @@ export class DocumentService {
   d.author_collaborator_id as authorColDocument,
    h.author_collaborator_id as authorColHistory
   */
-  async getListDocumentsByProjectId(idproject:number):Promise<any[]| null> {
-    return this.documentRepository.query(`select h.title,d.creation_date as creationDate,h.creation_date as creationDateHistory,h.history_id as historyId,h.documents_id as documentId,d.author_collaborator_id as authorColDocument, h.author_collaborator_id as authorColHistory from histories h inner join documents d on h.documents_id = d.last_history_id inner join projects p on d.projects_id = p.project_id where p.project_id = ${idproject}`);
+  async getListDocumentsByProjectId(projectId:number):Promise<any[]| null> {
+    return this.documentRepository.query(`select h.title, d.creation_date as creationDate,h.creation_date as creationDateHistory, h.history_id as historyId, h.documents_id as documentId, d.author_collaborator_id as authorColDocument, h.author_collaborator_id as authorColHistory from documents d inner join histories h on d.last_history_id = h.history_id where d.projects_id = ${projectId}`);
   }
 
   /*
