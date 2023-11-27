@@ -126,7 +126,7 @@ export class DocumentService {
   h.creation_date as creationDateHistory
   */
   async mostViewed():Promise<any[]>{
-    const documents = await this.documentRepository.query(`select p.title as projectTitle, h.content, d.total_visits as totalVisits, d.creation_date as creationDate,p.project_id as projectId, d.type, h.documents_id as documentId, d.author_collaborator_id as authorColDocument, h.author_collaborator_id as authorColHistory, d.last_history_id as historyId, h.creation_date as creationDateHistory from documents d inner join histories h on d.last_history_id = h.history_id inner join projects p on p.project_id = d.projects_id order by d.total_visits DESC`);
+    const documents = await this.documentRepository.query(`select h.title, p.title as projectTitle, h.content, d.total_visits as totalVisits, d.creation_date as creationDate,p.project_id as projectId, d.type, h.documents_id as documentId, d.author_collaborator_id as authorColDocument, h.author_collaborator_id as authorColHistory, d.last_history_id as historyId, h.creation_date as creationDateHistory from documents d inner join histories h on d.last_history_id = h.history_id inner join projects p on p.project_id = d.projects_id order by d.total_visits DESC`);
     return documents;    
   }
 
