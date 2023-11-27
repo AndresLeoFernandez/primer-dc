@@ -14,6 +14,7 @@ export class DocumentController {
   constructor(private readonly documentService: DocumentService) 
   {}
 
+  /* Suma visitas*/
   @UseGuards(DocumentExistGuard)
   @Get(':idDoc/view')
   @ApiOperation({summary: 'Get the last version of the document idDoc', description:'',})
@@ -37,7 +38,7 @@ export class DocumentController {
   async findHistoriesDocument(
     @Param('idDoc') idDoc: number,
     @CurrentDocument() document: Document
-  ): Promise<any> {
+  ): Promise<History[]> {
     return await this.documentService.getHistoriesDocument(document);
   }
 
