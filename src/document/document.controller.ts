@@ -7,6 +7,9 @@ import { Document } from './entities/document.entity';
 import { History } from 'src/history/entities/history.entity';
 import { DocumentExistGuard } from 'src/guards/documentExist.guard';
 import { CurrentDocument } from 'src/decorators/currentDocument.decorator';
+import { Comment } from 'src/comment/entities/comment.entity';
+
+
 
 @ApiTags('Document')
 @Controller('document')
@@ -94,4 +97,16 @@ export class DocumentController {
     return this.documentService.findAll();
   }
 
+  @UseGuards(DocumentExistGuard)
+  @Get(':idDoc/comment')
+  @ApiOperation({summary: 'Get comment of the document idDoc', description:'',})
+  @ApiOkResponse({ status: 200, description: 'Provide comment to the document.'}) 
+  @ApiResponse({ status: 404, description: 'Forbidden, no hay resultados.' })
+  @ApiParam({ name: 'idDoc', description: 'Gets the document id',})
+  async getCommentDocument(
+    @Param('idDoc') idDoc: number,
+    @CurrentDocument() document: Document
+  ): Promise<Comment[]> {
+    return await this.documentService.getCommentDocument(document);
+  }
 }

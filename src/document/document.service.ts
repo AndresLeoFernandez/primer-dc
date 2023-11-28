@@ -8,13 +8,15 @@ import { History } from 'src/history/entities/history.entity';
 import { Collaborator } from 'src/collaborator/entities/collaborator.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Project } from 'src/project/entities/project.entity';
+import { Comment } from 'src/comment/entities/comment.entity';
 @Injectable()
 export class DocumentService {
 
   constructor(
     @InjectRepository(Document) private readonly documentRepository: Repository<Document>,
     @InjectRepository(Collaborator) private readonly collaboratorRepository: Repository<Collaborator>,
-    @InjectRepository(History) private readonly historyRepository: Repository<History>
+    @InjectRepository(History) private readonly historyRepository: Repository<History>,
+    @InjectRepository(Comment) private readonly commentRepository: Repository<Comment>
     ) {}
 
   async createDocument(dto: CreateDocumentDto,project:Project, author:Collaborator):Promise<Document> {
@@ -98,6 +100,13 @@ export class DocumentService {
     relations:['document'], select: { document:{document:false}, historyId:true, messaggesLog:true, creationDate:true,visits:true}, where: { document: { documentId: document.getDocumentId(),},},};
     const currentHistories = await this.historyRepository.find(criteria);
     return currentHistories;
+  }
+  
+  async getCommentDocument(document:Document):Promise<Comment[]> {
+    const criteria : FindManyOptions = {
+    relations:['document'], select: { document:{document:false},author:true, email:true , content: true, creationDate:true,}, where: { document: { documentId: document.getDocumentId(),},},};
+    const currentComment = await this.commentRepository.find(criteria);
+    return currentComment;
   }
 
   async getTotalVisitsDocument(document:Document):Promise<number> {
